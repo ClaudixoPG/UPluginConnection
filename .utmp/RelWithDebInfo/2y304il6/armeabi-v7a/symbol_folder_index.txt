@@ -1,0 +1,1 @@
+C:\Users\Claudio Rubio\OneDrive\Documentos\GitHub\UpluginConnection\Library\Bee\Android\Prj\Mono2x\Gradle\unityLibrary\build\intermediates\cxx\RelWithDebInfo\2y304il6\obj\armeabi-v7a

@@ -1,0 +1,19 @@
+# ninja log v5
+64	6831	7657468330297950	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	fe74905c8a6e771d
+93	6999	7657468330968713	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	58a2ad7835b08809
+8264	8679	7657468348790393	C:/Users/Claudio Rubio/OneDrive/Documentos/GitHub/UpluginConnection/Library/Bee/Android/Prj/Mono2x/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/2y304il6/obj/armeabi-v7a/libgame.so	2c616208e9456a93
+214	8115	7657468342733769	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	1e56942dc3856e5c
+20	7002	7657468331270721	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	92916f5108076954
+12	7110	7657468332922849	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	ebdab2d33fcc7b4
+198	7106	7657468332535020	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	1638a50beada0d08
+34	7682	7657468338901515	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	af388da65750c603
+1	8262	7657468343527442	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	78d8d95f560e4d3
+94	15569	7657522728297559	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	58a2ad7835b08809
+188	15573	7657522728297559	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	fe74905c8a6e771d
+86	15576	7657522728322782	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	92916f5108076954
+169	15600	7657522728655479	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	1638a50beada0d08
+78	15604	7657522728872087	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	ebdab2d33fcc7b4
+178	15939	7657522732498468	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	af388da65750c603
+199	16051	7657522733620684	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	1e56942dc3856e5c
+54	16079	7657522733874825	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	78d8d95f560e4d3
+16079	16407	7657522737258356	C:/Users/Claudio Rubio/OneDrive/Documentos/GitHub/UpluginConnection/Library/Bee/Android/Prj/Mono2x/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/2y304il6/obj/armeabi-v7a/libgame.so	2c616208e9456a93

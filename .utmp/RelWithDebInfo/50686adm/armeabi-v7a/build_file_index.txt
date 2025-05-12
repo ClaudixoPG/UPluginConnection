@@ -1,0 +1,2 @@
+C:\Users\Claudio Rubio\OneDrive\Documentos\GitHub\UpluginConnection\Library\Bee\Android\Prj\Mono2x\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\Users\Claudio Rubio\OneDrive\Documentos\GitHub\UpluginConnection\Library\Bee\Android\Prj\Mono2x\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt
