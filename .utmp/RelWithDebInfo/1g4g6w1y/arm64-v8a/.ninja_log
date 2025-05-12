@@ -1,0 +1,19 @@
+# ninja log v5
+22	5859	7687748794120614	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	39e0f6fe62ac72d6
+7203	7771	7687748813466374	C:/Users/Claudio Rubio/OneDrive/Documentos/GitHub/UpluginConnection/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1g4g6w1y/obj/arm64-v8a/libgame.so	c7d36f45ec88d87f
+117	5829	7687748793476084	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	68bbfa75a49e3cd7
+73	5927	7687748793747286	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	805ebce144bb1417
+29	6066	7687748796349386	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	e01b66e13b44b177
+40	6042	7687748796087977	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	fd071080ee86ca95
+126	6142	7687748797529447	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	22d8f565d5a96391
+48	6608	7687748802009208	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	44c9d8cb5ad8c2ee
+12	7202	7687748807854144	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	752345e387d64b1a
+123	12932	7687872424503962	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	68bbfa75a49e3cd7
+52	12936	7687872424514107	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	fd071080ee86ca95
+131	12940	7687872424725876	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	805ebce144bb1417
+28	12945	7687872424488820	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	39e0f6fe62ac72d6
+43	12967	7687872425077751	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	e01b66e13b44b177
+109	13282	7687872428307917	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	44c9d8cb5ad8c2ee
+139	13440	7687872429956878	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	22d8f565d5a96391
+10	13480	7687872430284175	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	752345e387d64b1a
+13481	13743	7687872432976633	C:/Users/Claudio Rubio/OneDrive/Documentos/GitHub/UpluginConnection/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1g4g6w1y/obj/arm64-v8a/libgame.so	c7d36f45ec88d87f
