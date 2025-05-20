@@ -9,8 +9,11 @@ public class PluginActivity : MonoBehaviour
     public TextMeshProUGUI messageToSend;
     public TextMeshProUGUI messageReceived;
 
+    public PanelManager panelManager;
+
+
     private int currentControlIndex = 1; // comienza en 1
-    private const int maxControls = 4;
+    private const int maxControls = 2;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -50,7 +53,8 @@ public class PluginActivity : MonoBehaviour
     public void OnMessageReceived(string message)
     {
         Debug.Log("Mensaje recibido en Unity: " + message);
-        messageReceived.text = "Message Received: " + message;
+        messageReceived.text = "Mensaje recibido: " + message;
+        panelManager.HandleIncomingMessage(message);
     }
 
     public void NextControl()
@@ -59,10 +63,11 @@ public class PluginActivity : MonoBehaviour
         {
             currentControlIndex++;
             if (currentControlIndex > maxControls) currentControlIndex = 1;
-
-            string message = $"control_{currentControlIndex}";
+            UpdateControl();
+            /*string message = $"control_{currentControlIndex}";
             Debug.Log("Control -> " + message);
-            _pluginActivity.Call("sendMessageToSmartwatch", message);
+            _pluginActivity.Call("sendMessageToSmartwatch", message);*/
+
         }
     }
 
@@ -72,11 +77,26 @@ public class PluginActivity : MonoBehaviour
         {
             currentControlIndex--;
             if (currentControlIndex < 1) currentControlIndex = maxControls;
-
-            string message = $"control_{currentControlIndex}";
+            UpdateControl();
+            /*string message = $"control_{currentControlIndex}";
             Debug.Log("Control -> " + message);
+            _pluginActivity.Call("sendMessageToSmartwatch", message);*/
+        }
+    }
+
+    private void UpdateControl()
+    {
+        string message = $"control_{currentControlIndex}";
+        Debug.Log("Control -> " + message);
+
+        // Enviar al smartwatch
+        if (_pluginActivity != null)
+        {
             _pluginActivity.Call("sendMessageToSmartwatch", message);
         }
+
+        // Activar el panel correspondiente en Unity (índice - 1)
+        panelManager.SetActivePanel(currentControlIndex - 1);
     }
 
 }
