@@ -13,12 +13,13 @@ public class PluginActivity : MonoBehaviour
 
 
     private int currentControlIndex = 1; // comienza en 1
-    private const int maxControls = 2;
+    private int maxControls = 2;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _pluginActivity = new AndroidJavaObject("com.randomadjective.uactivity.PluginActivity");
+        maxControls = panelManager.panels.Count; // Asignar el número de controles según la cantidad de paneles
     }
 
 
