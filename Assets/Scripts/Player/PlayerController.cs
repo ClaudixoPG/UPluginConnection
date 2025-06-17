@@ -21,15 +21,15 @@ public class PlayerController : MonoBehaviour
 
         float angleToPOI = Vector3.Angle(flatForward, flatDirectionToPOI);
 
-        Debug.Log($"POI: {poi.name}, Angle: {angleToPOI}, Distance: {directionToPOI.magnitude}");
+        //Debug.Log($"POI: {poi.name}, Angle: {angleToPOI}, Distance: {directionToPOI.magnitude}");
 
         if (angleToPOI <= visionAngle / 2f && directionToPOI.magnitude <= visionDistance)
         {
-            Debug.Log($"POI {poi.name} está dentro del cono de visión del jugador.");
+            //Debug.Log($"POI {poi.name} está dentro del cono de visión del jugador.");
             return true;
         }
 
-        Debug.Log($"POI {poi.name} está fuera del cono de visión del jugador.");
+        //Debug.Log($"POI {poi.name} está fuera del cono de visión del jugador.");
         return false;
     }
 
