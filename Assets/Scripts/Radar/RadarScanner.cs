@@ -279,6 +279,15 @@ public class RadarScanner : MonoBehaviour
             if (currentWaveRadius > farDistance)
             {
                 currentWaveRadius = 0f; // reiniciar la onda
+
+                if (proceduralSynth != null)
+                {
+                    float distance = GetClosestDistance();
+                    float t = 1f - Mathf.Clamp01(distance / farDistance);
+                    float freq = Mathf.Lerp(90f, 150f, t);
+                    float amp = Mathf.Lerp(0.2f, 0.6f, t);
+                    proceduralSynth.PlayPing(freq, amp);
+                }
             }
         }
 
@@ -327,10 +336,6 @@ public class RadarScanner : MonoBehaviour
             currentWaveColor = noDetectionColor;
             waveSpeed = minSpeed;
 
-            if (proceduralSynth != null)
-                proceduralSynth.isPulsing = false;
-
-
             return;
         }
 
@@ -371,14 +376,6 @@ public class RadarScanner : MonoBehaviour
         float t = 1f - Mathf.Clamp01(distancia / farDistance); // Cerca → 1, Lejos → 0
         waveSpeed = Mathf.Lerp(minSpeed, maxSpeed, t);
 
-        // Audio: sincroniza frecuencia y volumen
-        if (proceduralSynth != null)
-        {
-            // Puedes ajustar estos valores base para sonar más como sonar submarino
-            proceduralSynth.frequency = Mathf.Lerp(300f, 80f, t);     // Lejos = grave, cerca = agudo
-            proceduralSynth.amplitude = Mathf.Lerp(0.02f, 0.1f, t);   // Lejos = débil, cerca = fuerte
-            proceduralSynth.isPulsing = true;
-        }
     }
     private void UpdateColorZone(float distance)
     {
