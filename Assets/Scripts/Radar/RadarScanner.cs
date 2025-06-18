@@ -59,6 +59,7 @@ public class RadarScanner : MonoBehaviour
     float maxAmplitude = 1f;
     float minFrequency = 1f;   // Lento cuando está lejos
     float maxFrequency = 20f;   // Rápido cuando está cerca
+    [SerializeField] private ProceduralSynth proceduralSynth;
 
     private void Start()
     {
@@ -72,6 +73,12 @@ public class RadarScanner : MonoBehaviour
         Material dynamicMat = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
         dynamicMat.color = currentWaveColor; // Inicializar con el color actual
         meshRenderer.material = dynamicMat;
+
+        proceduralSynth = GetComponent<ProceduralSynth>();
+        if (proceduralSynth == null)
+        {
+            Debug.LogWarning("No se encontró el componente ProceduralSynth.");
+        }
 
     }
 
@@ -256,8 +263,10 @@ public class RadarScanner : MonoBehaviour
 
         // Aplicamos el color dinámico al material
         meshRenderer.material.color = currentWaveColor;
-    }
 
+
+
+    }
 
 
     private void Update()
@@ -317,6 +326,11 @@ public class RadarScanner : MonoBehaviour
             // Nada detectado → color blanco, velocidad mínima
             currentWaveColor = noDetectionColor;
             waveSpeed = minSpeed;
+
+            if (proceduralSynth != null)
+                proceduralSynth.isPulsing = false;
+
+
             return;
         }
 
@@ -356,6 +370,15 @@ public class RadarScanner : MonoBehaviour
     {
         float t = 1f - Mathf.Clamp01(distancia / farDistance); // Cerca → 1, Lejos → 0
         waveSpeed = Mathf.Lerp(minSpeed, maxSpeed, t);
+
+        // Audio: sincroniza frecuencia y volumen
+        if (proceduralSynth != null)
+        {
+            // Puedes ajustar estos valores base para sonar más como sonar submarino
+            proceduralSynth.frequency = Mathf.Lerp(300f, 80f, t);     // Lejos = grave, cerca = agudo
+            proceduralSynth.amplitude = Mathf.Lerp(0.02f, 0.1f, t);   // Lejos = débil, cerca = fuerte
+            proceduralSynth.isPulsing = true;
+        }
     }
     private void UpdateColorZone(float distance)
     {
