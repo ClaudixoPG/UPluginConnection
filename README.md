@@ -61,7 +61,8 @@ The implementation includes:
 | **Purpose**       | Display smartwatch input data in real-time within the Unity game interface.                                                                                                                         |
 | **Summary**       | After data interpretation and Input System integration, Unity updates the game UI or visuals to reflect smartwatch inputs in real time. The use case ends when visualization is rendered correctly. |
 | **Preconditions** | (1) Data interpreted and integrated. (2) UI components implemented.                                                                                                                                 |
-                                                                                                                                                                                          |
+
+
 ## Notes
 
 This repository is part of a Research Article titled "A Communication Module for Smartphone–Smartwatch Integration in Pervasive Games Using Unity 3D and Native Android", for more details about each stage and the performance analyses performed, download the associated paper (ref to the paper's doi)
