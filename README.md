@@ -62,8 +62,17 @@ These prototypes are designed to verify **real-time communication reliability**,
 | **Purpose**       | Verify communication using joystick analog input.                                                                                                                                                                                                                         |
 | **Summary**       | The user opens both apps. The interface displays a joystick capturing direction and magnitude. The user moves the joystick on the smartphone, sending values to the smartwatch. The process is repeated from the smartwatch to the smartphone to validate the connection. |
 | **Preconditions** | (1) Apps installed. (2) Permissions granted. (3) Devices paired via Bluetooth.                                                                                                                                                                                            |
+## Notes
 
-### 👤 **Authors**
+This repository is part of a Research Article titled "A Communication Module for Smartphone–Smartwatch Integration in Pervasive Games Using Unity 3D and Native Android", for more details about each stage and the performance analyses performed, download the associated paper (ref to the paper's doi)
 
-- Claudio Rubio and Felipe Besoain
+## Authors
+
+* **Claudio Rubio Naranjo** - [ClaudixoPG](https://github.com/ClaudixoPG); crubio17@alumnos.utalca.cl; claudiorubio23@gmail.com
+* **Felipe Besoain** - [Fbesoain](https://github.com/fbesoain); fbesoain@utalca.cl
+
+## Acknowledgments
+
+* Research funded by Agencia Nacional de Investigación y Desarrollo, ANID-Subdirección del Capital Humano/Doctorado Nacional/2023-21232404 and FONDECYT Iniciación grant 11220438.
+
 - Universidad de Talca
