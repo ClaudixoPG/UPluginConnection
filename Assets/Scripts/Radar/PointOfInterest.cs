@@ -72,6 +72,8 @@ using UnityEngine;
 
 public class PointOfInterest : MonoBehaviour
 {
+    [SerializeField] private string id;
+    public string ID => id;
     public bool IsDetected { get; set; }
     public Renderer rend;
     public Material revealedMaterial;
@@ -87,7 +89,7 @@ public class PointOfInterest : MonoBehaviour
     private float emissionIntensity = 0.5f;
     private float emissionPulseSpeed = .5f;
 
-    void Start()
+    void Awake()
     {
         POIManager.Instance?.RegisterPOI(this);
         if (rend == null) rend = GetComponent<Renderer>();
