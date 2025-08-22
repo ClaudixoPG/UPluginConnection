@@ -33,39 +33,6 @@ namespace SpaceShip
 
         public void HandleMessage(string message)
         {
-            if(message.Equals("arriba"))
-            {
-                playerController.moveInput = Vector2.up;
-                return;
-            }
-            if(message.Equals("abajo"))
-            {
-                playerController.moveInput = Vector2.down;
-                return;
-            }
-            if(message.Equals("izquierda"))
-            {
-                playerController.moveInput = Vector2.left;
-                return;
-            }
-            if(message.Equals("derecha"))
-            {
-                playerController.moveInput = Vector2.right;
-                return;
-            }
-            if(message.Equals("Shoot"))
-            {
-                playerController.Fire();
-                return;
-            }
-            return;
-
-            //NEXT STEP: Manejar mensajes de joystick, dpad y botones
-            //reviar on release y on press
-
-
-            Debug.Log("Game1: mensaje recibido: " + message);
-
             if (string.IsNullOrEmpty(message))
                 return;
 
@@ -77,6 +44,7 @@ namespace SpaceShip
                     float.TryParse(parts[0], out float x) &&
                     float.TryParse(parts[1], out float y))
                 {
+                    Debug.Log("movement value:" + x + ", " + y);
                     playerController.moveInput = new Vector2(x, y);
                 }
                 return;
