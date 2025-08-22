@@ -1,6 +1,5 @@
 ﻿using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem.iOS;
 using UnityEngine.SceneManagement;
 
 public class PluginActivity : MonoBehaviour
@@ -10,7 +9,7 @@ public class PluginActivity : MonoBehaviour
     
     //Public Variables
     //public TextMeshProUGUI messageToSend;
-    public TextMeshProUGUI messageReceived;
+    //public TextMeshProUGUI messageReceived;
 
     //public PanelManager panelManager;
 
@@ -73,11 +72,13 @@ public class PluginActivity : MonoBehaviour
 
     public void OnMessageReceived(string message)
     {
-        Debug.Log("Mensaje recibido en Unity: " + message);
-        messageReceived.text = "Mensaje recibido: " + message;
+        //Debug.Log("Mensaje recibido en Unity: " + message);
+        //messageReceived.text = "Mensaje recibido: " + message;
 
         // Buscar el controlador de la escena actual
-        var controller = GameObject.FindFirstObjectByType<IGameController>();
+        //var controller = GameObject.FindObjectOfType<IGameController>();
+        GameObject controllerObject = GameObject.Find("GameController");
+        var controller = controllerObject?.GetComponent<IGameController>();
         controller?.HandleMessage(message);
     }
 
