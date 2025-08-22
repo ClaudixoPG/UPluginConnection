@@ -1,4 +1,9 @@
+#if UNITY_ANDROID || UNITY_IOS
+#define MOBILE
+#endif
+
 using UnityEngine;
+
 
 public class CameraController : MonoBehaviour
 {
@@ -35,20 +40,15 @@ public class CameraController : MonoBehaviour
     {
         //check if is in standalone mode or in smartphone mode
         #if UNITY_STANDALONE || UNITY_WEBGL || UNITY_EDITOR
-                float scroll = Input.GetAxis("Mouse ScrollWheel");
-                if (scroll != 0f)
-                {
-                    Camera.main.fieldOfView -= scroll * scrollSpeed;
-                    Camera.main.fieldOfView = Mathf.Clamp(Camera.main.fieldOfView, 45f, 90f);
-                }
-        #elif UNITY_ANDROID
-        #define MOBILE
-        #elif UNITY_IOS
-        #define MOBILE
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            if (scroll != 0f)
+            {
+                Camera.main.fieldOfView -= scroll * scrollSpeed;
+                Camera.main.fieldOfView = Mathf.Clamp(Camera.main.fieldOfView, 45f, 90f);
+            }
         #endif
-
         #if MOBILE
-            if (Input.touchCount == 2)
+        if (Input.touchCount == 2)
             {
                 Touch touchZero = Input.GetTouch(0);
                 Touch touchOne = Input.GetTouch(1);
@@ -87,7 +87,7 @@ public class CameraController : MonoBehaviour
     public void RotateCamera()
     {
         // Check if in standalone mode or smartphone mode
-#if UNITY_STANDALONE || UNITY_WEBGL || UNITY_EDITOR
+        #if UNITY_STANDALONE || UNITY_WEBGL || UNITY_EDITOR
 
         //if the right mouse button is pressed, rotate the camera 
         if (Input.GetMouseButton(1))
@@ -97,13 +97,9 @@ public class CameraController : MonoBehaviour
             //update the distance from the player
             distanceFromPlayer = transform.position - player.transform.position;
         }
-#elif UNITY_ANDROID
-#define MOBILE
-#elif UNITY_IOS
-#define MOBILE
-#endif
+        #endif
 
-#if MOBILE
+        #if MOBILE
         // Check if there is a touch input
         if (Input.touchCount == 1)
         {
@@ -116,7 +112,6 @@ public class CameraController : MonoBehaviour
                 distanceFromPlayer = transform.position - player.transform.position;
             }
         }
-
-#endif
+        #endif
     }
 }
