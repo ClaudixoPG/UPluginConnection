@@ -1,9 +1,8 @@
 {
-    "version": 1,
     "name": "PlayerInputActions",
     "maps": [
         {
-            "name": "Player",
+            "name": "SpaceShipMinigame",
             "id": "c1a7c4c3-45d8-4632-8423-57df7e96b09e",
             "actions": [
                 {
@@ -37,7 +36,7 @@
                     "name": "ChangeWeapon1",
                     "type": "Button",
                     "id": "f8ec2b2d-6a7e-4bc8-b3d3-3a0c9379ec5b",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -46,7 +45,7 @@
                     "name": "ChangeWeapon2",
                     "type": "Button",
                     "id": "8f91a13a-5a62-4973-9d46-9fbaf04de9cd",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -55,7 +54,7 @@
                     "name": "ChangeWeapon3",
                     "type": "Button",
                     "id": "a7c872ab-df47-4fbc-8f48-930d29599a54",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -257,6 +256,138 @@
                     "processors": "",
                     "groups": "",
                     "action": "ChangeWeapon3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "RythmGame",
+            "id": "713bbf39-40b4-4f7c-a6f0-cc2f17ede7e3",
+            "actions": [
+                {
+                    "name": "Y_Button",
+                    "type": "Button",
+                    "id": "125b3937-7ff2-47e0-9f28-3a98c0b1199e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "A_Button",
+                    "type": "Button",
+                    "id": "a0124ae7-1e34-428b-afd6-5c483eac5ab7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "X_Button",
+                    "type": "Button",
+                    "id": "51e53f52-0434-4658-a422-2ee214459136",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "B_Button",
+                    "type": "Button",
+                    "id": "07f89a68-1709-4747-9ea1-ef0e4eefe8db",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "7f8870f2-9ba9-4339-8320-67465d3023e9",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Y_Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8526bb4c-1dfb-403c-9f53-3e84af86719a",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Y_Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d7fbe3c1-00ca-423b-b488-ff96f3be1314",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "A_Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cab96c90-414e-4947-b7ac-7691b6c50f63",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "A_Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "66518916-76fb-45cc-b89a-4b97a8afdafb",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "X_Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "eed37b61-542b-4ac3-b236-b021cf13fa30",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "X_Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f001485a-4c5e-43af-8ca1-c204f44c04a9",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "B_Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "04d2e59c-cd28-4fe1-a6bc-bf6b8e88b07a",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "B_Button",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

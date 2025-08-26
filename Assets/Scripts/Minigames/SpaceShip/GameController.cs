@@ -11,21 +11,22 @@ namespace SpaceShip
         private void Awake()
         {
             inputActions = new PlayerInputActions();
+            inputActions.SpaceShipMinigame.Enable();
 
             // Movimiento
-            inputActions.Player.Move.performed += ctx => playerController.moveInput = ctx.ReadValue<Vector2>();
-            inputActions.Player.Move.canceled += ctx => playerController.moveInput = Vector2.zero;
+            inputActions.SpaceShipMinigame.Move.performed += ctx => playerController.moveInput = ctx.ReadValue<Vector2>();
+            inputActions.SpaceShipMinigame.Move.canceled += ctx => playerController.moveInput = Vector2.zero;
 
             // Disparo
-            inputActions.Player.Fire.performed += ctx => playerController.Fire();
+            inputActions.SpaceShipMinigame.Fire.performed += ctx => playerController.Fire();
 
             // Escudo
-            inputActions.Player.Shield.performed += ctx => playerController.UseShields();
+            inputActions.SpaceShipMinigame.Shield.performed += ctx => playerController.UseShields();
 
             // Cambio de armas
-            inputActions.Player.ChangeWeapon1.performed += ctx => playerController.ChangeWeapon(0);
-            inputActions.Player.ChangeWeapon2.performed += ctx => playerController.ChangeWeapon(1);
-            inputActions.Player.ChangeWeapon3.performed += ctx => playerController.ChangeWeapon(2);
+            inputActions.SpaceShipMinigame.ChangeWeapon1.performed += ctx => playerController.ChangeWeapon(0);
+            inputActions.SpaceShipMinigame.ChangeWeapon2.performed += ctx => playerController.ChangeWeapon(1);
+            inputActions.SpaceShipMinigame.ChangeWeapon3.performed += ctx => playerController.ChangeWeapon(2);
         }
 
         private void OnEnable() => inputActions.Enable();
@@ -35,6 +36,13 @@ namespace SpaceShip
         {
             if (string.IsNullOrEmpty(message))
                 return;
+
+
+            if (message.StartsWith("Tap"))
+            {   
+                playerController.Fire(); // Acción de disparo al recibir "Tap"
+                return;
+            }
 
             // --- Joystick:x,y ---
             if (message.StartsWith("Joystick:"))

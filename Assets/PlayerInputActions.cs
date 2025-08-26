@@ -88,7 +88,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     ""name"": ""PlayerInputActions"",
     ""maps"": [
         {
-            ""name"": ""Player"",
+            ""name"": ""SpaceShipMinigame"",
             ""id"": ""c1a7c4c3-45d8-4632-8423-57df7e96b09e"",
             ""actions"": [
                 {
@@ -122,7 +122,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""ChangeWeapon1"",
                     ""type"": ""Button"",
                     ""id"": ""f8ec2b2d-6a7e-4bc8-b3d3-3a0c9379ec5b"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -131,7 +131,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""ChangeWeapon2"",
                     ""type"": ""Button"",
                     ""id"": ""8f91a13a-5a62-4973-9d46-9fbaf04de9cd"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -140,7 +140,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""ChangeWeapon3"",
                     ""type"": ""Button"",
                     ""id"": ""a7c872ab-df47-4fbc-8f48-930d29599a54"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -346,23 +346,162 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""RythmGame"",
+            ""id"": ""713bbf39-40b4-4f7c-a6f0-cc2f17ede7e3"",
+            ""actions"": [
+                {
+                    ""name"": ""Y_Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""125b3937-7ff2-47e0-9f28-3a98c0b1199e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""A_Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""a0124ae7-1e34-428b-afd6-5c483eac5ab7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""X_Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""51e53f52-0434-4658-a422-2ee214459136"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""B_Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""07f89a68-1709-4747-9ea1-ef0e4eefe8db"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""7f8870f2-9ba9-4339-8320-67465d3023e9"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Y_Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8526bb4c-1dfb-403c-9f53-3e84af86719a"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Y_Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d7fbe3c1-00ca-423b-b488-ff96f3be1314"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""A_Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cab96c90-414e-4947-b7ac-7691b6c50f63"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""A_Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""66518916-76fb-45cc-b89a-4b97a8afdafb"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""X_Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eed37b61-542b-4ac3-b236-b021cf13fa30"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""X_Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f001485a-4c5e-43af-8ca1-c204f44c04a9"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""B_Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""04d2e59c-cd28-4fe1-a6bc-bf6b8e88b07a"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""B_Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
 }");
-        // Player
-        m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
-        m_Player_Shield = m_Player.FindAction("Shield", throwIfNotFound: true);
-        m_Player_ChangeWeapon1 = m_Player.FindAction("ChangeWeapon1", throwIfNotFound: true);
-        m_Player_ChangeWeapon2 = m_Player.FindAction("ChangeWeapon2", throwIfNotFound: true);
-        m_Player_ChangeWeapon3 = m_Player.FindAction("ChangeWeapon3", throwIfNotFound: true);
+        // SpaceShipMinigame
+        m_SpaceShipMinigame = asset.FindActionMap("SpaceShipMinigame", throwIfNotFound: true);
+        m_SpaceShipMinigame_Move = m_SpaceShipMinigame.FindAction("Move", throwIfNotFound: true);
+        m_SpaceShipMinigame_Fire = m_SpaceShipMinigame.FindAction("Fire", throwIfNotFound: true);
+        m_SpaceShipMinigame_Shield = m_SpaceShipMinigame.FindAction("Shield", throwIfNotFound: true);
+        m_SpaceShipMinigame_ChangeWeapon1 = m_SpaceShipMinigame.FindAction("ChangeWeapon1", throwIfNotFound: true);
+        m_SpaceShipMinigame_ChangeWeapon2 = m_SpaceShipMinigame.FindAction("ChangeWeapon2", throwIfNotFound: true);
+        m_SpaceShipMinigame_ChangeWeapon3 = m_SpaceShipMinigame.FindAction("ChangeWeapon3", throwIfNotFound: true);
+        // RythmGame
+        m_RythmGame = asset.FindActionMap("RythmGame", throwIfNotFound: true);
+        m_RythmGame_Y_Button = m_RythmGame.FindAction("Y_Button", throwIfNotFound: true);
+        m_RythmGame_A_Button = m_RythmGame.FindAction("A_Button", throwIfNotFound: true);
+        m_RythmGame_X_Button = m_RythmGame.FindAction("X_Button", throwIfNotFound: true);
+        m_RythmGame_B_Button = m_RythmGame.FindAction("B_Button", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
     {
-        UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, PlayerInputActions.Player.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_SpaceShipMinigame.enabled, "This will cause a leak and performance issues, PlayerInputActions.SpaceShipMinigame.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_RythmGame.enabled, "This will cause a leak and performance issues, PlayerInputActions.RythmGame.Disable() has not been called.");
     }
 
     /// <summary>
@@ -435,54 +574,54 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // Player
-    private readonly InputActionMap m_Player;
-    private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_Fire;
-    private readonly InputAction m_Player_Shield;
-    private readonly InputAction m_Player_ChangeWeapon1;
-    private readonly InputAction m_Player_ChangeWeapon2;
-    private readonly InputAction m_Player_ChangeWeapon3;
+    // SpaceShipMinigame
+    private readonly InputActionMap m_SpaceShipMinigame;
+    private List<ISpaceShipMinigameActions> m_SpaceShipMinigameActionsCallbackInterfaces = new List<ISpaceShipMinigameActions>();
+    private readonly InputAction m_SpaceShipMinigame_Move;
+    private readonly InputAction m_SpaceShipMinigame_Fire;
+    private readonly InputAction m_SpaceShipMinigame_Shield;
+    private readonly InputAction m_SpaceShipMinigame_ChangeWeapon1;
+    private readonly InputAction m_SpaceShipMinigame_ChangeWeapon2;
+    private readonly InputAction m_SpaceShipMinigame_ChangeWeapon3;
     /// <summary>
-    /// Provides access to input actions defined in input action map "Player".
+    /// Provides access to input actions defined in input action map "SpaceShipMinigame".
     /// </summary>
-    public struct PlayerActions
+    public struct SpaceShipMinigameActions
     {
         private @PlayerInputActions m_Wrapper;
 
         /// <summary>
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
-        public PlayerActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public SpaceShipMinigameActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "Player/Move".
+        /// Provides access to the underlying input action "SpaceShipMinigame/Move".
         /// </summary>
-        public InputAction @Move => m_Wrapper.m_Player_Move;
+        public InputAction @Move => m_Wrapper.m_SpaceShipMinigame_Move;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Fire".
+        /// Provides access to the underlying input action "SpaceShipMinigame/Fire".
         /// </summary>
-        public InputAction @Fire => m_Wrapper.m_Player_Fire;
+        public InputAction @Fire => m_Wrapper.m_SpaceShipMinigame_Fire;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Shield".
+        /// Provides access to the underlying input action "SpaceShipMinigame/Shield".
         /// </summary>
-        public InputAction @Shield => m_Wrapper.m_Player_Shield;
+        public InputAction @Shield => m_Wrapper.m_SpaceShipMinigame_Shield;
         /// <summary>
-        /// Provides access to the underlying input action "Player/ChangeWeapon1".
+        /// Provides access to the underlying input action "SpaceShipMinigame/ChangeWeapon1".
         /// </summary>
-        public InputAction @ChangeWeapon1 => m_Wrapper.m_Player_ChangeWeapon1;
+        public InputAction @ChangeWeapon1 => m_Wrapper.m_SpaceShipMinigame_ChangeWeapon1;
         /// <summary>
-        /// Provides access to the underlying input action "Player/ChangeWeapon2".
+        /// Provides access to the underlying input action "SpaceShipMinigame/ChangeWeapon2".
         /// </summary>
-        public InputAction @ChangeWeapon2 => m_Wrapper.m_Player_ChangeWeapon2;
+        public InputAction @ChangeWeapon2 => m_Wrapper.m_SpaceShipMinigame_ChangeWeapon2;
         /// <summary>
-        /// Provides access to the underlying input action "Player/ChangeWeapon3".
+        /// Provides access to the underlying input action "SpaceShipMinigame/ChangeWeapon3".
         /// </summary>
-        public InputAction @ChangeWeapon3 => m_Wrapper.m_Player_ChangeWeapon3;
+        public InputAction @ChangeWeapon3 => m_Wrapper.m_SpaceShipMinigame_ChangeWeapon3;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_Player; }
+        public InputActionMap Get() { return m_Wrapper.m_SpaceShipMinigame; }
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
         public void Enable() { Get().Enable(); }
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
@@ -490,9 +629,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
         public bool enabled => Get().enabled;
         /// <summary>
-        /// Implicitly converts an <see ref="PlayerActions" /> to an <see ref="InputActionMap" /> instance.
+        /// Implicitly converts an <see ref="SpaceShipMinigameActions" /> to an <see ref="InputActionMap" /> instance.
         /// </summary>
-        public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
+        public static implicit operator InputActionMap(SpaceShipMinigameActions set) { return set.Get(); }
         /// <summary>
         /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
         /// </summary>
@@ -500,11 +639,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <remarks>
         /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
         /// </remarks>
-        /// <seealso cref="PlayerActions" />
-        public void AddCallbacks(IPlayerActions instance)
+        /// <seealso cref="SpaceShipMinigameActions" />
+        public void AddCallbacks(ISpaceShipMinigameActions instance)
         {
-            if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_SpaceShipMinigameActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_SpaceShipMinigameActionsCallbackInterfaces.Add(instance);
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
@@ -531,8 +670,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <remarks>
         /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
         /// </remarks>
-        /// <seealso cref="PlayerActions" />
-        private void UnregisterCallbacks(IPlayerActions instance)
+        /// <seealso cref="SpaceShipMinigameActions" />
+        private void UnregisterCallbacks(ISpaceShipMinigameActions instance)
         {
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
@@ -555,12 +694,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         }
 
         /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />.
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="SpaceShipMinigameActions.UnregisterCallbacks(ISpaceShipMinigameActions)" />.
         /// </summary>
-        /// <seealso cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />
-        public void RemoveCallbacks(IPlayerActions instance)
+        /// <seealso cref="SpaceShipMinigameActions.UnregisterCallbacks(ISpaceShipMinigameActions)" />
+        public void RemoveCallbacks(ISpaceShipMinigameActions instance)
         {
-            if (m_Wrapper.m_PlayerActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_SpaceShipMinigameActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
@@ -570,27 +709,156 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <remarks>
         /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
         /// </remarks>
-        /// <seealso cref="PlayerActions.AddCallbacks(IPlayerActions)" />
-        /// <seealso cref="PlayerActions.RemoveCallbacks(IPlayerActions)" />
-        /// <seealso cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />
-        public void SetCallbacks(IPlayerActions instance)
+        /// <seealso cref="SpaceShipMinigameActions.AddCallbacks(ISpaceShipMinigameActions)" />
+        /// <seealso cref="SpaceShipMinigameActions.RemoveCallbacks(ISpaceShipMinigameActions)" />
+        /// <seealso cref="SpaceShipMinigameActions.UnregisterCallbacks(ISpaceShipMinigameActions)" />
+        public void SetCallbacks(ISpaceShipMinigameActions instance)
         {
-            foreach (var item in m_Wrapper.m_PlayerActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_SpaceShipMinigameActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_PlayerActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_SpaceShipMinigameActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
     /// <summary>
-    /// Provides a new <see cref="PlayerActions" /> instance referencing this action map.
+    /// Provides a new <see cref="SpaceShipMinigameActions" /> instance referencing this action map.
     /// </summary>
-    public PlayerActions @Player => new PlayerActions(this);
+    public SpaceShipMinigameActions @SpaceShipMinigame => new SpaceShipMinigameActions(this);
+
+    // RythmGame
+    private readonly InputActionMap m_RythmGame;
+    private List<IRythmGameActions> m_RythmGameActionsCallbackInterfaces = new List<IRythmGameActions>();
+    private readonly InputAction m_RythmGame_Y_Button;
+    private readonly InputAction m_RythmGame_A_Button;
+    private readonly InputAction m_RythmGame_X_Button;
+    private readonly InputAction m_RythmGame_B_Button;
     /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player" which allows adding and removing callbacks.
+    /// Provides access to input actions defined in input action map "RythmGame".
     /// </summary>
-    /// <seealso cref="PlayerActions.AddCallbacks(IPlayerActions)" />
-    /// <seealso cref="PlayerActions.RemoveCallbacks(IPlayerActions)" />
-    public interface IPlayerActions
+    public struct RythmGameActions
+    {
+        private @PlayerInputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public RythmGameActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "RythmGame/Y_Button".
+        /// </summary>
+        public InputAction @Y_Button => m_Wrapper.m_RythmGame_Y_Button;
+        /// <summary>
+        /// Provides access to the underlying input action "RythmGame/A_Button".
+        /// </summary>
+        public InputAction @A_Button => m_Wrapper.m_RythmGame_A_Button;
+        /// <summary>
+        /// Provides access to the underlying input action "RythmGame/X_Button".
+        /// </summary>
+        public InputAction @X_Button => m_Wrapper.m_RythmGame_X_Button;
+        /// <summary>
+        /// Provides access to the underlying input action "RythmGame/B_Button".
+        /// </summary>
+        public InputAction @B_Button => m_Wrapper.m_RythmGame_B_Button;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_RythmGame; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="RythmGameActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(RythmGameActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="RythmGameActions" />
+        public void AddCallbacks(IRythmGameActions instance)
+        {
+            if (instance == null || m_Wrapper.m_RythmGameActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_RythmGameActionsCallbackInterfaces.Add(instance);
+            @Y_Button.started += instance.OnY_Button;
+            @Y_Button.performed += instance.OnY_Button;
+            @Y_Button.canceled += instance.OnY_Button;
+            @A_Button.started += instance.OnA_Button;
+            @A_Button.performed += instance.OnA_Button;
+            @A_Button.canceled += instance.OnA_Button;
+            @X_Button.started += instance.OnX_Button;
+            @X_Button.performed += instance.OnX_Button;
+            @X_Button.canceled += instance.OnX_Button;
+            @B_Button.started += instance.OnB_Button;
+            @B_Button.performed += instance.OnB_Button;
+            @B_Button.canceled += instance.OnB_Button;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="RythmGameActions" />
+        private void UnregisterCallbacks(IRythmGameActions instance)
+        {
+            @Y_Button.started -= instance.OnY_Button;
+            @Y_Button.performed -= instance.OnY_Button;
+            @Y_Button.canceled -= instance.OnY_Button;
+            @A_Button.started -= instance.OnA_Button;
+            @A_Button.performed -= instance.OnA_Button;
+            @A_Button.canceled -= instance.OnA_Button;
+            @X_Button.started -= instance.OnX_Button;
+            @X_Button.performed -= instance.OnX_Button;
+            @X_Button.canceled -= instance.OnX_Button;
+            @B_Button.started -= instance.OnB_Button;
+            @B_Button.performed -= instance.OnB_Button;
+            @B_Button.canceled -= instance.OnB_Button;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="RythmGameActions.UnregisterCallbacks(IRythmGameActions)" />.
+        /// </summary>
+        /// <seealso cref="RythmGameActions.UnregisterCallbacks(IRythmGameActions)" />
+        public void RemoveCallbacks(IRythmGameActions instance)
+        {
+            if (m_Wrapper.m_RythmGameActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="RythmGameActions.AddCallbacks(IRythmGameActions)" />
+        /// <seealso cref="RythmGameActions.RemoveCallbacks(IRythmGameActions)" />
+        /// <seealso cref="RythmGameActions.UnregisterCallbacks(IRythmGameActions)" />
+        public void SetCallbacks(IRythmGameActions instance)
+        {
+            foreach (var item in m_Wrapper.m_RythmGameActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_RythmGameActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="RythmGameActions" /> instance referencing this action map.
+    /// </summary>
+    public RythmGameActions @RythmGame => new RythmGameActions(this);
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "SpaceShipMinigame" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="SpaceShipMinigameActions.AddCallbacks(ISpaceShipMinigameActions)" />
+    /// <seealso cref="SpaceShipMinigameActions.RemoveCallbacks(ISpaceShipMinigameActions)" />
+    public interface ISpaceShipMinigameActions
     {
         /// <summary>
         /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
@@ -634,5 +902,41 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnChangeWeapon3(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "RythmGame" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="RythmGameActions.AddCallbacks(IRythmGameActions)" />
+    /// <seealso cref="RythmGameActions.RemoveCallbacks(IRythmGameActions)" />
+    public interface IRythmGameActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Y_Button" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnY_Button(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "A_Button" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnA_Button(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "X_Button" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnX_Button(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "B_Button" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnB_Button(InputAction.CallbackContext context);
     }
 }
