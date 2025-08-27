@@ -41,12 +41,12 @@ namespace SpaceShip
         {
             //check if is in standalone mode or in smartphone mode
 #if UNITY_STANDALONE || UNITY_WEBGL || UNITY_EDITOR
-            float scroll = Input.GetAxis("Mouse ScrollWheel");
-            if (scroll != 0f)
-            {
-                Camera.main.fieldOfView -= scroll * scrollSpeed;
-                Camera.main.fieldOfView = Mathf.Clamp(Camera.main.fieldOfView, 45f, 90f);
-            }
+            //float scroll = Input.GetAxis("Mouse ScrollWheel");
+            //if (scroll != 0f)
+            //{
+            //    Camera.main.fieldOfView -= scroll * scrollSpeed;
+            //    Camera.main.fieldOfView = Mathf.Clamp(Camera.main.fieldOfView, 45f, 90f);
+            //}
 #endif
 #if MOBILE
             if (Input.touchCount == 2)
@@ -91,13 +91,13 @@ namespace SpaceShip
 #if UNITY_STANDALONE || UNITY_WEBGL || UNITY_EDITOR
 
             //if the right mouse button is pressed, rotate the camera 
-            if (Input.GetMouseButton(1))
-            {
-                float horizontal = Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime;
-                transform.RotateAround(player.transform.position, Vector3.up, horizontal);
-                //update the distance from the player
-                distanceFromPlayer = transform.position - player.transform.position;
-            }
+            //if (Input.GetMouseButton(1))
+            //{
+            //    float horizontal = Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime;
+            //    transform.RotateAround(player.transform.position, Vector3.up, horizontal);
+            //    //update the distance from the player
+            //    distanceFromPlayer = transform.position - player.transform.position;
+            //}
 #endif
 
 #if MOBILE

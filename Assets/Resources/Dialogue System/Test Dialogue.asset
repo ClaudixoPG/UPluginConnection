@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45d8770642537b941828e5dce62b031d, type: 3}
+  m_Name: Test Dialogue
+  m_EditorClassIdentifier: 
+  dialogueID: test_dialogue
+  dialogues:
+  - message: Aqui puedes escribir una gran cantidad de texto con muchas palabras
+      que pueden sonar pretenciosas.
+    background: {fileID: 21300000, guid: 9213ebd5ba27f1e448c336272fb6ec3e, type: 3}
+    character: {fileID: 21300000, guid: b50d1b734603cf34fa5bb96c59024c6d, type: 3}
+    dalogueOptions: []
+  - message: Este texto puede servir para recordar alguna palabra clave antes de
+      elegir una opcion.
+    background: {fileID: 21300000, guid: 9213ebd5ba27f1e448c336272fb6ec3e, type: 3}
+    character: {fileID: 21300000, guid: b50d1b734603cf34fa5bb96c59024c6d, type: 3}
+    dalogueOptions:
+    - message: Minimo 0 opciones
+    - message: Poco texto nomas
+    - message: Maximo 3 opciones
+  - message: Exceder el limite de opciones puede causar un crash
+    background: {fileID: 21300000, guid: 9213ebd5ba27f1e448c336272fb6ec3e, type: 3}
+    character: {fileID: 21300000, guid: eded1390ce1d6a64f86ed0d15f786e9a, type: 3}
+    dalogueOptions:
+    - message: Entendido
+    - message: Me la suda
+  - message: Este seria el ultimo texto que aparece antes de finalizar el dialogo,
+      al finalizar mira el log
+    background: {fileID: 21300000, guid: 9213ebd5ba27f1e448c336272fb6ec3e, type: 3}
+    character: {fileID: 21300000, guid: b50d1b734603cf34fa5bb96c59024c6d, type: 3}
+    dalogueOptions: []
