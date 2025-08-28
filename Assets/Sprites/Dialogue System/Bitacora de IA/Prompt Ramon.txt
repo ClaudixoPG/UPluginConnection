@@ -1,0 +1,5 @@
+Crea un personaje con el mismo estilo que la imagen original.
+
+Un estudiante universitario comun y corriente. 
+
+Fondo blanco para poder remover el fondo facilmente
