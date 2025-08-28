@@ -1,0 +1,3 @@
+Dibuja al personaje de la imagen con una expresion de confundido, apoya con expresion corporal para reprsentar confusion.
+
+Imagen en fondo blanco para poder quitar el fondo.
