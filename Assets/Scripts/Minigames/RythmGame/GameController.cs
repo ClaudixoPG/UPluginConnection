@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SpaceShip;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -18,7 +19,6 @@ namespace RythmGame
 
         //Points
         public int currentScore;
-        public int scorePerNote = 100;
 
         //multiplier
         public int currentMultiplier;
@@ -29,9 +29,29 @@ namespace RythmGame
         public TextMeshProUGUI scoreText;
         public TextMeshProUGUI multiplierText;
 
+        //Total notes (for accuracy)
+        public float totalNotes;
+        public float perfectNote;
+        public float goodNote;
+        public float hitNote;
+        public float missedNote;
+
+        //UI (esto debiera ser con un panel manager al cual le paso los values)
+        public GameObject resultsScreen;
+        public TextMeshProUGUI percentageHitText;
+        public TextMeshProUGUI perfectHitText;
+        public TextMeshProUGUI goodHitText;
+        public TextMeshProUGUI hitText;
+        public TextMeshProUGUI missedText;
+        public TextMeshProUGUI rankText;
+        public TextMeshProUGUI finalScoreText;
+
         private void Start()
         {
             instance = this;
+
+            //get notes
+            totalNotes = FindObjectsByType<Note>(sortMode: FindObjectsSortMode.None).Length;
         }
 
         private void Awake()
@@ -53,9 +73,36 @@ namespace RythmGame
 
         public void HandleMessage(string message)
         {
-            throw new System.NotImplementedException();
-        }
+            if (string.IsNullOrEmpty(message))
+                return;
 
+            // --- Dpad:UP / DOWN / LEFT / RIGHT ---
+            if (message.StartsWith("Dpad:"))
+            {
+                string dir = message.Substring("Dpad:".Length).ToUpper();
+                switch (dir)
+                {
+                    case "UP":
+                        buttons[0].PressButton();
+                        break;
+                    case "DOWN":
+                        buttons[1].PressButton();
+                        break;
+                    case "LEFT":
+                        buttons[2].PressButton();
+                        break;
+                    case "RIGHT":
+                        buttons[0].PressButton();
+                        break;
+                    default:
+                        Debug.LogWarning("Dirección Dpad desconocida: " + dir);
+                        break;
+                }
+                return;
+            }
+
+            Debug.LogWarning("Formato de mensaje no reconocido: " + message);
+        }
         void Update()
         {
             if (startPlaying)
@@ -63,13 +110,35 @@ namespace RythmGame
                 AudioSource.Play();
                 beatScroller.hasStarted = true;
                 startPlaying = false;
+            }else
+            {
+                if (!AudioSource.isPlaying && !resultsScreen.activeInHierarchy)
+                {
+                    //show results screen
+                    resultsScreen.SetActive(true);
+                    //calculate percentage hit
+                    float totalHit = perfectNote + goodNote + hitNote;
+                    float percentHit = (totalHit / totalNotes) * 100f;
+                    percentageHitText.text = "Hit Percentage: " + percentHit.ToString("F1") + "%";
+                    perfectHitText.text = "Perfect Hits: " + perfectNote;
+                    goodHitText.text = "Good Hits: " + goodNote;
+                    hitText.text = "Hits: " + hitNote;
+                    missedText.text = "Missed: " + missedNote;
+                    finalScoreText.text = "Final Score: " + currentScore;
+                    //rank
+                    if (percentHit == 100f) rankText.text = "Rank: S+";
+                    else if (percentHit >= 95f) rankText.text = "Rank: S";
+                    else if (percentHit >= 90f) rankText.text = "Rank: A";
+                    else if (percentHit >= 80f) rankText.text = "Rank: B";
+                    else if (percentHit >= 70f) rankText.text = "Rank: C";
+                    else if (percentHit >= 60f) rankText.text = "Rank: D";
+                    else rankText.text = "Rank: F";
+                }
             }
         }
 
-        public void NoteHit()
+        public void NoteHit(int value)
         {
-            Debug.Log("Hit on time");
-
             multiplierTracker++;
             if (currentMultiplier - 1 < multiplierThresholds.Length) // evitar desbordamiento del array
             {
@@ -79,22 +148,17 @@ namespace RythmGame
                     currentMultiplier++; // incrementar el multiplicador
                 }
             }
-
             multiplierText.text = "Multiplier: x" + currentMultiplier;
-            currentScore += scorePerNote * currentMultiplier;
+            currentScore += value * currentMultiplier;
             scoreText.text = "Score: " + currentScore;
         }
 
         public void NoteMissed()
         {
-            Debug.Log("Missed the note");
-
             currentMultiplier = 1;
             multiplierTracker = 0;
             multiplierText.text = "Multiplier: x" + currentMultiplier;
-
         }
-
-
     }
+
 }

@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/RythmGame/Start.unity
+    guid: a7efac3f0da73e7439004acd29203987
+  - enabled: 1
     path: Assets/Scenes/SpaceShip/StartScene.unity
     guid: 7a2a1b0f13fc05e4ca694d44bb6fe11b
   - enabled: 1
