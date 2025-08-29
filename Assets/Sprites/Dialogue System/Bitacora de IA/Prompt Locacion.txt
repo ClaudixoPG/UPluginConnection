@@ -1,0 +1,1 @@
+Toma la primera imagen y estilizala con el estilo de la segunda imagen, no incluyas ningun personaje, unicamente restiliza. Conserva lo mejor posible la imagen original

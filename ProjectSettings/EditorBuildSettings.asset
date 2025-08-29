@@ -6,11 +6,17 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/RythmGame/Start.unity
+    guid: a7efac3f0da73e7439004acd29203987
+  - enabled: 1
     path: Assets/Scenes/SpaceShip/StartScene.unity
     guid: 7a2a1b0f13fc05e4ca694d44bb6fe11b
   - enabled: 1
     path: Assets/Scenes/SpaceShip/Minigame_1.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Dialogue Manager/Dialogue Scene.unity
+    guid: 9026346a371adcb43b4c309158834572
   m_configObjects:
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: 5cb26a33543308a4d87e9de8fa786ffd, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: f82b0fe54a99cc8418cbf97c0c1a10de, type: 2}

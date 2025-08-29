@@ -1,19 +1,38 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class POIManager : MonoBehaviour
 {
-    public static POIManager Instance;
+    private static POIManager instance;
+
+    public static POIManager Instance
+    {
+        get
+        {
+            if (instance == null)
+                instance = FindFirstObjectByType<POIManager>();
+
+            return instance;
+        }
+    }
 
     private List<PointOfInterest> allPOIs = new List<PointOfInterest>();
 
-    private void Awake()
+    /// <summary>
+    /// Retrieves a Point of Interest (POI) by its unique ID.
+    /// Returns null if no matching POI is found.
+    /// </summary>
+    public PointOfInterest GetPOI(string poi_id)
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
+        return allPOIs.FirstOrDefault(x => x.ID == poi_id);
     }
+
+    //private void Awake()
+    //{
+    //    if (Instance != null)
+    //        Destroy(gameObject);
+    //}
 
     public void RegisterPOI(PointOfInterest poi)
     {

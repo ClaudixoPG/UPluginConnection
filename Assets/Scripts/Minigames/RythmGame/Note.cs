@@ -1,20 +1,53 @@
 using RythmGame;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Note : MonoBehaviour
+namespace RythmGame
 {
-    public bool wasHit = false;
-    public void Hit()
+    public class Note : MonoBehaviour
     {
-        wasHit = true;
-        GameController.instance.NoteHit();
-        Destroy(gameObject);
-    }
+        public bool wasHit = false;
+        public int scorePerNote = 100;
+        public int scorePerGoodNote = 125;
+        public int scorePerPerfectNote = 150;
 
-    public void Missed()
-    {
-        if (wasHit) return;
-        GameController.instance.NoteMissed();
-        Destroy(gameObject);
+        //Effects
+        //public List<GameObject> effects;
+
+        public void Hit(ButtonController.State state)
+        {
+            wasHit = true;
+            var value = 0;
+        
+            switch (state)
+            {
+                case ButtonController.State.Hit:
+                    GameController.instance.hitNote++;
+                    value = scorePerNote;
+                    break;
+                case ButtonController.State.Good:
+                    GameController.instance.goodNote++;
+                    value = scorePerGoodNote;
+                    break;
+                case ButtonController.State.Perfect:
+                    GameController.instance.perfectNote++;
+                    value = scorePerPerfectNote;
+                    break;
+                default:
+                    value = 0;
+                    break;
+            }
+
+            GameController.instance.NoteHit(value);
+            Destroy(gameObject);
+        }
+
+        public void Missed()
+        {
+            if (wasHit) return;
+            GameController.instance.missedNote++;
+            GameController.instance.NoteMissed();
+            Destroy(gameObject);
+        }
     }
 }
