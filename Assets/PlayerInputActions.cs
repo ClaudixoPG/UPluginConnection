@@ -478,6 +478,74 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""GolfMiniGame"",
+            ""id"": ""9dadb106-1138-47d7-8df6-c410b9119e38"",
+            ""actions"": [
+                {
+                    ""name"": ""LeftDirection"",
+                    ""type"": ""Button"",
+                    ""id"": ""ed9a826d-bacf-4d79-85a2-c128d3246608"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightDirection"",
+                    ""type"": ""Button"",
+                    ""id"": ""87f422f8-6696-4852-9f14-7567eb5c8405"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LaunchForce"",
+                    ""type"": ""Button"",
+                    ""id"": ""9c1442a0-24d3-448d-8f65-12a538319de0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""53f4a0ab-e54e-4873-8b0c-1e3b0ea4ef71"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftDirection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""37948cb8-5eaa-4c33-a4b2-68bb16bbb485"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightDirection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c8a4642-3894-40cc-b321-b7ed20b9c93a"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LaunchForce"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -496,12 +564,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_RythmGame_A_Button = m_RythmGame.FindAction("A_Button", throwIfNotFound: true);
         m_RythmGame_X_Button = m_RythmGame.FindAction("X_Button", throwIfNotFound: true);
         m_RythmGame_B_Button = m_RythmGame.FindAction("B_Button", throwIfNotFound: true);
+        // GolfMiniGame
+        m_GolfMiniGame = asset.FindActionMap("GolfMiniGame", throwIfNotFound: true);
+        m_GolfMiniGame_LeftDirection = m_GolfMiniGame.FindAction("LeftDirection", throwIfNotFound: true);
+        m_GolfMiniGame_RightDirection = m_GolfMiniGame.FindAction("RightDirection", throwIfNotFound: true);
+        m_GolfMiniGame_LaunchForce = m_GolfMiniGame.FindAction("LaunchForce", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
     {
         UnityEngine.Debug.Assert(!m_SpaceShipMinigame.enabled, "This will cause a leak and performance issues, PlayerInputActions.SpaceShipMinigame.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_RythmGame.enabled, "This will cause a leak and performance issues, PlayerInputActions.RythmGame.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_GolfMiniGame.enabled, "This will cause a leak and performance issues, PlayerInputActions.GolfMiniGame.Disable() has not been called.");
     }
 
     /// <summary>
@@ -853,6 +927,124 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="RythmGameActions" /> instance referencing this action map.
     /// </summary>
     public RythmGameActions @RythmGame => new RythmGameActions(this);
+
+    // GolfMiniGame
+    private readonly InputActionMap m_GolfMiniGame;
+    private List<IGolfMiniGameActions> m_GolfMiniGameActionsCallbackInterfaces = new List<IGolfMiniGameActions>();
+    private readonly InputAction m_GolfMiniGame_LeftDirection;
+    private readonly InputAction m_GolfMiniGame_RightDirection;
+    private readonly InputAction m_GolfMiniGame_LaunchForce;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "GolfMiniGame".
+    /// </summary>
+    public struct GolfMiniGameActions
+    {
+        private @PlayerInputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public GolfMiniGameActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "GolfMiniGame/LeftDirection".
+        /// </summary>
+        public InputAction @LeftDirection => m_Wrapper.m_GolfMiniGame_LeftDirection;
+        /// <summary>
+        /// Provides access to the underlying input action "GolfMiniGame/RightDirection".
+        /// </summary>
+        public InputAction @RightDirection => m_Wrapper.m_GolfMiniGame_RightDirection;
+        /// <summary>
+        /// Provides access to the underlying input action "GolfMiniGame/LaunchForce".
+        /// </summary>
+        public InputAction @LaunchForce => m_Wrapper.m_GolfMiniGame_LaunchForce;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_GolfMiniGame; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="GolfMiniGameActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(GolfMiniGameActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="GolfMiniGameActions" />
+        public void AddCallbacks(IGolfMiniGameActions instance)
+        {
+            if (instance == null || m_Wrapper.m_GolfMiniGameActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_GolfMiniGameActionsCallbackInterfaces.Add(instance);
+            @LeftDirection.started += instance.OnLeftDirection;
+            @LeftDirection.performed += instance.OnLeftDirection;
+            @LeftDirection.canceled += instance.OnLeftDirection;
+            @RightDirection.started += instance.OnRightDirection;
+            @RightDirection.performed += instance.OnRightDirection;
+            @RightDirection.canceled += instance.OnRightDirection;
+            @LaunchForce.started += instance.OnLaunchForce;
+            @LaunchForce.performed += instance.OnLaunchForce;
+            @LaunchForce.canceled += instance.OnLaunchForce;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="GolfMiniGameActions" />
+        private void UnregisterCallbacks(IGolfMiniGameActions instance)
+        {
+            @LeftDirection.started -= instance.OnLeftDirection;
+            @LeftDirection.performed -= instance.OnLeftDirection;
+            @LeftDirection.canceled -= instance.OnLeftDirection;
+            @RightDirection.started -= instance.OnRightDirection;
+            @RightDirection.performed -= instance.OnRightDirection;
+            @RightDirection.canceled -= instance.OnRightDirection;
+            @LaunchForce.started -= instance.OnLaunchForce;
+            @LaunchForce.performed -= instance.OnLaunchForce;
+            @LaunchForce.canceled -= instance.OnLaunchForce;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="GolfMiniGameActions.UnregisterCallbacks(IGolfMiniGameActions)" />.
+        /// </summary>
+        /// <seealso cref="GolfMiniGameActions.UnregisterCallbacks(IGolfMiniGameActions)" />
+        public void RemoveCallbacks(IGolfMiniGameActions instance)
+        {
+            if (m_Wrapper.m_GolfMiniGameActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="GolfMiniGameActions.AddCallbacks(IGolfMiniGameActions)" />
+        /// <seealso cref="GolfMiniGameActions.RemoveCallbacks(IGolfMiniGameActions)" />
+        /// <seealso cref="GolfMiniGameActions.UnregisterCallbacks(IGolfMiniGameActions)" />
+        public void SetCallbacks(IGolfMiniGameActions instance)
+        {
+            foreach (var item in m_Wrapper.m_GolfMiniGameActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_GolfMiniGameActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="GolfMiniGameActions" /> instance referencing this action map.
+    /// </summary>
+    public GolfMiniGameActions @GolfMiniGame => new GolfMiniGameActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "SpaceShipMinigame" which allows adding and removing callbacks.
     /// </summary>
@@ -938,5 +1130,34 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnB_Button(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "GolfMiniGame" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="GolfMiniGameActions.AddCallbacks(IGolfMiniGameActions)" />
+    /// <seealso cref="GolfMiniGameActions.RemoveCallbacks(IGolfMiniGameActions)" />
+    public interface IGolfMiniGameActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "LeftDirection" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLeftDirection(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RightDirection" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRightDirection(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "LaunchForce" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLaunchForce(InputAction.CallbackContext context);
     }
 }

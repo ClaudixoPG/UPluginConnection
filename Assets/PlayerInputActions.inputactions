@@ -392,6 +392,74 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "GolfMiniGame",
+            "id": "9dadb106-1138-47d7-8df6-c410b9119e38",
+            "actions": [
+                {
+                    "name": "LeftDirection",
+                    "type": "Button",
+                    "id": "ed9a826d-bacf-4d79-85a2-c128d3246608",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RightDirection",
+                    "type": "Button",
+                    "id": "87f422f8-6696-4852-9f14-7567eb5c8405",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LaunchForce",
+                    "type": "Button",
+                    "id": "9c1442a0-24d3-448d-8f65-12a538319de0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "53f4a0ab-e54e-4873-8b0c-1e3b0ea4ef71",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftDirection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "37948cb8-5eaa-4c33-a4b2-68bb16bbb485",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightDirection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9c8a4642-3894-40cc-b321-b7ed20b9c93a",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LaunchForce",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

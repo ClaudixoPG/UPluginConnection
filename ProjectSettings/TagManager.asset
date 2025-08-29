@@ -7,14 +7,16 @@ TagManager:
   - Activator
   - Enemy
   - Note
+  - Wall
+  - Floor
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Wall
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 
