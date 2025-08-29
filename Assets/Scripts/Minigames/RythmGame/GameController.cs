@@ -3,6 +3,7 @@ using SpaceShip;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace RythmGame
 {
@@ -82,17 +83,42 @@ namespace RythmGame
                 string dir = message.Substring("Dpad:".Length).ToUpper();
                 switch (dir)
                 {
-                    case "UP":
+                    case "LEFT":
                         buttons[0].PressButton();
                         break;
-                    case "DOWN":
+                    case "UP":
                         buttons[1].PressButton();
                         break;
-                    case "LEFT":
+                    case "RIGHT":
                         buttons[2].PressButton();
                         break;
+                    case "DOWN":
+                        buttons[3].PressButton();
+                        break;
+                    default:
+                        Debug.LogWarning("Dirección Dpad desconocida: " + dir);
+                        break;
+                }
+                return;
+            }
+
+            // --- DpadRelease:UP / DOWN / LEFT / RIGHT ---
+            if (message.StartsWith("DpadRelease:"))
+            {
+                string dir = message.Substring("DpadRelease:".Length).ToUpper();
+                switch (dir)
+                {
+                    case "LEFT":
+                        buttons[0].ReleaseButton();
+                        break;
+                    case "UP":
+                        buttons[1].ReleaseButton();
+                        break;
                     case "RIGHT":
-                        buttons[0].PressButton();
+                        buttons[2].ReleaseButton();
+                        break;
+                    case "DOWN":
+                        buttons[3].ReleaseButton();
                         break;
                     default:
                         Debug.LogWarning("Dirección Dpad desconocida: " + dir);
@@ -103,8 +129,39 @@ namespace RythmGame
 
             Debug.LogWarning("Formato de mensaje no reconocido: " + message);
         }
+
+        private ButtonController activeButton; // botón actualmente presionado
+
         void Update()
         {
+            #if UNITY_ANDROID
+            // --- Touch en móvil ---
+            if (Touchscreen.current != null)
+            {
+                var touch = Touchscreen.current.primaryTouch;
+
+                if (touch.press.wasPressedThisFrame)
+                {
+                    int buttonLayerMask = LayerMask.GetMask("Button");
+
+                    Vector2 worldPos = Camera.main.ScreenToWorldPoint(touch.position.ReadValue());
+                    Collider2D hit = Physics2D.OverlapPoint(worldPos,buttonLayerMask);
+
+                    if (hit != null && hit.TryGetComponent<ButtonController>(out var button))
+                    {
+                        activeButton = button;
+                        activeButton.PressButton();
+                    }
+                }
+
+                if (touch.press.wasReleasedThisFrame && activeButton != null)
+                {
+                    activeButton.ReleaseButton();
+                    activeButton = null;
+                }
+            }
+            #endif
+
             if (startPlaying)
             {
                 AudioSource.Play();

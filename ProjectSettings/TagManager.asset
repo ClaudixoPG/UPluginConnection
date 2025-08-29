@@ -14,7 +14,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Button
   - 
   - 
   - 
@@ -46,6 +46,9 @@ TagManager:
     locked: 0
   - name: Arrows
     uniqueID: 4046707611
+    locked: 0
+  - name: Button
+    uniqueID: 3218049111
     locked: 0
   m_RenderingLayers:
   - Default
