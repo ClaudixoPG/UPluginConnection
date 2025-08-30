@@ -7,6 +7,7 @@ TagManager:
   - Activator
   - Enemy
   - Note
+  - Obstacle
   layers:
   - Default
   - TransparentFX
@@ -15,9 +16,9 @@ TagManager:
   - Water
   - UI
   - Button
-  - 
-  - 
-  - 
+  - Player
+  - Crounch
+  - Obstacle
   - 
   - 
   - 

@@ -478,6 +478,76 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""EndlessRunner"",
+            ""id"": ""500f767a-7711-4ae3-9563-9945e69472a0"",
+            ""actions"": [
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""085e186e-30a1-42bb-9e52-7760aa5cf3a0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Crounch"",
+                    ""type"": ""Button"",
+                    ""id"": ""cce16de0-6f47-4bba-b897-e20ad45b6c7d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""47edd419-01eb-43f8-9102-0b86511fb7c4"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""81f8c654-1087-4db3-bf40-73b106e052df"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""534bc280-bf4c-4644-b351-67878fa44b05"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crounch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3625f1e8-d0b6-4ca4-8cc5-922355f36dad"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crounch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -496,12 +566,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_RythmGame_A_Button = m_RythmGame.FindAction("A_Button", throwIfNotFound: true);
         m_RythmGame_X_Button = m_RythmGame.FindAction("X_Button", throwIfNotFound: true);
         m_RythmGame_B_Button = m_RythmGame.FindAction("B_Button", throwIfNotFound: true);
+        // EndlessRunner
+        m_EndlessRunner = asset.FindActionMap("EndlessRunner", throwIfNotFound: true);
+        m_EndlessRunner_Jump = m_EndlessRunner.FindAction("Jump", throwIfNotFound: true);
+        m_EndlessRunner_Crounch = m_EndlessRunner.FindAction("Crounch", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
     {
         UnityEngine.Debug.Assert(!m_SpaceShipMinigame.enabled, "This will cause a leak and performance issues, PlayerInputActions.SpaceShipMinigame.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_RythmGame.enabled, "This will cause a leak and performance issues, PlayerInputActions.RythmGame.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_EndlessRunner.enabled, "This will cause a leak and performance issues, PlayerInputActions.EndlessRunner.Disable() has not been called.");
     }
 
     /// <summary>
@@ -853,6 +928,113 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="RythmGameActions" /> instance referencing this action map.
     /// </summary>
     public RythmGameActions @RythmGame => new RythmGameActions(this);
+
+    // EndlessRunner
+    private readonly InputActionMap m_EndlessRunner;
+    private List<IEndlessRunnerActions> m_EndlessRunnerActionsCallbackInterfaces = new List<IEndlessRunnerActions>();
+    private readonly InputAction m_EndlessRunner_Jump;
+    private readonly InputAction m_EndlessRunner_Crounch;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "EndlessRunner".
+    /// </summary>
+    public struct EndlessRunnerActions
+    {
+        private @PlayerInputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public EndlessRunnerActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "EndlessRunner/Jump".
+        /// </summary>
+        public InputAction @Jump => m_Wrapper.m_EndlessRunner_Jump;
+        /// <summary>
+        /// Provides access to the underlying input action "EndlessRunner/Crounch".
+        /// </summary>
+        public InputAction @Crounch => m_Wrapper.m_EndlessRunner_Crounch;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_EndlessRunner; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="EndlessRunnerActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(EndlessRunnerActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="EndlessRunnerActions" />
+        public void AddCallbacks(IEndlessRunnerActions instance)
+        {
+            if (instance == null || m_Wrapper.m_EndlessRunnerActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_EndlessRunnerActionsCallbackInterfaces.Add(instance);
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
+            @Crounch.started += instance.OnCrounch;
+            @Crounch.performed += instance.OnCrounch;
+            @Crounch.canceled += instance.OnCrounch;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="EndlessRunnerActions" />
+        private void UnregisterCallbacks(IEndlessRunnerActions instance)
+        {
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
+            @Crounch.started -= instance.OnCrounch;
+            @Crounch.performed -= instance.OnCrounch;
+            @Crounch.canceled -= instance.OnCrounch;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="EndlessRunnerActions.UnregisterCallbacks(IEndlessRunnerActions)" />.
+        /// </summary>
+        /// <seealso cref="EndlessRunnerActions.UnregisterCallbacks(IEndlessRunnerActions)" />
+        public void RemoveCallbacks(IEndlessRunnerActions instance)
+        {
+            if (m_Wrapper.m_EndlessRunnerActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="EndlessRunnerActions.AddCallbacks(IEndlessRunnerActions)" />
+        /// <seealso cref="EndlessRunnerActions.RemoveCallbacks(IEndlessRunnerActions)" />
+        /// <seealso cref="EndlessRunnerActions.UnregisterCallbacks(IEndlessRunnerActions)" />
+        public void SetCallbacks(IEndlessRunnerActions instance)
+        {
+            foreach (var item in m_Wrapper.m_EndlessRunnerActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_EndlessRunnerActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="EndlessRunnerActions" /> instance referencing this action map.
+    /// </summary>
+    public EndlessRunnerActions @EndlessRunner => new EndlessRunnerActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "SpaceShipMinigame" which allows adding and removing callbacks.
     /// </summary>
@@ -938,5 +1120,27 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnB_Button(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "EndlessRunner" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="EndlessRunnerActions.AddCallbacks(IEndlessRunnerActions)" />
+    /// <seealso cref="EndlessRunnerActions.RemoveCallbacks(IEndlessRunnerActions)" />
+    public interface IEndlessRunnerActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnJump(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Crounch" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCrounch(InputAction.CallbackContext context);
     }
 }
