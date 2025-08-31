@@ -462,6 +462,56 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "FishingGame",
+            "id": "d44ae147-59ef-4ee4-9254-f9229b5716db",
+            "actions": [
+                {
+                    "name": "PressScreen",
+                    "type": "Button",
+                    "id": "594ad938-048a-4661-83fc-f70e16244c26",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f11fae04-8828-4dd8-8b3b-a5743d6d2c80",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PressScreen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "74610df0-4ed7-4ec6-a7fc-efeb05162b74",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PressScreen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0e7c4eb6-2797-4592-97d4-1ea4224f1adf",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PressScreen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []
