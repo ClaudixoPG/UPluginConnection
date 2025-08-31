@@ -42,6 +42,8 @@ namespace GolfGame
             if (string.IsNullOrEmpty(message))
                 return;
 
+            #region
+
             if (message.StartsWith("Dpad:"))
             {
                 string dir = message.Substring("Dpad:".Length).ToUpper();
@@ -53,6 +55,10 @@ namespace GolfGame
                     case "RIGHT":
                         playerController.isTurningRight = true;
                         break;
+                    case "FIRE":
+                        PluginActivity.Instance.UpdateControl(4); // Cambia a modo de fuerza
+                        break;
+
                     default:
                         Debug.LogWarning("Dirección Dpad desconocida: " + dir);
                         break;
@@ -79,6 +85,35 @@ namespace GolfGame
                 }
                 return;
             }
+
+            #endregion
+
+            // --- fuerza:x ---
+            if (message.StartsWith("fuerza:"))
+            {
+                string[] parts = message.Substring("fuerza:".Length).Split(',');
+                if (parts.Length == 2 &&
+                    float.TryParse(parts[0], out float x))
+                {
+                    Debug.Log("fuerza value:" + x);
+                    playerController.isCharging = true;
+                }
+                return;
+            }
+
+            // --- fuerza:x ---
+            if (message.StartsWith("fuerzaRelease:"))
+            {
+                string[] parts = message.Substring("fuerzaRelease:".Length).Split(',');
+                if (parts.Length == 1 &&
+                    float.TryParse(parts[0], out float x))
+                {
+                    PluginActivity.Instance.UpdateControl(1); // Cambia a modo de dirección
+                    playerController.Release();
+                }
+                return;
+            }
+
 
         }
     }
