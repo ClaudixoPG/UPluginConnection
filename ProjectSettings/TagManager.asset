@@ -7,11 +7,15 @@ TagManager:
   - Activator
   - Enemy
   - Note
+  - Wall
+  - Floor
+  - Goal
+  - Ball
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Goal
   - Water
   - UI
   - Button
