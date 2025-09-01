@@ -1377,14 +1377,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 499d48940973ee348b5b855d56bd279a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxPower: 40
-  minPower: 2
-  maxGoalSpeed: 10
+  maxPower: 10
+  maxGoalSpeed: 4
   rb: {fileID: 1033385892789032590}
   lr: {fileID: 8946152294084331145}
   rotationSpeed: 200
   isTurningLeft: 0
   isTurningRight: 0
+  isCharging: 0
 --- !u!58 &8527848274436626741
 CircleCollider2D:
   m_ObjectHideFlags: 0

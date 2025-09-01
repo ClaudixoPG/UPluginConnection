@@ -95,12 +95,11 @@ namespace GolfGame
             if (message.StartsWith("fuerza:"))
             {
                 string[] parts = message.Substring("fuerza:".Length).Split(',');
-                if (parts.Length == 1 &&
-                    float.TryParse(parts[0], out float x))
+                if (parts.Length == 1 && float.TryParse(parts[0], out float x))
                 {
-                    //Debug.Log("fuerza value:" + x);
+                    // x ya está entre 0 y 1 (smartwatch lo envía normalizado)
                     playerController.isCharging = true;
-                    playerController.Charging();
+                    playerController.SetNormalizedForce(x);
                 }
                 return;
             }
@@ -109,16 +108,15 @@ namespace GolfGame
             if (message.StartsWith("fuerzaRelease:"))
             {
                 string[] parts = message.Substring("fuerzaRelease:".Length).Split(',');
-                if (parts.Length == 1 &&
-                    float.TryParse(parts[0], out float x))
+                if (parts.Length == 1 && float.TryParse(parts[0], out float x))
                 {
+                    // último valor normalizado
+                    playerController.SetNormalizedForce(x);
                     playerController.Release();
                     PluginActivity.Instance.UpdateControl(2); // Cambia a modo de dirección
                 }
                 return;
             }
-
-
         }
     }
 }

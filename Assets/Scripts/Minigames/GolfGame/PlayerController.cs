@@ -8,44 +8,53 @@ namespace GolfGame
     {
         [Header("Ball Settings")]
         [SerializeField] private float maxPower = 10f;
-        [SerializeField] private float minPower = 0f;
         [SerializeField] private float maxGoalSpeed = 4f;
         [SerializeField] private Rigidbody2D rb;
         [SerializeField] private LineRenderer lr;
         public float rotationSpeed = 100f;
-        //Privadas
 
-
-        private bool isDragging;
+        // Flags de control
         private bool inHole;
         public bool isTurningLeft;
         public bool isTurningRight;
         public bool isCharging = false;
+        private bool isDragging; // si decides mantener input por mouse
 
-        private void Awake()
-        {
-            minPower = 0f;
-            maxPower = 10f;
-        }
+        // Fuerza normalizada (0–1)
+        private float normalizedForce = 0f;
 
         private void Update()
         {
             Turning();
-            Charging();
+
+            // carga local (si no viene del smartwatch)
+            if (isCharging)
+            {
+                Charging();
+            }
         }
 
-        public void DragChange(/*Vector2 pos*/)
+        public void Charging()
         {
-            isDragging = true;
-            lr.positionCount = 2;
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            float distance = Vector2.Distance(transform.position, pos);
-
-
-            Vector2 dir = (Vector2)transform.position - pos;
-            lr.SetPosition(0, transform.position);
-            lr.SetPosition(1, (Vector2)transform.position + Vector2.ClampMagnitude((dir * minPower) / 2, maxPower / 2));
+            normalizedForce += Time.deltaTime;
+            normalizedForce = Mathf.Clamp01(normalizedForce);
         }
+
+        public void SetNormalizedForce(float value)
+        {
+            normalizedForce = Mathf.Clamp01(value);
+        }
+
+        public void Release()
+        {
+            float actualPower = normalizedForce * maxPower;
+            var force = transform.up * actualPower;
+            rb.linearVelocity = Vector2.ClampMagnitude(force, maxPower);
+
+            isCharging = false;
+            normalizedForce = 0f; // reset después de lanzar
+        }
+
         private void Turning()
         {
             if (isTurningLeft)
@@ -58,99 +67,51 @@ namespace GolfGame
             }
         }
 
-        
-        public void DragRelease(/*Vector2 pos*/)
-        {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            float distance = Vector2.Distance(transform.position, pos);
-
-
-            //float distance = Vector2.Distance(transform.position, pos);
-            isDragging = false;
-            lr.positionCount = 0;
-            if (distance < 1f)
-            {
-                return;
-            }
-
-            Vector2 dir = (Vector2)transform.position - pos;
-
-            rb.linearVelocity = Vector2.ClampMagnitude(dir * minPower, maxPower);
-            //rb.AddForce(Vector2.ClampMagnitude(dir.normalized * minPower, maxPower));
-
-        }
-
-        public void Charging()
-        {          
-            if (!isCharging) return;
-
-            //var initialLaunchForce = 5;
-            //minPower += initialLaunchForce * Time.deltaTime;
-            //Debug.Log( "Poder de lanzamiento :" + minPower);
-            minPower += Time.deltaTime;
-        }
-        public void Release()
-        {
-            var force = transform.up * minPower;
-            rb.linearVelocity = Vector2.ClampMagnitude(force, maxPower);
-            isCharging = false;
-        }
-
         public void TurnRight()
         {
             transform.Rotate((Vector3.forward * -rotationSpeed) * Time.deltaTime);
         }
+
         public void TurnLeft()
         {
-            //transform.rotation.eulerAngles = new Vector3(); 
             transform.Rotate((Vector3.forward * rotationSpeed) * Time.deltaTime);
         }
+
         private void BallInHole()
         {
-            Debug.Log("Entro en el hoyo siuuuuuuuuuuu");
-            if (inHole)
-            {
-                return;
-            }
+            Debug.Log("Entro en el hoyo");
+            if (inHole) return;
 
             if (rb.linearVelocity.magnitude <= maxGoalSpeed)
             {
                 inHole = true;
-
                 rb.linearVelocity = Vector2.zero;
-                Debug.Log("LE PEGOOOOOOOO en el hoyo siuuuuuuuuuuu");
+                Debug.Log("Pelota dentro del hoyo");
                 gameObject.SetActive(false);
-
-                //LevelComplete
             }
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if(collision.CompareTag("Goal"))
+            if (collision.CompareTag("Goal"))
             {
-                Debug.Log("Choco en el hoyo siuuuuuuuuuuu");
                 BallInHole();
             }
 
-            if(collision.CompareTag("Enemy"))
+            if (collision.CompareTag("Enemy"))
             {
-              UnityEngine.SceneManagement.SceneManager.LoadScene("GolfMiniGame2");
-                
+                UnityEngine.SceneManagement.SceneManager.LoadScene("GolfMiniGame2");
             }
         }
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            
             if (collision.CompareTag("Goal"))
             {
-                Debug.Log("Esta en el hoyo siuuuuuuuuuuu");
                 BallInHole();
             }
         }
-      
-      
     }
+
 
 }
