@@ -8,7 +8,7 @@ namespace GolfGame
     {
         [Header("Ball Settings")]
         [SerializeField] private float maxPower = 10f;
-        [SerializeField] private float minPower = 2f;
+        [SerializeField] private float minPower = 0f;
         [SerializeField] private float maxGoalSpeed = 4f;
         [SerializeField] private Rigidbody2D rb;
         [SerializeField] private LineRenderer lr;
@@ -22,13 +22,16 @@ namespace GolfGame
         public bool isTurningRight;
         public bool isCharging = false;
 
+        private void Awake()
+        {
+            minPower = 0f;
+            maxPower = 10f;
+        }
 
         private void Update()
         {
-
             Turning();
             Charging();
-            
         }
 
         public void DragChange(/*Vector2 pos*/)
@@ -78,21 +81,19 @@ namespace GolfGame
         }
 
         public void Charging()
-        {             
-            if(!isCharging) return;
+        {          
+            if (!isCharging) return;
 
-            var initialLaunchForce = 5;
-            minPower += initialLaunchForce * Time.deltaTime;
-            Debug.Log( "Poder de lanzamiento :" + minPower);
+            //var initialLaunchForce = 5;
+            //minPower += initialLaunchForce * Time.deltaTime;
+            //Debug.Log( "Poder de lanzamiento :" + minPower);
+            minPower += Time.deltaTime;
         }
         public void Release()
         {
-            isCharging = false;            
-            var dir = transform.up;
-            rb.linearVelocity = Vector2.ClampMagnitude(dir * minPower, maxPower);
-            Debug.Log("Launching" + Vector2.ClampMagnitude(dir * minPower, maxPower));
-            
-            minPower = 0f;
+            var force = transform.up * minPower;
+            rb.linearVelocity = Vector2.ClampMagnitude(force, maxPower);
+            isCharging = false;
         }
 
         public void TurnRight()
