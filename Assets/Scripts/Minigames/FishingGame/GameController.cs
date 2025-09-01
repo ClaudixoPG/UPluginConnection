@@ -33,7 +33,7 @@ namespace FishingGame
 
             if (message.StartsWith("Time:"))
             {
-                string[] parts = message.Substring("Joystick:".Length).Split(',');
+                string[] parts = message.Substring("Time:".Length).Split(',');
                 if (parts.Length == 1 &&
                     float.TryParse(parts[0], out float x))
                 {

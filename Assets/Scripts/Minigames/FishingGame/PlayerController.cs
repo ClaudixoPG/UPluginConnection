@@ -33,8 +33,27 @@ namespace FishingGame
 
         void Start()
         {
-
+            hookSize = ComputeHookSizeNormalized(); // ahora sí, hookSize vuelve a ser 0..1
         }
+
+        float ComputeHookSizeNormalized()
+        {
+            float railHeight = Vector3.Distance(bottomPivot.position, topPivot.position);
+
+            // SpriteRenderer
+            var sr = hook.GetComponent<SpriteRenderer>();
+            if (sr != null)
+                return Mathf.Clamp01(sr.bounds.size.y / railHeight);
+
+            // UI (RectTransform)
+            var rt = hook.GetComponent<RectTransform>();
+            if (rt != null)
+                return Mathf.Clamp01((rt.rect.height * hook.lossyScale.y) / railHeight);
+
+            // Fallback (menos preciso)
+            return Mathf.Clamp01(hook.lossyScale.y / railHeight);
+        }
+
         void Update()
         {
             Fish();
