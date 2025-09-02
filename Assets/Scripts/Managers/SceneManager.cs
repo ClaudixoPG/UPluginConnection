@@ -8,13 +8,28 @@ public class SceneManager : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
     }
+
+    //get the index of the current scene
+    public int GetCurrentSceneIndex()
+    {
+        return UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+    }
+
+    //get the name of the current scene
+    public string GetCurrentSceneName()
+    {
+        return UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+    }
+
     //make a function that will load the next scene
     public void LoadNextScene()
     {
         //get the current scene index
         int currentSceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
-        //load the next scene
+
+        //load the next scene       
         UnityEngine.SceneManagement.SceneManager.LoadScene(currentSceneIndex + 1);
+       
     }
 
     //make a function that will load the first scene
