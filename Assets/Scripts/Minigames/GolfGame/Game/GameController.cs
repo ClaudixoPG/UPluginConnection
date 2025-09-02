@@ -1,7 +1,6 @@
 using NUnit.Framework;
-using RythmGame;
 using UnityEngine;
-
+using System.Collections.Generic;
 
 
 namespace GolfGame
@@ -11,6 +10,15 @@ namespace GolfGame
         private PlayerInputActions inputActions;
         public PlayerController playerController;
 
+        private SceneManager sceneManager;
+
+
+        [Header("Scene Flow")]
+        [Tooltip("List of the scenes in order")]
+        public List<string> sceneOrder = new List<string>();
+
+
+        private int currentSceneIndex = 0;
         private void Awake()
         {
             inputActions = new PlayerInputActions();
@@ -31,7 +39,8 @@ namespace GolfGame
             //Turn Right
             inputActions.GolfMiniGame.RightDirection.started += ctx => playerController.isTurningRight = true;
             inputActions.GolfMiniGame.RightDirection.canceled += ctx => playerController.isTurningRight = false;
-          
+
+            sceneManager = FindFirstObjectByType<SceneManager>();
 
         }
 
@@ -74,7 +83,7 @@ namespace GolfGame
                     case "LEFT":
                         playerController.isTurningLeft = false;
                         break;
-                   
+
                     case "RIGHT":
                         playerController.isTurningRight = false;
                         break;
@@ -117,6 +126,49 @@ namespace GolfGame
                 }
                 return;
             }
+        }
+
+
+        //Manejo de escenas--------
+
+        public void LoadNextGolfScene()
+        {
+            if (sceneManager == null || sceneOrder.Count == 0) return;
+
+            currentSceneIndex++;
+            if (currentSceneIndex >= sceneOrder.Count)
+            {
+                sceneManager.LoadScene("GolfMiniGame");
+                return;
+            }
+
+            sceneManager.LoadScene(sceneOrder[currentSceneIndex]);
+        }
+
+        public void RestartCurrentScene()
+        {
+            if (sceneManager == null || sceneOrder.Count == 0) return;
+            sceneManager.LoadScene(sceneOrder[currentSceneIndex]);
+        }
+
+        public void LoadSceneByName(string name)
+        {
+            if (sceneManager == null) return;
+
+            if (sceneOrder.Contains(name))
+            {
+                currentSceneIndex = sceneOrder.IndexOf(name);
+                sceneManager.LoadScene(name);
+            }
+        }
+
+        public void Win()
+        {
+            LoadNextGolfScene();
+        }
+        public void Lose()
+        {
+            RestartCurrentScene();
         }
     }
 }

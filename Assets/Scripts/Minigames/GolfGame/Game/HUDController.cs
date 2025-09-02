@@ -18,6 +18,7 @@ namespace GolfGame
 
         private float currentTime;
         private int launch = 0;
+        private GameController gameController;
 
         private void Awake()
         {
@@ -33,6 +34,7 @@ namespace GolfGame
 
         private void Update()
         {
+            gameController = Object.FindFirstObjectByType<GameController>();
             UpdateUI();
         }
 
@@ -61,16 +63,12 @@ namespace GolfGame
                 if (currentTime <= 0)
                 {
                     currentTime = 0;
-                    PlayerLose();
+                    gameController.Lose();
                 }
                 UI();
             }
         }
 
-        private void PlayerLose()
-        {
-            //Implementar logica de perder
-        }
     }
 
 }

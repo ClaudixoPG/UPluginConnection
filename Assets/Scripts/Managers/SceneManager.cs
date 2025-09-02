@@ -45,6 +45,11 @@ public class SceneManager : MonoBehaviour
         //load the scene with the given index
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
     }
+    public void LoadScene(string sceneName)
+    {
+        //load the scene with the given index
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+    }
 
     //make a function that will quit the game
     public void QuitGame()

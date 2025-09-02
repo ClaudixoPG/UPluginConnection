@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
+
 
 namespace GolfGame
 {
@@ -26,11 +26,17 @@ namespace GolfGame
         //Managers
         private SceneManager sceneManager;
         private HUDController controller;
+        private GameController gameController;
+
+        private Vector3 startPosition;
 
         private void Start()
         {
             sceneManager = Object.FindFirstObjectByType<SceneManager>();
-            controller = Object.FindFirstObjectByType<HUDController>(); 
+            controller = Object.FindFirstObjectByType<HUDController>();
+            gameController = Object.FindFirstObjectByType<GameController>();
+
+            startPosition = transform.position; 
         }
 
         private void Update()
@@ -98,8 +104,8 @@ namespace GolfGame
             {
                 inHole = true;
                 rb.linearVelocity = Vector2.zero;
-                Debug.Log("Pelota dentro del hoyo");
                 gameObject.SetActive(false);
+                gameController.Win();
             }
         }
 
@@ -107,18 +113,11 @@ namespace GolfGame
         {
             if (collision.CompareTag("Goal"))
             {
-                BallInHole();
-
-                if(sceneManager.GetCurrentSceneIndex() == 0) //cambiar cuando la escena 1 deje ser la 0 en la build
-                {
-                    sceneManager.LoadNextScene();
-                }
-                
+                BallInHole(); 
             }
-
-            if (collision.CompareTag("Enemy"))
+            if(collision.CompareTag("Enemy"))
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene("GolfMiniGame2");
+               ResetPosition();
             }
         }
 
@@ -128,6 +127,14 @@ namespace GolfGame
             {
                 BallInHole();
             }
+        }
+
+        private void ResetPosition()
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+            transform.position = startPosition;
+            transform.rotation = Quaternion.identity;
         }
     }
 
