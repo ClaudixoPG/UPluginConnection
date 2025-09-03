@@ -15,4 +15,21 @@ namespace QuestSystem
 
         public string[] POI_Ids;
     }
+
+    [System.Serializable]
+    public class QuestlineCacheData
+    {
+        public string questlineID;
+        public int storedIndex;
+
+        public QuestlineCacheData()
+        {
+        }
+
+        public QuestlineCacheData(string questlineID, int storedIndex)
+        {
+            this.questlineID = questlineID;
+            this.storedIndex = storedIndex;
+        }
+    }
 }

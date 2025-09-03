@@ -73,7 +73,9 @@ using UnityEngine;
 public class PointOfInterest : MonoBehaviour
 {
     [SerializeField] private string id;
+    [SerializeField] private string clueMessage;
     public string ID => id;
+    public string ClueMessage => clueMessage;
     public bool IsDetected { get; set; }
     public Renderer rend;
     public Material revealedMaterial;

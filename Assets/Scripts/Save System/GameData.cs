@@ -1,5 +1,7 @@
 using MessageSystem;
+using QuestSystem;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static SaveSystem.GameData;
 
@@ -11,6 +13,7 @@ namespace SaveSystem
         public string username;
         public int age;
 
+        public List<QuestlineCacheData> questlineCacheDatas = new List<QuestlineCacheData> ();
         public List<ConversationData> conversationData = new List<ConversationData>();
 
         public GameData(string username, int age)
@@ -27,6 +30,49 @@ namespace SaveSystem
 
         public delegate void OnMessageReceive(ConversationData conversation);
         public static event OnMessageReceive onMessageReceive;
+
+        public QuestlineCacheData GetLastQuestLine()
+        {
+            if (questlineCacheDatas.Count > 0)
+                return questlineCacheDatas.Last();
+
+            return null;
+        }
+
+        public int GetStoredIndexQuestline(string questlineID)
+        {
+            foreach (var questline in questlineCacheDatas)
+            {
+                if(questline.questlineID == questlineID)
+                {
+                    return questline.storedIndex;
+                }
+            }
+
+            return -1;
+        }
+
+        public bool StoredQuestlineExists(string questlineID)
+        {
+            return questlineCacheDatas.Any(x => x.questlineID == questlineID);
+        }
+
+        public void SaveQuestline(string questlineID, int currentIndex)
+        {
+            for (int i = 0; i < questlineCacheDatas.Count; i++)
+            {
+                if (questlineCacheDatas[i].questlineID == questlineID)
+                {
+                    questlineCacheDatas[i].storedIndex = currentIndex;
+                    return;
+                }
+            }
+
+            var cache = new QuestlineCacheData(questlineID, currentIndex);
+            questlineCacheDatas.Add(cache);
+
+            SaveHandler.Save();
+        }
 
         /// <summary>
         /// Adds or replaces a conversation in the list.

@@ -1,4 +1,6 @@
 using DialogueSystem;
+using MessageSystem;
+using QuestSystem;
 using SaveSystem;
 using SaveSystem.Extras;
 using UnityEngine;
@@ -27,6 +29,10 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private DialogueModel _welcomeDialogue;
 
+    [Header("Quest References")]
+    [SerializeField]
+    private QuestData _findYourCredentials_questline;
+
 
     /// <summary>
     /// UI window that allows new players to register. 
@@ -52,12 +58,13 @@ public class TutorialManager : MonoBehaviour
     {
         if (_welcomeDialogue.dialogueID == dialogueID)
         {
-            MessageSystem.ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Hola, espero no haberme equivocado de numero jaja");
-            MessageSystem.ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Por cierto, necesitaras tu credencial");
-            // Iniciar mision 'Find your Credential'
+            ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Hola, espero no haberme equivocado de numero jaja");
+            ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Por cierto, necesitaras tu credencial");
 
-            MessageSystem.ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Puedes encontrarla utilizando el sistema de radar que funciona asi:");
-            MessageSystem.ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "[Explicacion]");
+            QuestSystemManager.Singleton.AssignQuest(_findYourCredentials_questline);
+
+            ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Puedes encontrarla utilizando el sistema de radar que funciona asi:");
+            ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "[Explicacion]");
             return;
         }
     }

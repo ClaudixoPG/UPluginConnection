@@ -1,3 +1,5 @@
+using NUnit.Framework.Interfaces;
+using SaveSystem;
 using UnityEngine;
 
 namespace QuestSystem
@@ -13,6 +15,22 @@ namespace QuestSystem
         [Header("Components")]
         [SerializeField] private GameObject _questMark; //The GameObject used as a visual marker displayed above the target POI.
 
+        private static QuestSystemManager _singleton;
+
+        public delegate void OnStartNewQuestline(QuestData questlineData, int currentPOI);
+        public static OnStartNewQuestline onQuestStatusUpdate;
+
+        public static QuestSystemManager Singleton
+        {
+            get
+            {
+                if (_singleton == null)
+                    _singleton = FindFirstObjectByType<QuestSystemManager>();
+
+                return _singleton;
+            }
+        }    
+
         /// <summary>
         /// Index of the next Point of Interest (POI) the player must visit in the current quest.
         /// </summary>
@@ -21,7 +39,47 @@ namespace QuestSystem
         private void Awake()
         {
             _questMark.gameObject.SetActive(false);
-            AssignQuest(_currentQuest);
+
+            if (_currentQuest != null)
+            {
+                AssignQuest(_currentQuest);
+            }
+
+            GameData data = SaveHandler.GetGameData();
+            var lastQuest = data.GetLastQuestLine();
+            if (lastQuest != null)
+            {
+                var allQuests = Resources.LoadAll<QuestData>("Quests");
+
+                foreach (var quest in allQuests)
+                {
+                    if(quest.questID == lastQuest.questlineID)
+                    {
+                        _currentQuest = quest;
+                        _questIndex = lastQuest.storedIndex;
+                        onQuestStatusUpdate?.Invoke(quest, _questIndex);
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void TryCompletePOI(string poi_id)
+        {
+            if (_currentQuest != null) 
+            {
+                //If the completed poi its the same as the actual target poi, then complete and move to the next poi
+                if (_currentQuest.POI_Ids[_questIndex] == poi_id)
+                {
+                    _questIndex++;
+
+                    if (_questIndex < _currentQuest.POI_Ids.Length)
+                    {
+                        onQuestStatusUpdate?.Invoke(_currentQuest, _questIndex);
+                        UpdateQuest();
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -34,8 +92,10 @@ namespace QuestSystem
 
             if (_currentQuest != null)
             {
-                _questIndex = RememberIndex();
+                _questIndex = RememberIndex(questData.questID);
             }
+
+            onQuestStatusUpdate?.Invoke(questData, _questIndex);
 
             UpdateQuest();
         }
@@ -66,8 +126,15 @@ namespace QuestSystem
         /// Not yet implemented; currently always returns the first POI (index 0).
         /// </summary>
         /// <returns>The index of the last visited POI (currently always 0).</returns>
-        private int RememberIndex()
+        private int RememberIndex(string questlineID)
         {
+            var data = SaveSystem.SaveHandler.GetGameData();
+
+            if(data.StoredQuestlineExists(questlineID))
+            {
+                return data.GetStoredIndexQuestline(questlineID);
+            }
+
             return 0;
         }
     }
