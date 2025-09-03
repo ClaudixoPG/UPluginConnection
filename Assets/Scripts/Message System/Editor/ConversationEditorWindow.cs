@@ -50,20 +50,7 @@ namespace MessageSystem.EditorTools
         /// <param name="message">The message to send.</param>
         private void SendMessageToConversation(string conversationID, string senderID, string message)
         {
-            var data = SaveSystem.SaveHandler.GetGameData();
-
-            if (data.ConversationExists(conversationID))
-            {
-                var conversation = data.GetConversation(conversationID);
-                conversation.Sendmessage(senderID, message);
-
-                data.SetConversation(conversation);
-            }
-            else
-            {
-                var conversation = new ConversationData(conversationID, senderID, message);
-                data.SetConversation(conversation);
-            }
+            ConversationManager.SendMessage(conversationID, senderID, message);
         }
     }
 }

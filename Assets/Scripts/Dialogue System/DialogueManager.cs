@@ -36,6 +36,16 @@ namespace DialogueSystem
             }
         }
 
+        private void Awake()
+        {
+            DialogueSceneHandler.onEndDialogue += WaitForEndDialogue;
+        }
+
+        private void WaitForEndDialogue(string dialogueID)
+        {
+            _isPlaying = false;
+        }
+
         [ContextMenu("Test Dialogue")]
         private void TestDialogue()
         {

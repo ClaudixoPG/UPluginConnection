@@ -47,9 +47,15 @@ namespace DialogueSystem
 
         private string _log;
 
+        public delegate void OnStartDialogue(string dialogueID);
+        public delegate void OnEndDialogue(string dialogueID);
+
+        public static event OnStartDialogue onStartDialogue;
+        public static event OnEndDialogue onEndDialogue;
+
         private void Update()
         {
-            if (_currentDialogueModel != null)
+            if (_currentDialogueModel != null && _currentDialogueIndex < _currentDialogueModel.dialogues.Count)
             {
                 TypeDialogueMessageBox(_messageBox_text, _messageBox_text.text, _currentDialogueModel.dialogues[_currentDialogueIndex].message);
             }
@@ -62,6 +68,8 @@ namespace DialogueSystem
             _currentDialogueModel = model;
 
             _currentDialogueIndex = -1;
+
+            onStartDialogue?.Invoke(model.dialogueID);
 
             NextDialogue();
         }
@@ -92,12 +100,18 @@ namespace DialogueSystem
             }
         }
 
-            private void NextDialogue()
+        private void NextDialogue()
         {
             if (_currentDialogueIndex < _currentDialogueModel.dialogues.Count)
             {
                 _currentDialogueIndex++;
                 _messageBox_text.text = string.Empty;
+
+                if (_currentDialogueIndex == _currentDialogueModel.dialogues.Count)
+                {
+                    FinishDialogue();
+                    return;
+                }
 
                 if (_character_image.sprite == null || _character_image.sprite != _currentDialogueModel.dialogues[_currentDialogueIndex].character)
                 {
@@ -111,6 +125,7 @@ namespace DialogueSystem
                 }
 
                 UpdateOptions();
+
             }
             else
             {
@@ -147,11 +162,9 @@ namespace DialogueSystem
         {
             _log += "\nEnd Dialogue";
 
-            Debug.Log(_log);
+            onEndDialogue?.Invoke(_currentDialogueModel.dialogueID);
 
-            //Save data here
-
-            //Send Event Here
+            _currentDialogueModel = null;
 
             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync("Dialogue Scene");
         }

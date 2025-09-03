@@ -9,12 +9,24 @@ namespace SaveSystem
     public class GameData
     {
         public string username;
+        public int age;
 
         public List<ConversationData> conversationData = new List<ConversationData>();
 
+        public GameData(string username, int age)
+        {
+            this.username = username;
+            this.age = age;
+        }
+
+        public GameData()
+        {
+            username = string.Empty;
+            age = -1;
+        }
+
         public delegate void OnMessageReceive(ConversationData conversation);
         public static event OnMessageReceive onMessageReceive;
-
 
         /// <summary>
         /// Adds or replaces a conversation in the list.

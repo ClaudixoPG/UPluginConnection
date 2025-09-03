@@ -18,6 +18,20 @@ namespace SaveSystem
 
         private static GameData _currentGameData;
 
+        public static bool GameDataExists()
+        {
+            if (_currentGameData == null)
+            {
+                _currentGameData = LoadOrCreate();
+
+                return _currentGameData.username != string.Empty;
+            }
+            else
+            {
+                return _currentGameData.username != string.Empty;
+            }
+        }
+
         /// <summary>
         /// Saves the current game data to disk. 
         /// If no data exists, it will create a new one before saving.
@@ -103,7 +117,8 @@ namespace SaveSystem
                     using (FileStream stream = new FileStream(path, FileMode.Open))
                     {
                         BinaryFormatter formatter = new BinaryFormatter();
-                        return (GameData)formatter.Deserialize(stream);
+                        var data = (GameData)formatter.Deserialize(stream);
+                        return data;
                     }
                 }
                 catch (Exception e)
@@ -111,11 +126,23 @@ namespace SaveSystem
                     Debug.LogError($"[SaveHandler] Failed to load data. Creating new one. Error: {e.Message}");
                 }
             }
+            
+            return CreateNewGameData(string.Empty, -1);
+        }
 
-            // If file doesn't exist or loading failed, create new data
-            GameData newData = new GameData();
+
+        /// <summary>
+        /// Create and save new data, this functions will override exiting data.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="age"></param>
+        /// <returns></returns>
+        public static GameData CreateNewGameData(string username, int age)
+        {
+            GameData newData = new GameData(username, age);
             _currentGameData = newData;
-            Save(); // Save the newly created data
+            Save(); 
+
             return newData;
         }
 
