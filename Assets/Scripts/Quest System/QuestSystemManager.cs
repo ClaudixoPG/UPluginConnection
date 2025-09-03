@@ -57,6 +57,7 @@ namespace QuestSystem
                     {
                         _currentQuest = quest;
                         _questIndex = lastQuest.storedIndex;
+                        QuestView.Singleton.Paint(_currentQuest, _questIndex);
                         onQuestStatusUpdate?.Invoke(quest, _questIndex);
                         break;
                     }
@@ -73,8 +74,12 @@ namespace QuestSystem
                 {
                     _questIndex++;
 
+                    SaveHandler.GetGameData().SaveQuestline(_currentQuest.questID, _questIndex);
+                    SaveHandler.Save();
+
                     if (_questIndex < _currentQuest.POI_Ids.Length)
                     {
+                        QuestView.Singleton.Paint(_currentQuest, _questIndex);
                         onQuestStatusUpdate?.Invoke(_currentQuest, _questIndex);
                         UpdateQuest();
                     }
@@ -94,6 +99,9 @@ namespace QuestSystem
             {
                 _questIndex = RememberIndex(questData.questID);
             }
+
+            SaveHandler.GetGameData().SaveQuestline(_currentQuest.questID, _questIndex);
+            SaveHandler.Save();
 
             onQuestStatusUpdate?.Invoke(questData, _questIndex);
 
