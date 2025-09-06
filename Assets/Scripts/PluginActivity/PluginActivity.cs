@@ -6,16 +6,8 @@ public class PluginActivity : MonoBehaviour
 {
     //Private Variables
     AndroidJavaObject _pluginActivity;
-    
-    //Public Variables
-    //public TextMeshProUGUI messageToSend;
-    //public TextMeshProUGUI messageReceived;
-
-    //public PanelManager panelManager;
-
 
     private int currentControlIndex = 1; // comienza en 1
-    //private int maxControls = 2;
 
     void Awake()
     {
@@ -63,13 +55,6 @@ public class PluginActivity : MonoBehaviour
         }
     }
 
-    /*public void OnMessageReceived(string message)
-    {
-        Debug.Log("Mensaje recibido en Unity: " + message);
-        messageReceived.text = "Mensaje recibido: " + message;
-        panelManager.HandleIncomingMessage(message);
-    }*/
-
     public void OnMessageReceived(string message)
     {
         //Debug.Log("Mensaje recibido en Unity: " + message);
@@ -81,27 +66,6 @@ public class PluginActivity : MonoBehaviour
         var controller = controllerObject?.GetComponent<IGameController>();
         controller?.HandleMessage(message);
     }
-
-    /*public void NextControl()
-    {
-        if (_pluginActivity != null)
-        {
-            currentControlIndex++;
-            if (currentControlIndex > maxControls) currentControlIndex = 1;
-            UpdateControl();
-
-        }
-    }
-
-    public void PreviousControl()
-    {
-        if (_pluginActivity != null)
-        {
-            currentControlIndex--;
-            if (currentControlIndex < 1) currentControlIndex = maxControls;
-            UpdateControl();
-        }
-    }*/
 
     private void UpdateControl()
     {

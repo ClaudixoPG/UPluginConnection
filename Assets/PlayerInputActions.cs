@@ -598,6 +598,89 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""ReignsGame"",
+            ""id"": ""af850f3d-b1f4-4a25-8eb9-ebfc20274cc0"",
+            ""actions"": [
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""06a2e036-47fb-4930-b95f-f79d03f56d79"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""70600717-bdbf-45c2-9980-3fafa5613997"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""bef5e5fe-4550-42dd-aef5-e0b4b455e52a"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""66208ae9-4d3a-4051-bd3d-e79df14ef7e7"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""cc814b2c-d21b-4aec-bde2-dbf7cc15a1c8"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""ecd025ef-2958-4099-b530-f51f536bb91d"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""6be8f7ff-f649-4800-8ea2-50821c8d904d"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -623,6 +706,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         // FishingGame
         m_FishingGame = asset.FindActionMap("FishingGame", throwIfNotFound: true);
         m_FishingGame_PressScreen = m_FishingGame.FindAction("PressScreen", throwIfNotFound: true);
+        // ReignsGame
+        m_ReignsGame = asset.FindActionMap("ReignsGame", throwIfNotFound: true);
+        m_ReignsGame_Move = m_ReignsGame.FindAction("Move", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -631,6 +717,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_RythmGame.enabled, "This will cause a leak and performance issues, PlayerInputActions.RythmGame.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_EndlessRunner.enabled, "This will cause a leak and performance issues, PlayerInputActions.EndlessRunner.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_FishingGame.enabled, "This will cause a leak and performance issues, PlayerInputActions.FishingGame.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_ReignsGame.enabled, "This will cause a leak and performance issues, PlayerInputActions.ReignsGame.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1185,6 +1272,102 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="FishingGameActions" /> instance referencing this action map.
     /// </summary>
     public FishingGameActions @FishingGame => new FishingGameActions(this);
+
+    // ReignsGame
+    private readonly InputActionMap m_ReignsGame;
+    private List<IReignsGameActions> m_ReignsGameActionsCallbackInterfaces = new List<IReignsGameActions>();
+    private readonly InputAction m_ReignsGame_Move;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "ReignsGame".
+    /// </summary>
+    public struct ReignsGameActions
+    {
+        private @PlayerInputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public ReignsGameActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "ReignsGame/Move".
+        /// </summary>
+        public InputAction @Move => m_Wrapper.m_ReignsGame_Move;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_ReignsGame; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="ReignsGameActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(ReignsGameActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="ReignsGameActions" />
+        public void AddCallbacks(IReignsGameActions instance)
+        {
+            if (instance == null || m_Wrapper.m_ReignsGameActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_ReignsGameActionsCallbackInterfaces.Add(instance);
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="ReignsGameActions" />
+        private void UnregisterCallbacks(IReignsGameActions instance)
+        {
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="ReignsGameActions.UnregisterCallbacks(IReignsGameActions)" />.
+        /// </summary>
+        /// <seealso cref="ReignsGameActions.UnregisterCallbacks(IReignsGameActions)" />
+        public void RemoveCallbacks(IReignsGameActions instance)
+        {
+            if (m_Wrapper.m_ReignsGameActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="ReignsGameActions.AddCallbacks(IReignsGameActions)" />
+        /// <seealso cref="ReignsGameActions.RemoveCallbacks(IReignsGameActions)" />
+        /// <seealso cref="ReignsGameActions.UnregisterCallbacks(IReignsGameActions)" />
+        public void SetCallbacks(IReignsGameActions instance)
+        {
+            foreach (var item in m_Wrapper.m_ReignsGameActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_ReignsGameActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="ReignsGameActions" /> instance referencing this action map.
+    /// </summary>
+    public ReignsGameActions @ReignsGame => new ReignsGameActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "SpaceShipMinigame" which allows adding and removing callbacks.
     /// </summary>
@@ -1307,5 +1490,20 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPressScreen(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "ReignsGame" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="ReignsGameActions.AddCallbacks(IReignsGameActions)" />
+    /// <seealso cref="ReignsGameActions.RemoveCallbacks(IReignsGameActions)" />
+    public interface IReignsGameActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMove(InputAction.CallbackContext context);
     }
 }
