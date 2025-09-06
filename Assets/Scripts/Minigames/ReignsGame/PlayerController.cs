@@ -13,7 +13,7 @@ namespace ReignsGame
 
         [Header("Parámetros")]
         [SerializeField] private float rotationSpeed = 90f;
-        [SerializeField] private float moveSpeed = 2f;
+        [SerializeField] private float moveSpeed = 4f;
         [SerializeField, Range(0f, 1f)] private float deadzonePercent = 0.02f;
         [SerializeField, Range(0f, 1f)] private float decisionThresholdPercent = 0.25f;
 
@@ -61,7 +61,25 @@ namespace ReignsGame
                 targetObject.position = newPosition;
             }
         }
+        /*private void HandleTranslating()
+        {
+            float y = moveInput.y;
+
+            if (Mathf.Abs(y) > deadzone)
+            {
+                // mapea de [-1,1] a [minY, maxY]
+                float targetY = Mathf.Lerp(minY, maxY, (y + 1f) * 0.5f);
+
+                Vector3 newPosition = targetObject.position;
+                newPosition.y = targetY;
+
+                targetObject.position = newPosition;
+            }
+        }*/
         #endregion
+
+
+
 
         #region Rotación
         private void HandleTurning()
