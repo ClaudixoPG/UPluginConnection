@@ -68,14 +68,13 @@ public class PointOfInterest : MonoBehaviour
 }
 */
 
+using System.Linq;
 using UnityEngine;
 
 public class PointOfInterest : MonoBehaviour
 {
     [SerializeField] private string id;
-    [SerializeField] private string clueMessage;
     public string ID => id;
-    public string ClueMessage => clueMessage;
     public bool IsDetected { get; set; }
     public Renderer rend;
     public Material revealedMaterial;
@@ -91,8 +90,12 @@ public class PointOfInterest : MonoBehaviour
     private float emissionIntensity = 0.5f;
     private float emissionPulseSpeed = .5f;
 
+    private POI_InteractionHandler[] interactionsInThisPOI;
+
     void Awake()
     {
+        interactionsInThisPOI = GetComponents<POI_InteractionHandler>();
+
         POIManager.Instance?.RegisterPOI(this);
         if (rend == null) rend = GetComponent<Renderer>();
     }
@@ -152,6 +155,82 @@ public class PointOfInterest : MonoBehaviour
 
             // Puedes instanciar partículas si lo deseas aquí
         }
+    }
+
+    public bool CanInteract()
+    {
+        //Check if this poi contains any interactions
+        if (interactionsInThisPOI == null || interactionsInThisPOI.Length == 0) return false;
+
+        var priorityBasedInteractions = interactionsInThisPOI.OrderByDescending(x => x.Priority).ToArray();
+
+        foreach (var interaction in priorityBasedInteractions)
+        {
+            //Check if this interaction is the current objective of the questline
+            if (interaction.QuestMeetingConditions)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool CanInteract(out POI_InteractionHandler result)
+    {
+        result = null;
+
+        //Check if this poi contains any interactions
+        if (interactionsInThisPOI == null || interactionsInThisPOI.Length == 0) return false;
+
+        var priorityBasedInteractions = interactionsInThisPOI.OrderByDescending(x => x.Priority).ToArray();
+
+        foreach (var interaction in priorityBasedInteractions)
+        {
+            //Check if this interaction is the current objective of the questline
+            if (interaction.QuestMeetingConditions)
+            {
+                //Check if was activated and if its repetable
+
+                if (interaction.IsRepeatable)
+                {
+                    result = interaction;
+                    return true;
+                }
+                else
+                {
+                    var gameData = SaveSystem.SaveHandler.GetGameData();
+
+                    if (!gameData.activatedPOIs.Contains(interaction.GetInteractionID))
+                    {
+                        result = interaction;
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                //Check if was activated and if its repetable
+
+                if (interaction.IsRepeatable)
+                {
+                    result = interaction;
+                    return true;
+                }
+                else
+                {
+                    var gameData = SaveSystem.SaveHandler.GetGameData();
+
+                    if (!gameData.activatedPOIs.Contains(interaction.GetInteractionID))
+                    {
+                        result = interaction;
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     private void OnDestroy()

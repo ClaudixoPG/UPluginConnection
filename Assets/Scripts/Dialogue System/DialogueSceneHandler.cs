@@ -44,7 +44,7 @@ namespace DialogueSystem
 
         private int _currentDialogueIndex = -1;
         private float _typingTimer = 0f;
-
+        private string _currentFinalText;
         private string _log;
 
         public delegate void OnStartDialogue(string dialogueID);
@@ -57,7 +57,7 @@ namespace DialogueSystem
         {
             if (_currentDialogueModel != null && _currentDialogueIndex < _currentDialogueModel.dialogues.Count)
             {
-                TypeDialogueMessageBox(_messageBox_text, _messageBox_text.text, _currentDialogueModel.dialogues[_currentDialogueIndex].message);
+                TypeDialogueMessageBox(_messageBox_text, _messageBox_text.text, _currentFinalText);
             }
         }
 
@@ -112,6 +112,8 @@ namespace DialogueSystem
                     FinishDialogue();
                     return;
                 }
+
+                _currentFinalText = _currentDialogueModel.dialogues[_currentDialogueIndex].message.Replace("%username%", SaveSystem.SaveHandler.GetGameData().username);
 
                 if (_character_image.sprite == null || _character_image.sprite != _currentDialogueModel.dialogues[_currentDialogueIndex].character)
                 {
@@ -171,9 +173,9 @@ namespace DialogueSystem
 
         public void Skip()
         {
-            if (_messageBox_text.text != _currentDialogueModel.dialogues[_currentDialogueIndex].message)
+            if (_messageBox_text.text != _currentFinalText)
             {
-                _messageBox_text.text = _currentDialogueModel.dialogues[_currentDialogueIndex].message;
+                _messageBox_text.text = _currentFinalText;
             }
             else
             {

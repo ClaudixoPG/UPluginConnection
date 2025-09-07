@@ -1,3 +1,5 @@
+using MessageSystem;
+using MinigameSystem;
 using NUnit.Framework.Interfaces;
 using SaveSystem;
 using UnityEngine;
@@ -18,7 +20,9 @@ namespace QuestSystem
         private static QuestSystemManager _singleton;
 
         public delegate void OnStartNewQuestline(QuestData questlineData, int currentPOI);
+        public delegate void OnQuestCompleted(QuestData questlineData);
         public static OnStartNewQuestline onQuestStatusUpdate;
+        public static OnQuestCompleted onQuestCompleted;
 
         public static QuestSystemManager Singleton
         {
@@ -57,21 +61,28 @@ namespace QuestSystem
                     {
                         _currentQuest = quest;
                         _questIndex = lastQuest.storedIndex;
+                        SaveHandler.GetGameData().activatedPOIs.Remove(_currentQuest.POI_Ids[_questIndex].interactionPOI_id); //Se remueve este id para garantizar que sea interactable
                         QuestView.Singleton.Paint(_currentQuest, _questIndex);
                         onQuestStatusUpdate?.Invoke(quest, _questIndex);
                         break;
                     }
                 }
             }
+
+            MinigameHandler.onCompleteGame += Listener_MinigameComplete;
         }
 
-        public void TryCompletePOI(string poi_id)
+        private void Listener_MinigameComplete(string questID, string poiInteractionID)
         {
-            if (_currentQuest != null) 
+            if (_currentQuest != null)
             {
-                //If the completed poi its the same as the actual target poi, then complete and move to the next poi
-                if (_currentQuest.POI_Ids[_questIndex] == poi_id)
+                if (_currentQuest.questID == questID && GetCurrentQuestObjective() != null && GetCurrentQuestObjective().interactionPOI_id == poiInteractionID)
                 {
+                    foreach (var reward in _currentQuest.POI_Ids[_questIndex].rewards)
+                    {
+                        ConversationManager.SendMessage(reward.senderID, reward.senderID, reward.message.Replace("%username%", SaveHandler.GetGameData().username));
+                    }
+
                     _questIndex++;
 
                     SaveHandler.GetGameData().SaveQuestline(_currentQuest.questID, _questIndex);
@@ -83,8 +94,28 @@ namespace QuestSystem
                         onQuestStatusUpdate?.Invoke(_currentQuest, _questIndex);
                         UpdateQuest();
                     }
+                    else
+                    {
+                        onQuestCompleted?.Invoke(_currentQuest);
+                        QuestView.Singleton.Hide();
+                        _currentQuest = null;
+                    }
                 }
             }
+        }
+
+        public string GetCurrentQuestID()
+        {
+            if (_currentQuest == null) return "no_active_quest";
+
+            return _currentQuest.questID;
+        }
+
+        public QuestObjectiveData GetCurrentQuestObjective()
+        {
+            if (_currentQuest == null) return null;
+
+            return _currentQuest.POI_Ids[_questIndex];
         }
 
         /// <summary>
@@ -101,6 +132,7 @@ namespace QuestSystem
             }
 
             SaveHandler.GetGameData().SaveQuestline(_currentQuest.questID, _questIndex);
+            SaveHandler.GetGameData().activatedPOIs.Remove(_currentQuest.POI_Ids[_questIndex].interactionPOI_id); //Se remueve este id para garantizar que sea interactable
             SaveHandler.Save();
 
             onQuestStatusUpdate?.Invoke(questData, _questIndex);
@@ -122,7 +154,7 @@ namespace QuestSystem
 
             _questMark.SetActive(true);
 
-            var poi = POIManager.Instance.GetPOI(_currentQuest.POI_Ids[_questIndex]);
+            var poi = POIManager.Instance.GetPOI(_currentQuest.POI_Ids[_questIndex].targetPOI_id);
 
             _questMark.transform.position = poi.transform.position + Vector3.up * 30;
 
@@ -136,7 +168,7 @@ namespace QuestSystem
         /// <returns>The index of the last visited POI (currently always 0).</returns>
         private int RememberIndex(string questlineID)
         {
-            var data = SaveSystem.SaveHandler.GetGameData();
+            var data = SaveHandler.GetGameData();
 
             if(data.StoredQuestlineExists(questlineID))
             {

@@ -328,7 +328,7 @@ public class RadarScanner : MonoBehaviour
             return;
         }
 
-        var pois = POIManager.Instance.GetPOIsInRange(transform.position, farDistance);
+        var pois = POIManager.Instance.GetPOIsInRange(transform.position, farDistance).Where(x => x.CanInteract());
 
         if (pois.Count() == 0)
         {

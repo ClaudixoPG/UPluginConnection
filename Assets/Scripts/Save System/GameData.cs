@@ -15,6 +15,7 @@ namespace SaveSystem
 
         public List<QuestlineCacheData> questlineCacheDatas = new List<QuestlineCacheData> ();
         public List<ConversationData> conversationData = new List<ConversationData>();
+        public List<string> activatedPOIs = new List<string>();
 
         public GameData(string username, int age)
         {
@@ -72,6 +73,17 @@ namespace SaveSystem
             questlineCacheDatas.Add(cache);
 
             SaveHandler.Save();
+        }
+
+        public void MarkPOIasVisited(string poiInteractableID)
+        {
+            if (activatedPOIs == null) activatedPOIs = new List<string>();
+
+            if (!activatedPOIs.Contains(poiInteractableID))
+            {
+                activatedPOIs.Add(poiInteractableID);
+                SaveHandler.Save();
+            }
         }
 
         /// <summary>

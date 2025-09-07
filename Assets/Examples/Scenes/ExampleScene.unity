@@ -11318,6 +11318,113 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &163792551
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 163792552}
+  - component: {fileID: 163792554}
+  - component: {fileID: 163792553}
+  - component: {fileID: 163792556}
+  - component: {fileID: 163792555}
+  m_Layer: 0
+  m_Name: VG POI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &163792552
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163792551}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -237.13, y: 1, z: 48.76}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 837288438}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &163792553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163792551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc82c001e7106924893f570232da7626, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poi_interaction_id: vg_carrier_credential
+  _triggeredDialogue: {fileID: 11400000, guid: 06ae9795dc1886c439eefa77672245bd, type: 2}
+  minigame_name: Credential Minigame
+  requiredQuestID: find_your_credential
+  isRepeatable: 0
+  priority: 2
+--- !u!114 &163792554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163792551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e259d591c229944aac9e1a5741b6e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: vg_carrier
+  rend: {fileID: 837288439}
+  revealedMaterial: {fileID: 2100000, guid: 921396b3a08101c4ebaed986a6afb7cd, type: 2}
+  transitionDuration: 1
+  particles: {fileID: 2394263181605874001, guid: bfe56232f05ada54994a5dbf75d2bc29, type: 3}
+  enableEmissionPulse: 1
+--- !u!114 &163792555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163792551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc82c001e7106924893f570232da7626, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poi_interaction_id: vg_carrier_default
+  _triggeredDialogue: {fileID: 11400000, guid: 7ecb99aaa5bfb0042a0e7c0e6b09d673, type: 2}
+  minigame_name: 
+  requiredQuestID: 
+  isRepeatable: 1
+  priority: 0
+--- !u!114 &163792556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163792551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc82c001e7106924893f570232da7626, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poi_interaction_id: vg_carrier_common
+  _triggeredDialogue: {fileID: 11400000, guid: f0c5be2ccca1be24493916082bb1d0a7, type: 2}
+  minigame_name: 
+  requiredQuestID: 
+  isRepeatable: 0
+  priority: 1
 --- !u!1 &165324797
 GameObject:
   m_ObjectHideFlags: 0
@@ -37009,8 +37116,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: POI Title
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: eb74aaa983878c9409b23a4b9d4310ff, type: 2}
+  m_sharedMaterial: {fileID: 9049703551526282714, guid: eb74aaa983878c9409b23a4b9d4310ff, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -37040,7 +37147,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -49925,8 +50032,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _senderMessage_name: Ramon
-  _prologueDialogue: {fileID: 11400000, guid: 9b168490b745ca745be2aba5d79131af, type: 2}
-  _welcomeDialogue: {fileID: 11400000, guid: 58456d69358d6e74187d3d0ac9c4d411, type: 2}
   _findYourCredentials_questline: {fileID: 11400000, guid: 673642401d9aa3646b21c2d1425ff283, type: 2}
   _register_window: {fileID: 12569038}
 --- !u!1 &701213261
@@ -59634,6 +59739,16 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 836922720}
   m_Mesh: {fileID: 500170668}
+--- !u!4 &837288438 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8672287573785368996, guid: 631c59b94530a0e4794f1489abadc23f, type: 3}
+  m_PrefabInstance: {fileID: 5596692582059128867}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &837288439 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1393383452005514369, guid: 631c59b94530a0e4794f1489abadc23f, type: 3}
+  m_PrefabInstance: {fileID: 5596692582059128867}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &840423107
 Mesh:
   m_ObjectHideFlags: 0
@@ -62357,49 +62472,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &872489074 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -9109718650374162961, guid: 631c59b94530a0e4794f1489abadc23f, type: 3}
-  m_PrefabInstance: {fileID: 5596692582059128867}
-  m_PrefabAsset: {fileID: 0}
 --- !u!23 &872489076 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -6981528904460340698, guid: 631c59b94530a0e4794f1489abadc23f, type: 3}
   m_PrefabInstance: {fileID: 5596692582059128867}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &872489078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+--- !u!4 &872489080 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7431971512521977702, guid: 631c59b94530a0e4794f1489abadc23f, type: 3}
+  m_PrefabInstance: {fileID: 5596692582059128867}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 872489074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45e259d591c229944aac9e1a5741b6e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: location1
-  clueMessage: Go to Location1
-  rend: {fileID: 872489076}
-  revealedMaterial: {fileID: 2100000, guid: 921396b3a08101c4ebaed986a6afb7cd, type: 2}
-  transitionDuration: 1
-  particles: {fileID: 2394263181605874001, guid: bfe56232f05ada54994a5dbf75d2bc29, type: 3}
-  enableEmissionPulse: 1
---- !u!114 &872489079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 872489074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc82c001e7106924893f570232da7626, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minigame_name: Find your Credential
-  _triggeredDialogue: {fileID: 11400000, guid: 8a87fd032564be046955c15346d72822, type: 2}
 --- !u!1 &874582743
 GameObject:
   m_ObjectHideFlags: 0
@@ -62634,8 +62716,8 @@ MonoBehaviour:
   _conversations: {fileID: 1788092354}
   _conversationLog: {fileID: 1589571043}
   _conversation_prefab: {fileID: 6848817894404123405, guid: 5abc7479def70e6449369ab7cceb7c93, type: 3}
-  _messageLeft_prefab: {fileID: 3867501084937722383, guid: 47b6a38d7d9f1f743a2a52270d82aa3a, type: 3}
-  _messageRight_prefab: {fileID: 144022348588004421, guid: ff6f98ea984eb3f478ae120aaed3b288, type: 3}
+  _messageLeft_prefab: {fileID: 1527676814649418313, guid: 47b6a38d7d9f1f743a2a52270d82aa3a, type: 3}
+  _messageRight_prefab: {fileID: 7061690723151955137, guid: ff6f98ea984eb3f478ae120aaed3b288, type: 3}
 --- !u!1 &874856733
 GameObject:
   m_ObjectHideFlags: 0
@@ -62695,8 +62777,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Quest Title
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: eb74aaa983878c9409b23a4b9d4310ff, type: 2}
+  m_sharedMaterial: {fileID: 9049703551526282714, guid: eb74aaa983878c9409b23a4b9d4310ff, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -62726,7 +62808,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -101146,7 +101228,7 @@ Transform:
   m_GameObject: {fileID: 1447156987}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 933, y: 1, z: 701.8}
+  m_LocalPosition: {x: 914.5, y: 1, z: 642.8}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -110567,7 +110649,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: test_poi
-  clueMessage: 
   rend: {fileID: 1589383704}
   revealedMaterial: {fileID: 2100000, guid: 921396b3a08101c4ebaed986a6afb7cd, type: 2}
   transitionDuration: 1
@@ -140816,6 +140897,75 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2027595125
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2027595126}
+  - component: {fileID: 2027595128}
+  - component: {fileID: 2027595127}
+  m_Layer: 0
+  m_Name: Rueda POI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2027595126
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027595125}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.000000014901159, y: -0, z: -0.0000000046566124, w: 1}
+  m_LocalPosition: {x: -14.688637, y: -0.000022888184, z: -0.00007172111}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 872489080}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2027595127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027595125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc82c001e7106924893f570232da7626, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poi_interaction_id: rueda_quest
+  _triggeredDialogue: {fileID: 11400000, guid: 01226ccb85a57254ead1d42e55f3443b, type: 2}
+  minigame_name: 
+  requiredQuestID: find_your_credential
+  isRepeatable: 0
+  priority: 3
+--- !u!114 &2027595128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027595125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e259d591c229944aac9e1a5741b6e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: rueda_poi
+  rend: {fileID: 872489076}
+  revealedMaterial: {fileID: 2100000, guid: 921396b3a08101c4ebaed986a6afb7cd, type: 2}
+  transitionDuration: 1
+  particles: {fileID: 2394263181605874001, guid: bfe56232f05ada54994a5dbf75d2bc29, type: 3}
+  enableEmissionPulse: 1
 --- !u!1 &2027916878
 GameObject:
   m_ObjectHideFlags: 0
@@ -151731,13 +151881,13 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 631c59b94530a0e4794f1489abadc23f, type: 3}
       insertIndex: 14
       addedObject: {fileID: 2662953180521429728}
+    - targetCorrespondingSourceObject: {fileID: 7431971512521977702, guid: 631c59b94530a0e4794f1489abadc23f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2027595126}
+    - targetCorrespondingSourceObject: {fileID: -8672287573785368996, guid: 631c59b94530a0e4794f1489abadc23f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 163792552}
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: -9109718650374162961, guid: 631c59b94530a0e4794f1489abadc23f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 872489078}
-    - targetCorrespondingSourceObject: {fileID: -9109718650374162961, guid: 631c59b94530a0e4794f1489abadc23f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 872489079}
     - targetCorrespondingSourceObject: {fileID: -3523094816144472567, guid: 631c59b94530a0e4794f1489abadc23f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1589383706}

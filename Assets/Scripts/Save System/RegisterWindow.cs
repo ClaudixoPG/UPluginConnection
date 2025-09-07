@@ -45,7 +45,12 @@ namespace SaveSystem.Extras
                 return;
             }
 
-            if (_age_field.text.Length > 0 && !ValidateAge(int.Parse(_age_field.text)))
+            if (_age_field.text.Length == 0)
+            {
+                return;
+            }
+
+            if (!ValidateAge(int.Parse(_age_field.text)))
             {
                 _continueButton.interactable = false;
                 return;

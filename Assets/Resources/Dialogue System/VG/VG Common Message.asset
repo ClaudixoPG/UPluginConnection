@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45d8770642537b941828e5dce62b031d, type: 3}
+  m_Name: VG Common Message
+  m_EditorClassIdentifier: 
+  dialogueID: vg_common_message
+  dialogues:
+  - message: Hola %username%
+    background: {fileID: 21300000, guid: 339e085cd71f0df4f8362be5afcb2ac1, type: 3}
+    character: {fileID: 21300000, guid: 41ba3c2de86b31b448f485492e2d20cb, type: 3}
+    dalogueOptions: []
+  - message: Ando un poco estresado ahora...
+    background: {fileID: 21300000, guid: 339e085cd71f0df4f8362be5afcb2ac1, type: 3}
+    character: {fileID: 21300000, guid: 41ba3c2de86b31b448f485492e2d20cb, type: 3}
+    dalogueOptions: []
+  - message: No he estudiado para ningun parcial y no se cual deberia priorizar
+    background: {fileID: 21300000, guid: 339e085cd71f0df4f8362be5afcb2ac1, type: 3}
+    character: {fileID: 21300000, guid: 41ba3c2de86b31b448f485492e2d20cb, type: 3}
+    dalogueOptions: []
+  - message: "\xBFCual asignatura crees que deba concentrarme?"
+    background: {fileID: 21300000, guid: 339e085cd71f0df4f8362be5afcb2ac1, type: 3}
+    character: {fileID: 21300000, guid: 41ba3c2de86b31b448f485492e2d20cb, type: 3}
+    dalogueOptions:
+    - message: Bases de datos
+    - message: "Dise\xF1o 2D"
+    - message: Orientado a objetos
+  - message: Esperaba que no digas esa... Pero esta bien tomare tu consejo
+    background: {fileID: 21300000, guid: 339e085cd71f0df4f8362be5afcb2ac1, type: 3}
+    character: {fileID: 21300000, guid: 41ba3c2de86b31b448f485492e2d20cb, type: 3}
+    dalogueOptions: []

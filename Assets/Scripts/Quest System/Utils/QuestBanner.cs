@@ -11,13 +11,19 @@ namespace QuestSystem.Utils
 
         private void Awake()
         {
-            QuestSystemManager.onQuestStatusUpdate += AwaitForNewQuest;
+            QuestSystemManager.onQuestStatusUpdate += Listener_QuestUpdate;
+            QuestSystemManager.onQuestCompleted += Listener_QuestCompleted;
         }
 
-        private void AwaitForNewQuest(QuestData questData, int currentPOI)
+        private void Listener_QuestUpdate(QuestData questData, int currentPOI)
         {
-            var poi = POIManager.Instance.GetPOI(questData.POI_Ids[currentPOI]);
-            DisplayBanner(questData.questName, poi.ClueMessage);
+            var objective = questData.POI_Ids[currentPOI];
+            DisplayBanner(objective.title, objective.description);
+        }
+
+        private void Listener_QuestCompleted(QuestData questData)
+        {
+            DisplayBanner(questData.questName, "Completado");
         }
 
         public void DisplayBanner(string title, string subtext)

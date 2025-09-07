@@ -3,7 +3,9 @@ using MessageSystem;
 using QuestSystem;
 using SaveSystem;
 using SaveSystem.Extras;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages the player's saved game data at the start of the game.
@@ -18,16 +20,6 @@ public class TutorialManager : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private string _senderMessage_name = "Ramon";
-
-    [Header("Dialogues References")]
-    /// <summary>
-    /// Reference to the dialogue that should play at the beginning of the game
-    /// if no saved data is found (the game's prologue).
-    /// </summary>
-    [SerializeField]
-    private DialogueModel _prologueDialogue;
-    [SerializeField]
-    private DialogueModel _welcomeDialogue;
 
     [Header("Quest References")]
     [SerializeField]
@@ -49,29 +41,35 @@ public class TutorialManager : MonoBehaviour
     {
         _register_window.SetActive(false);
 
-        RegisterWindow.onCompleteRegistration += DisplayWelcome;
+        PrologueSceneManager.onPrologueSceneEnds += Listener_DisplayForm;
+        RegisterWindow.onCompleteRegistration += Listener_OnRegisterComplete;
 
-        DialogueSceneHandler.onEndDialogue += DialogueEndListener;
+        DialogueSceneHandler.onEndDialogue += Listener_DialogueEnd;
     }
 
-    private void DialogueEndListener(string dialogueID)
+    private void Listener_OnRegisterComplete()
     {
-        if (_welcomeDialogue.dialogueID == dialogueID)
-        {
-            ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Hola, espero no haberme equivocado de numero jaja");
-            ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Por cierto, necesitaras tu credencial");
+        _register_window.SetActive(false);
 
-            QuestSystemManager.Singleton.AssignQuest(_findYourCredentials_questline);
+        ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Wena, ya llegaste?");
+        ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Estoy aca en la U");
 
-            ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Puedes encontrarla utilizando el sistema de radar que funciona asi:");
-            ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "[Explicacion]");
-            return;
-        }
+        ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "[carrera_videojuegos]");
+
+        ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Tenis que venir pa ca a buscar tu credencial");
+        ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Ah, y prende el radar cuando caminis, asi te marca altiro donde queda la cuestion");
+
+        QuestSystemManager.Singleton.AssignQuest(_findYourCredentials_questline);
     }
 
-    private void DisplayWelcome()
+    private void Listener_DialogueEnd(string dialogueID)
     {
-        DialogueManager.PlayDialogue(_welcomeDialogue);
+        
+    }
+
+    private void Listener_DisplayForm()
+    {
+        _register_window.SetActive(true);
     }
 
     /// <summary>
@@ -84,8 +82,7 @@ public class TutorialManager : MonoBehaviour
     {
         if (!SaveHandler.GameDataExists())
         {
-            DialogueManager.PlayDialogue(_prologueDialogue);
-            _register_window.SetActive(true);
+            StartCoroutine(LoadPrologueScene());
         }
     }
 
@@ -97,5 +94,19 @@ public class TutorialManager : MonoBehaviour
     private void RemoveAllStoredData()
     {
         SaveHandler.Delete();
+    }
+
+    /// <summary>
+    /// Loads the prologue scene asynchronously
+    /// </summary>
+    /// <param name="dialogueModel">The dialogue data to be used in the scene.</param>
+    /// <returns>Coroutine enumerator for asynchronous scene loading.</returns>
+    private IEnumerator LoadPrologueScene()
+    {
+        AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Prologue", LoadSceneMode.Additive);
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
     }
 }

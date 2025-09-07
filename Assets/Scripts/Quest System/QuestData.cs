@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace QuestSystem
@@ -13,7 +14,25 @@ namespace QuestSystem
         public string questName;
         public string questDescription;
 
-        public string[] POI_Ids;
+        public QuestObjectiveData[] POI_Ids;
+    }
+
+    [System.Serializable]
+    public class QuestObjectiveData
+    {
+        [System.Serializable]
+        public class MessageReward
+        {
+            public string senderID;
+            public string message;
+        }
+
+        public string targetPOI_id;
+        public string interactionPOI_id;
+        public string title;
+        public string description;
+        public List<MessageReward> rewards = new List<MessageReward>();
+
     }
 
     [System.Serializable]

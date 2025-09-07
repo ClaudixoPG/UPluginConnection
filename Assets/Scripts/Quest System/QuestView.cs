@@ -31,8 +31,8 @@ namespace QuestSystem
         {
             gameObject.SetActive(true);
 
-            _questTitle_text.text = currentQuestData.questName;
-            _currentPOITitle_text.text = currentQuestData.POI_Ids[currentPoiIndex];
+            _questTitle_text.text = currentQuestData.POI_Ids[currentPoiIndex].title;
+            _currentPOITitle_text.text = currentQuestData.POI_Ids[currentPoiIndex].description;
         }
 
         public void Hide()

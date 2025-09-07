@@ -14,9 +14,8 @@ namespace MessageSystem
 
         [Header("References")]
         [SerializeField] private GameObject _conversation_prefab;
-        [SerializeField] private GameObject _messageLeft_prefab;
-        [SerializeField] private GameObject _messageRight_prefab;
-
+        [SerializeField] private MessageBox _messageLeft_prefab;
+        [SerializeField] private MessageBox _messageRight_prefab;
 
         public bool IsOpen => _content.activeSelf;
 
@@ -48,10 +47,22 @@ namespace MessageSystem
 
             var data = SaveSystem.SaveHandler.GetGameData();
 
+            var allCharacterPhotos = Resources.LoadAll<Sprite>("Message System/Characters Photos");
+
             foreach (var conversation in data.conversationData)
             {
                 var entry = Instantiate(_conversation_prefab, content);
                 entry.transform.Find("User ID").GetComponent<TextMeshProUGUI>().text = conversation.ID;
+
+                foreach (var photo in allCharacterPhotos)
+                {
+                    if (photo.name == conversation.ID)
+                    {
+                        entry.transform.Find("User").GetComponent<Image>().sprite = photo;
+                        break;
+                    }
+                }
+
 
                 var log = conversation.GetLog;
 
@@ -87,12 +98,12 @@ namespace MessageSystem
                 if (entry.senderID == "player")
                 {
                     var bubble = Instantiate(_messageRight_prefab, content);
-                    bubble.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = entry.message;
+                    bubble.SetMessage(entry.message);
                 }
                 else
                 {
                     var bubble = Instantiate(_messageLeft_prefab, content);
-                    bubble.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = entry.message;
+                    bubble.SetMessage(entry.message);
                 }
             }
         }
