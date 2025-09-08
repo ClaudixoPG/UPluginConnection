@@ -31,7 +31,8 @@ namespace QuestSystem
         public string interactionPOI_id;
         public string title;
         public string description;
-        public List<MessageReward> rewards = new List<MessageReward>();
+        public List<MessageReward> messagesOnComplete = new List<MessageReward>();
+        public DialogueSystem.DialogueModel dialogueOnComplete;
 
     }
 

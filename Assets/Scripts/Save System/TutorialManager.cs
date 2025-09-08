@@ -58,6 +58,7 @@ public class TutorialManager : MonoBehaviour
 
         ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Tenis que venir pa ca a buscar tu credencial");
         ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "Ah, y prende el radar cuando caminis, asi te marca altiro donde queda la cuestion");
+        ConversationManager.SendMessage(_senderMessage_name, _senderMessage_name, "[Explicacion de radar aqui]");
 
         QuestSystemManager.Singleton.AssignQuest(_findYourCredentials_questline);
     }

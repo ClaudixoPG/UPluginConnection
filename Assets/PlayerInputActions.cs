@@ -681,6 +681,120 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""FindYourCredentialGame"",
+            ""id"": ""1d766573-16a5-4b6c-b8a6-c688eb3dbb97"",
+            ""actions"": [
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""d17e37dd-75bc-47a8-9d6f-77e4d6976154"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""02295989-ed4e-4d83-acf4-0c66da349718"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""b3e79ec6-2846-4cee-a5f3-622bb273e512"",
+                    ""path"": ""<XInputController>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""ef53070c-6fd8-42b0-ba47-33664f1b3b71"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""9d8f4a40-2fa2-477c-a593-db05e38d98e8"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""1c876321-9c1b-4210-8154-b73e27886b08"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""fb79a2bc-52de-4d91-b29f-701e1cf6586e"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""e48ea81a-bb44-4a04-8894-7c57b54a7997"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8453153-8c96-44f6-b172-1a559b18a0d0"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c1c94a80-6bd9-4ca1-8515-9719b03d3e04"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -709,6 +823,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         // ReignsGame
         m_ReignsGame = asset.FindActionMap("ReignsGame", throwIfNotFound: true);
         m_ReignsGame_Move = m_ReignsGame.FindAction("Move", throwIfNotFound: true);
+        // FindYourCredentialGame
+        m_FindYourCredentialGame = asset.FindActionMap("FindYourCredentialGame", throwIfNotFound: true);
+        m_FindYourCredentialGame_Move = m_FindYourCredentialGame.FindAction("Move", throwIfNotFound: true);
+        m_FindYourCredentialGame_Fire = m_FindYourCredentialGame.FindAction("Fire", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -718,6 +836,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_EndlessRunner.enabled, "This will cause a leak and performance issues, PlayerInputActions.EndlessRunner.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_FishingGame.enabled, "This will cause a leak and performance issues, PlayerInputActions.FishingGame.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_ReignsGame.enabled, "This will cause a leak and performance issues, PlayerInputActions.ReignsGame.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_FindYourCredentialGame.enabled, "This will cause a leak and performance issues, PlayerInputActions.FindYourCredentialGame.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1368,6 +1487,113 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="ReignsGameActions" /> instance referencing this action map.
     /// </summary>
     public ReignsGameActions @ReignsGame => new ReignsGameActions(this);
+
+    // FindYourCredentialGame
+    private readonly InputActionMap m_FindYourCredentialGame;
+    private List<IFindYourCredentialGameActions> m_FindYourCredentialGameActionsCallbackInterfaces = new List<IFindYourCredentialGameActions>();
+    private readonly InputAction m_FindYourCredentialGame_Move;
+    private readonly InputAction m_FindYourCredentialGame_Fire;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "FindYourCredentialGame".
+    /// </summary>
+    public struct FindYourCredentialGameActions
+    {
+        private @PlayerInputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public FindYourCredentialGameActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "FindYourCredentialGame/Move".
+        /// </summary>
+        public InputAction @Move => m_Wrapper.m_FindYourCredentialGame_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "FindYourCredentialGame/Fire".
+        /// </summary>
+        public InputAction @Fire => m_Wrapper.m_FindYourCredentialGame_Fire;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_FindYourCredentialGame; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="FindYourCredentialGameActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(FindYourCredentialGameActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="FindYourCredentialGameActions" />
+        public void AddCallbacks(IFindYourCredentialGameActions instance)
+        {
+            if (instance == null || m_Wrapper.m_FindYourCredentialGameActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_FindYourCredentialGameActionsCallbackInterfaces.Add(instance);
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
+            @Fire.started += instance.OnFire;
+            @Fire.performed += instance.OnFire;
+            @Fire.canceled += instance.OnFire;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="FindYourCredentialGameActions" />
+        private void UnregisterCallbacks(IFindYourCredentialGameActions instance)
+        {
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
+            @Fire.started -= instance.OnFire;
+            @Fire.performed -= instance.OnFire;
+            @Fire.canceled -= instance.OnFire;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="FindYourCredentialGameActions.UnregisterCallbacks(IFindYourCredentialGameActions)" />.
+        /// </summary>
+        /// <seealso cref="FindYourCredentialGameActions.UnregisterCallbacks(IFindYourCredentialGameActions)" />
+        public void RemoveCallbacks(IFindYourCredentialGameActions instance)
+        {
+            if (m_Wrapper.m_FindYourCredentialGameActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="FindYourCredentialGameActions.AddCallbacks(IFindYourCredentialGameActions)" />
+        /// <seealso cref="FindYourCredentialGameActions.RemoveCallbacks(IFindYourCredentialGameActions)" />
+        /// <seealso cref="FindYourCredentialGameActions.UnregisterCallbacks(IFindYourCredentialGameActions)" />
+        public void SetCallbacks(IFindYourCredentialGameActions instance)
+        {
+            foreach (var item in m_Wrapper.m_FindYourCredentialGameActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_FindYourCredentialGameActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="FindYourCredentialGameActions" /> instance referencing this action map.
+    /// </summary>
+    public FindYourCredentialGameActions @FindYourCredentialGame => new FindYourCredentialGameActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "SpaceShipMinigame" which allows adding and removing callbacks.
     /// </summary>
@@ -1505,5 +1731,27 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "FindYourCredentialGame" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="FindYourCredentialGameActions.AddCallbacks(IFindYourCredentialGameActions)" />
+    /// <seealso cref="FindYourCredentialGameActions.RemoveCallbacks(IFindYourCredentialGameActions)" />
+    public interface IFindYourCredentialGameActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Fire" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFire(InputAction.CallbackContext context);
     }
 }

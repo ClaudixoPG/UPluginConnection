@@ -1,3 +1,4 @@
+using DialogueSystem;
 using MessageSystem;
 using MinigameSystem;
 using NUnit.Framework.Interfaces;
@@ -69,7 +70,7 @@ namespace QuestSystem
                 }
             }
 
-            MinigameHandler.onCompleteGame += Listener_MinigameComplete;
+            MinigamesManager.onCompleteGame += Listener_MinigameComplete;
         }
 
         private void Listener_MinigameComplete(string questID, string poiInteractionID)
@@ -78,29 +79,41 @@ namespace QuestSystem
             {
                 if (_currentQuest.questID == questID && GetCurrentQuestObjective() != null && GetCurrentQuestObjective().interactionPOI_id == poiInteractionID)
                 {
-                    foreach (var reward in _currentQuest.POI_Ids[_questIndex].rewards)
+                    if (_currentQuest.POI_Ids[_questIndex].dialogueOnComplete != null)
                     {
-                        ConversationManager.SendMessage(reward.senderID, reward.senderID, reward.message.Replace("%username%", SaveHandler.GetGameData().username));
-                    }
-
-                    _questIndex++;
-
-                    SaveHandler.GetGameData().SaveQuestline(_currentQuest.questID, _questIndex);
-                    SaveHandler.Save();
-
-                    if (_questIndex < _currentQuest.POI_Ids.Length)
-                    {
-                        QuestView.Singleton.Paint(_currentQuest, _questIndex);
-                        onQuestStatusUpdate?.Invoke(_currentQuest, _questIndex);
-                        UpdateQuest();
+                        DialogueManager.PlayDialogue(_currentQuest.POI_Ids[_questIndex].dialogueOnComplete, CompleteQuestObjective);
                     }
                     else
                     {
-                        onQuestCompleted?.Invoke(_currentQuest);
-                        QuestView.Singleton.Hide();
-                        _currentQuest = null;
+                        CompleteQuestObjective();
                     }
                 }
+            }
+        }
+
+        private void CompleteQuestObjective()
+        {
+            foreach (var reward in _currentQuest.POI_Ids[_questIndex].messagesOnComplete)
+            {
+                ConversationManager.SendMessage(reward.senderID, reward.senderID, reward.message.Replace("%username%", SaveHandler.GetGameData().username));
+            }
+
+            _questIndex++;
+
+            SaveHandler.GetGameData().SaveQuestline(_currentQuest.questID, _questIndex);
+            SaveHandler.Save();
+
+            if (_questIndex < _currentQuest.POI_Ids.Length)
+            {
+                QuestView.Singleton.Paint(_currentQuest, _questIndex);
+                onQuestStatusUpdate?.Invoke(_currentQuest, _questIndex);
+                UpdateQuest();
+            }
+            else
+            {
+                onQuestCompleted?.Invoke(_currentQuest);
+                QuestView.Singleton.Hide();
+                _currentQuest = null;
             }
         }
 

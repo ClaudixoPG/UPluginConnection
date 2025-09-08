@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace DialogueSystem
@@ -11,6 +12,8 @@ namespace DialogueSystem
     public class DialogueManager : MonoBehaviour
     {
         [SerializeField] private DialogueModel _testDialogue;
+
+        private UnityAction _onEndDialogueAction;
 
         /// <summary>
         /// Singleton instance of the DialogueManager.
@@ -59,6 +62,21 @@ namespace DialogueSystem
         /// <param name="dialogueModel">The dialogue data to play.</param>
         public static void PlayDialogue(DialogueModel dialogueModel)
         {
+            Singleton._onEndDialogueAction = null;
+
+            if (!Singleton._isPlaying)
+            {
+                Singleton.InitDialogue(dialogueModel);
+            }
+        }
+
+        /// <summary>
+        /// Starts a dialogue sequence if no other dialogue is currently playing. At the ends execute a unity action
+        /// </summary>
+        /// <param name="dialogueModel">The dialogue data to play.</param>
+        public static void PlayDialogue(DialogueModel dialogueModel, UnityAction onEndDialogueAction)
+        {
+            Singleton._onEndDialogueAction = onEndDialogueAction;
             if (!Singleton._isPlaying)
             {
                 Singleton.InitDialogue(dialogueModel);
@@ -101,7 +119,7 @@ namespace DialogueSystem
                 }
                 if (handler != null)
                 {
-                    handler.Play(dialogueModel);
+                    handler.Play(dialogueModel, _onEndDialogueAction);
                 }
             }
         }

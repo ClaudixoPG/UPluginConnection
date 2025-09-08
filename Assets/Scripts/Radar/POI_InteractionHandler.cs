@@ -74,7 +74,7 @@ public class POI_InteractionHandler : MonoBehaviour
         {
             if (minigame_name != string.Empty)
             {
-                MinigameHandler.PlayMinigame(minigame_name, requiredQuestID, poi_interaction_id);
+                MinigamesManager.PlayMinigame(minigame_name, requiredQuestID, poi_interaction_id);
             }
         }
     }

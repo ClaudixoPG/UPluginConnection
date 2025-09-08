@@ -1,6 +1,7 @@
 using SpaceShip;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -53,6 +54,8 @@ namespace DialogueSystem
         public static event OnStartDialogue onStartDialogue;
         public static event OnEndDialogue onEndDialogue;
 
+        private UnityAction _onEndDialogueAction;
+
         private void Update()
         {
             if (_currentDialogueModel != null && _currentDialogueIndex < _currentDialogueModel.dialogues.Count)
@@ -61,8 +64,10 @@ namespace DialogueSystem
             }
         }
 
-        public void Play(DialogueModel model)
+        public void Play(DialogueModel model, UnityAction onEndDailogueAction = null)
         {
+            _onEndDialogueAction = onEndDailogueAction;
+
             _log = $"Init Dialogue: {model.dialogueID}";
 
             _currentDialogueModel = model;
@@ -165,6 +170,7 @@ namespace DialogueSystem
             _log += "\nEnd Dialogue";
 
             onEndDialogue?.Invoke(_currentDialogueModel.dialogueID);
+            _onEndDialogueAction?.Invoke();
 
             _currentDialogueModel = null;
 
