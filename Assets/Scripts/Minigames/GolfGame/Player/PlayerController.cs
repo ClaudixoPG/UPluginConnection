@@ -12,6 +12,7 @@ namespace GolfGame
         [SerializeField] private Rigidbody2D rb;
         [SerializeField] private LineRenderer lr;
         public float rotationSpeed = 100f;
+        [SerializeField] ArrowCanva arrowFill;
 
         // Flags de control
         private bool inHole;
@@ -54,6 +55,7 @@ namespace GolfGame
         {
             normalizedForce += Time.deltaTime;
             normalizedForce = Mathf.Clamp01(normalizedForce);
+            arrowFill.SetFill(normalizedForce);
         }
 
         public void SetNormalizedForce(float value)
@@ -70,6 +72,7 @@ namespace GolfGame
             isCharging = false;
             normalizedForce = 0f; // reset después de lanzar
 
+            arrowFill.SetFill(normalizedForce);
             controller.AddLaunch();
         }
 
