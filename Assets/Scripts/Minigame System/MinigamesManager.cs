@@ -2,12 +2,16 @@ using DialogueSystem;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 namespace MinigameSystem
 {
     public class MinigamesManager : MonoBehaviour
     {
+        [SerializeField] private Camera _worldCamera;
+        [SerializeField] private EventSystem _worldEventSystem;
+
         public delegate void OnCompleteGame(string questID, string _poiInteractionID);
         public static event OnCompleteGame onCompleteGame;
 
@@ -32,6 +36,9 @@ namespace MinigameSystem
         {
             onCompleteGame?.Invoke(_currentQuestID, _currentPointInteractionID);
 
+            Singleton._worldCamera.gameObject.SetActive(true);
+            Singleton._worldEventSystem.gameObject.SetActive(true);
+
             _currentQuestID = string.Empty;
             _currentPointInteractionID = string.Empty;
 
@@ -44,6 +51,9 @@ namespace MinigameSystem
 
         public static void PlayMinigame(string minigameScene, string questID, string poiInteractionID)
         {
+            Singleton._worldCamera.gameObject.SetActive(false);
+            Singleton._worldEventSystem.gameObject.SetActive(false);
+
             _currentQuestID = questID;
             _currentPointInteractionID = poiInteractionID;
             Singleton.StartCoroutine(Singleton.LoadGame(minigameScene, questID, poiInteractionID));

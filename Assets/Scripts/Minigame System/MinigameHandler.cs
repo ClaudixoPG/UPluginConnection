@@ -8,9 +8,6 @@ namespace MinigameSystem
 {
     public abstract class MinigameHandler : MonoBehaviour
     {
-        [SerializeField] protected Camera _minigameCamera;
-        [SerializeField] protected EventSystem _minigameEventSystem;
-
         private string _questID, _poiInteractionID;
 
         private bool _wasInit;
@@ -21,11 +18,6 @@ namespace MinigameSystem
             if (UnityEngine.SceneManagement.SceneManager.sceneCount == 1)
             {
                 Init(string.Empty, string.Empty);
-            }
-            else
-            {
-                _minigameCamera.gameObject.SetActive(false);
-                _minigameEventSystem.gameObject.SetActive(false);
             }
         }
 

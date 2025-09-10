@@ -10,6 +10,7 @@ namespace ReignsGame
     {
         [Header("Referencias")]
         [SerializeField] private Transform targetObject;
+        [SerializeField] private GameController controller;
 
         [Header("Parámetros")]
         [SerializeField] private float rotationSpeed = 90f;
@@ -130,6 +131,11 @@ namespace ReignsGame
             moveInput = Vector2.zero;
         }
 
+        public void ResetController()
+        {
+            StartCoroutine(LerpToInitialPosition());
+        }
+
         private IEnumerator LerpToInitialPosition()
         {
             Vector3 startPos = targetObject.position;
@@ -178,12 +184,12 @@ namespace ReignsGame
         #region Add / Remove
         private void AddObject()
         {
-            Debug.Log("AddObject -> llamado (no implementado)");
+            controller.CheckTarget(1);
         }
 
         private void RemoveObject()
         {
-            Debug.Log("RemoveObject -> llamado (no implementado)");
+            controller.CheckTarget(-1);
         }
         #endregion
 

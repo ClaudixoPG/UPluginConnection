@@ -6450,6 +6450,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 325eeab9d27334341a4c3af416ea6052, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _worldCamera: {fileID: 890892618}
+  _worldEventSystem: {fileID: 1996577889}
 --- !u!43 &82826248
 Mesh:
   m_ObjectHideFlags: 0

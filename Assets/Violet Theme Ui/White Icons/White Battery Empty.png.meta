@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: 8d9f54261b21bc6408119d9e04cc974f
+AssetOrigin:
+  serializedVersion: 1
+  productId: 235559
+  packageName: Violet Themed UI
+  packageVersion: 1.2
+  assetPath: Assets/Violet Theme Ui/White Icons/White Battery Empty.png
+  uploadId: 767621
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -124,8 +131,8 @@ TextureImporter:
         width: 460
         height: 288
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 170, y: 120, z: 170, w: 120}
       customData: 
       outline: []
       physicsShape: []
@@ -146,7 +153,7 @@ TextureImporter:
         width: 45
         height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -163,7 +170,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 14bcaca6853b6fc4c9dee16665d50f88
     internalID: 0
     vertices: []
     indices: 
@@ -180,10 +187,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 235559
-  packageName: Violet Themed UI
-  packageVersion: 1.2
-  assetPath: Assets/Violet Theme Ui/White Icons/White Battery Empty.png
-  uploadId: 767621
