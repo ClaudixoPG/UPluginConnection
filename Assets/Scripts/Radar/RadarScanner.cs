@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UIElements;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -42,6 +44,8 @@ public class RadarScanner : MonoBehaviour
     public float waveWidth = 0.2f;
 
     private float currentWaveRadius;
+
+    private PointOfInterest closestDetectedPOI;
 
     //MESH
     private MeshFilter meshFilter;
@@ -336,6 +340,12 @@ public class RadarScanner : MonoBehaviour
             currentWaveColor = noDetectionColor;
             waveSpeed = minSpeed;
 
+            if (closestDetectedPOI != null)
+            {
+                POIManager.Instance.MarkAsUnDetected(closestDetectedPOI);
+                closestDetectedPOI = null;
+            }
+
             return;
         }
 
@@ -359,8 +369,12 @@ public class RadarScanner : MonoBehaviour
             }
             if (dist <= nearDistance && isInPlayerVision)
             {
-                Debug.Log($"Detectado en zona cercana: {poi.name}");
-                POIManager.Instance.MarkAsDetected(poi);
+                if (closestDetectedPOI == null)
+                {
+                    Debug.Log($"Detectado en zona cercana: {poi.name}");
+                    POIManager.Instance.MarkAsDetected(poi);
+                    closestDetectedPOI = poi;
+                }
             }
             else
             {

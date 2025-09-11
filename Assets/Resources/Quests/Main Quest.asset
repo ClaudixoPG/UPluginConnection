@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b830bf06b8fa04d468d7c52d4d4d12a8, type: 3}
+  m_Name: Main Quest
+  m_EditorClassIdentifier: 
+  questID: main_quest
+  questName: Bienvenido a la Brigada
+  questDescription: La brigada te necesita y tu eres el candidato perfecto para ayudarnos
+  POI_Ids:
+  - targetPOI_id: vg_carrier
+    interactionPOI_id: vg_carrier_credential
+    title: La Credencial
+    description: Reunete con Ramon en la Carrera de Videojuegos
+    questCompletionTime: 0
+    messagesOnComplete:
+    - senderID: Camila
+      message: "Hola %username% soy Cami, te espero aca en la rueda \xBFVa?"
+    - senderID: Camila
+      message: '[rueda]'
+    - senderID: Camila
+      message: No te me pierdas u.u
+    dialogueOnComplete: {fileID: 11400000, guid: 93aaa817f81878f479a59f962a969b95, type: 2}
+    messagesOnFail: []
+  - targetPOI_id: rueda_poi
+    interactionPOI_id: rueda_quest
+    title: Los Preservativos pt.1
+    description: Reunete con Camila en la Rueda
+    questCompletionTime: 60
+    messagesOnComplete: []
+    dialogueOnComplete: {fileID: 11400000, guid: dbe023a212d03d7459efb0bddf1bbb17, type: 2}
+    messagesOnFail:
+    - senderID: Camila
+      message: Ya nos estamos quitando
+    - senderID: Camila
+      message: Fue dificil sin tu ayuda pero supongo que para la proxima nos podras
+        ayudar
+    - senderID: Player
+      message: Que bueno que todo salio bien, una disculpa no tuve tiempo para ayudarles
+        esta vez
+  - targetPOI_id: vg_carrier
+    interactionPOI_id: vg_carrier_end
+    title: Los Preservativos pt.2
+    description: Lleva los preservativos a la Carrera de Videojuegos
+    questCompletionTime: 0
+    messagesOnComplete: []
+    dialogueOnComplete: {fileID: 11400000, guid: dbe023a212d03d7459efb0bddf1bbb17, type: 2}
+    messagesOnFail: []

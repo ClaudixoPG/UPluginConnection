@@ -3,6 +3,8 @@ using MessageSystem;
 using MinigameSystem;
 using NUnit.Framework.Interfaces;
 using SaveSystem;
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace QuestSystem
@@ -22,8 +24,10 @@ namespace QuestSystem
 
         public delegate void OnStartNewQuestline(QuestData questlineData, int currentPOI);
         public delegate void OnQuestCompleted(QuestData questlineData);
+        public delegate void OnQuestFail(QuestData questlineData, int currentPOI);
         public static OnStartNewQuestline onQuestStatusUpdate;
         public static OnQuestCompleted onQuestCompleted;
+        public static OnQuestFail onQuestFail;
 
         public static QuestSystemManager Singleton
         {
@@ -73,6 +77,53 @@ namespace QuestSystem
             MinigamesManager.onCompleteGame += Listener_MinigameComplete;
         }
 
+        private void Update()
+        {
+            if (_currentQuest != null)
+            {
+                var objective = GetCurrentQuestObjective();
+                if (objective != null && objective.questCompletionTime > 0)
+                {
+                    var questCache = SaveHandler.GetGameData().GetQuestCache(_currentQuest.questID);
+
+                    // Tiempo de aceptación
+                    DateTime acceptTime = new DateTime(questCache.acceptTime);
+
+                    // Duración (en minutos)
+                    long durationMinutes = objective.questCompletionTime;
+
+                    // Fecha en que debe expirar
+                    DateTime expireTime = acceptTime.AddMinutes(durationMinutes);
+
+                    TimeSpan remaining = expireTime - DateTime.Now;
+
+                    string timerInFormat;
+
+                    // If still valid, format as countdown
+                    if (remaining.TotalSeconds > 0)
+                    {
+                        timerInFormat = string.Format("{0:D2}:{1:D2}", remaining.Minutes, remaining.Seconds);
+                    }
+                    else
+                    {
+                        // Already expired
+                        timerInFormat = "00:00";
+                    }
+
+                    var title = objective.title;
+                    var subtitle = objective.description + "\n" + timerInFormat;
+
+                    QuestView.Singleton.Paint(title, subtitle);
+
+                    if (DateTime.Now > expireTime)
+                    {
+                        // Quest Expired
+                        FailQuestObjective();
+                    }
+                }
+            }
+        }
+
         private void Listener_MinigameComplete(string questID, string poiInteractionID)
         {
             if (_currentQuest != null)
@@ -88,6 +139,43 @@ namespace QuestSystem
                         CompleteQuestObjective();
                     }
                 }
+            }
+        }
+
+        private void FailQuestObjective()
+        {
+            foreach (var message in _currentQuest.POI_Ids[_questIndex].messagesOnFail)
+            {
+                ConversationManager.SendMessage(message.senderID, message.senderID, message.message.Replace("%username%", SaveHandler.GetGameData().username));
+            }
+
+            var failedIndex = _questIndex;
+
+            _questIndex++;
+
+            SaveHandler.GetGameData().SaveQuestline(_currentQuest.questID, _questIndex);
+            SaveHandler.Save();
+            QuestView.Singleton.Hide();
+            onQuestFail?.Invoke(_currentQuest, failedIndex);
+
+            StartCoroutine(WaitForNewQuest());
+        }
+
+        private IEnumerator WaitForNewQuest()
+        {
+            yield return new WaitForSeconds(3);
+
+            if (_questIndex < _currentQuest.POI_Ids.Length)
+            {
+                QuestView.Singleton.Paint(_currentQuest, _questIndex);
+                onQuestStatusUpdate?.Invoke(_currentQuest, _questIndex);
+                UpdateQuest();
+            }
+            else
+            {
+                onQuestCompleted?.Invoke(_currentQuest);
+                QuestView.Singleton.Hide();
+                _currentQuest = null;
             }
         }
 
@@ -127,6 +215,8 @@ namespace QuestSystem
         public QuestObjectiveData GetCurrentQuestObjective()
         {
             if (_currentQuest == null) return null;
+
+            if (_questIndex >= _currentQuest.POI_Ids.Length) return null;
 
             return _currentQuest.POI_Ids[_questIndex];
         }

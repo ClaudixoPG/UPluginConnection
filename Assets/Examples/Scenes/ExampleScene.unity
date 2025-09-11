@@ -11375,6 +11375,7 @@ GameObject:
   - component: {fileID: 163792552}
   - component: {fileID: 163792554}
   - component: {fileID: 163792553}
+  - component: {fileID: 163792557}
   - component: {fileID: 163792556}
   - component: {fileID: 163792555}
   m_Layer: 0
@@ -11414,9 +11415,9 @@ MonoBehaviour:
   poi_interaction_id: vg_carrier_credential
   _triggeredDialogue: {fileID: 11400000, guid: 06ae9795dc1886c439eefa77672245bd, type: 2}
   minigame_name: Credential Minigame
-  requiredQuestID: find_your_credential
+  requiredQuestID: main_quest
   isRepeatable: 0
-  priority: 2
+  priority: 3
 --- !u!114 &163792554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11471,6 +11472,24 @@ MonoBehaviour:
   requiredQuestID: 
   isRepeatable: 0
   priority: 1
+--- !u!114 &163792557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163792551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc82c001e7106924893f570232da7626, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poi_interaction_id: vg_carrier_end
+  _triggeredDialogue: {fileID: 11400000, guid: b30ebc2e1d09ff9458bc679c831c12f3, type: 2}
+  minigame_name: 
+  requiredQuestID: main_quest
+  isRepeatable: 0
+  priority: 2
 --- !u!1 &165324797
 GameObject:
   m_ObjectHideFlags: 0
@@ -62711,9 +62730,9 @@ Canvas:
   m_GameObject: {fileID: 874789122}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 890892618}
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -62723,7 +62742,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!224 &874789126
 RectTransform:
@@ -64292,7 +64311,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1015
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -101275,7 +101294,7 @@ Transform:
   m_GameObject: {fileID: 1447156987}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 914.5, y: 1, z: 642.8}
+  m_LocalPosition: {x: 919.2, y: 1, z: 664.5}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -101295,7 +101314,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visionAngle: 60
-  visionDistance: 20
+  visionDistance: 30
   visionGizmoColor: {r: 0, g: 0.27450982, b: 1, a: 1}
   portableObjects:
   - {fileID: 283433788}
@@ -101311,7 +101330,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 485d25a005056d0479d6a128153d88f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputActionAsset: {fileID: -944628639613478452, guid: 182fa253fc7bd3a4991fc19f33c6904f, type: 3}
 --- !u!1 &1447619460
 GameObject:
   m_ObjectHideFlags: 0
@@ -110737,7 +110755,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -124.14}
+  m_AnchoredPosition: {x: 0, y: -124.140015}
   m_SizeDelta: {x: 0, y: -248.27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1589571045
@@ -123638,7 +123656,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -124.13519}
+  m_AnchoredPosition: {x: 0, y: -124.135254}
   m_SizeDelta: {x: 0, y: -248.2704}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1788092356
@@ -124536,9 +124554,9 @@ Canvas:
   m_GameObject: {fileID: 1797954732}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 890892618}
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -140992,7 +141010,7 @@ MonoBehaviour:
   poi_interaction_id: rueda_quest
   _triggeredDialogue: {fileID: 11400000, guid: 01226ccb85a57254ead1d42e55f3443b, type: 2}
   minigame_name: ReignsGame
-  requiredQuestID: find_your_credential
+  requiredQuestID: main_quest
   isRepeatable: 0
   priority: 3
 --- !u!114 &2027595128
@@ -142700,9 +142718,9 @@ Canvas:
   m_GameObject: {fileID: 2051299434}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 890892618}
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0

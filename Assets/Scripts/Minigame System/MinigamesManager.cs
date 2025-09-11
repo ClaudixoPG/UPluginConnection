@@ -37,7 +37,7 @@ namespace MinigameSystem
             onCompleteGame?.Invoke(_currentQuestID, _currentPointInteractionID);
 
             Singleton._worldCamera.gameObject.SetActive(true);
-            Singleton._worldEventSystem.gameObject.SetActive(true);
+            Singleton._worldEventSystem.enabled = true;
 
             _currentQuestID = string.Empty;
             _currentPointInteractionID = string.Empty;
@@ -52,7 +52,7 @@ namespace MinigameSystem
         public static void PlayMinigame(string minigameScene, string questID, string poiInteractionID)
         {
             Singleton._worldCamera.gameObject.SetActive(false);
-            Singleton._worldEventSystem.gameObject.SetActive(false);
+            Singleton._worldEventSystem.enabled = false;
 
             _currentQuestID = questID;
             _currentPointInteractionID = poiInteractionID;

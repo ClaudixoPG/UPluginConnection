@@ -47,14 +47,11 @@ public class POIManager : MonoBehaviour
     {
         foreach (var poi in allPOIs)
         {
-            if (!poi.IsDetected)
+            float dist = Vector3.Distance(origin, poi.transform.position);
+            if (dist <= maxDistance)
             {
-                float dist = Vector3.Distance(origin, poi.transform.position);
-                if (dist <= maxDistance)
-                {
-                    //Debug.Log($"POI en rango: {poi.name} a {dist} unidades");
-                    yield return poi;
-                }
+                //Debug.Log($"POI en rango: {poi.name} a {dist} unidades");
+                yield return poi;
             }
         }
     }
@@ -65,6 +62,14 @@ public class POIManager : MonoBehaviour
         {
             Debug.Log($"Marcando como detectado: {poi.name}");
             poi.OnDetected();
+        }
+    }
+
+    public void MarkAsUnDetected(PointOfInterest poi)
+    {
+        if (poi.IsDetected)
+        {
+            poi.OnUndetected();
         }
     }
 }

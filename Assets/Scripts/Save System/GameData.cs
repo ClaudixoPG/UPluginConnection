@@ -32,6 +32,17 @@ namespace SaveSystem
         public delegate void OnMessageReceive(ConversationData conversation);
         public static event OnMessageReceive onMessageReceive;
 
+        public QuestlineCacheData GetQuestCache(string questID)
+        {
+            foreach (var quest in questlineCacheDatas)
+            {
+                if (quest.questlineID == questID)
+                    return quest;
+            }
+
+            return null;
+        }
+
         public QuestlineCacheData GetLastQuestLine()
         {
             if (questlineCacheDatas.Count > 0)

@@ -100,6 +100,50 @@ public class PointOfInterest : MonoBehaviour
         if (rend == null) rend = GetComponent<Renderer>();
     }
 
+    public void OnUndetected()
+    {
+        if (!IsDetected) return;
+        IsDetected = false;
+
+        Debug.Log($"POI undetected: {name}");
+
+        if (rend != null && uniqueMaterials != null)
+        {
+            for (int i = 0; i < uniqueMaterials.Length; i++)
+            {
+                Material mat = uniqueMaterials[i];
+
+                // Cancel emission tweens
+                if (emissionTweens != null && emissionTweens[i] != null)
+                {
+                    LeanTween.cancel(emissionTweens[i].id);
+                    emissionTweens[i] = null;
+                }
+
+                // Reverse color transition back to original
+                Color startColor = mat.color;
+                Color endColor = new Color(0.8773585f, 0.2276166f, 0.5634834f, 1); // <-- default (or you can store original color at OnDetected)
+
+                if (revealedMaterial.HasProperty("_Color") && mat.HasProperty("_Color"))
+                {
+                    LeanTween.value(gameObject, 0f, 1f, transitionDuration)
+                        .setOnUpdate((float val) =>
+                        {
+                            mat.color = Color.Lerp(startColor, endColor, val);
+                        })
+                        .setEase(LeanTweenType.easeInOutSine);
+                }
+
+                // Disable emission
+                if (mat.HasProperty("_EmissionColor"))
+                {
+                    mat.SetColor("_EmissionColor", Color.black);
+                    mat.DisableKeyword("_EMISSION");
+                }
+            }
+        }
+    }
+
     public void OnDetected()
     {
         if (IsDetected) return;
@@ -188,23 +232,26 @@ public class PointOfInterest : MonoBehaviour
         foreach (var interaction in priorityBasedInteractions)
         {
             //Check if this interaction is the current objective of the questline
-            if (interaction.QuestMeetingConditions)
+            if (interaction.RequireQuest)
             {
-                //Check if was activated and if its repetable
-
-                if (interaction.IsRepeatable)
+                if (interaction.QuestMeetingConditions)
                 {
-                    result = interaction;
-                    return true;
-                }
-                else
-                {
-                    var gameData = SaveSystem.SaveHandler.GetGameData();
+                    //Check if was activated and if its repetable
 
-                    if (!gameData.activatedPOIs.Contains(interaction.GetInteractionID))
+                    if (interaction.IsRepeatable)
                     {
                         result = interaction;
                         return true;
+                    }
+                    else
+                    {
+                        var gameData = SaveSystem.SaveHandler.GetGameData();
+
+                        if (!gameData.activatedPOIs.Contains(interaction.GetInteractionID))
+                        {
+                            result = interaction;
+                            return true;
+                        }
                     }
                 }
             }

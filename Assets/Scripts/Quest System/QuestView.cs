@@ -35,6 +35,14 @@ namespace QuestSystem
             _currentPOITitle_text.text = currentQuestData.POI_Ids[currentPoiIndex].description;
         }
 
+        public void Paint(string title, string subtitle)
+        {
+            gameObject.SetActive(true);
+
+            _questTitle_text.text = title;
+            _currentPOITitle_text.text = subtitle;
+        }
+
         public void Hide()
         {
             gameObject.SetActive(false);

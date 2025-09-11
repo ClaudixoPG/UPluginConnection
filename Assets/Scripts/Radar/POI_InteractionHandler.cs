@@ -53,6 +53,14 @@ public class POI_InteractionHandler : MonoBehaviour
         }
     }
 
+    public bool RequireQuest
+    {
+        get
+        {
+            return requiredQuestID != string.Empty;
+        }
+    }
+
     public bool IsRepeatable => isRepeatable;
 
     void Awake()

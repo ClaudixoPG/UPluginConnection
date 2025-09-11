@@ -174,7 +174,7 @@ GameObject:
   - component: {fileID: 41641998}
   - component: {fileID: 41642000}
   - component: {fileID: 41641999}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,7 +311,7 @@ GameObject:
   - component: {fileID: 50153689}
   - component: {fileID: 50153688}
   - component: {fileID: 50153687}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -458,6 +458,10 @@ PrefabInstance:
       value: Troyan Broken
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -571,7 +575,7 @@ GameObject:
   - component: {fileID: 76365171}
   - component: {fileID: 76365170}
   - component: {fileID: 76365169}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -671,7 +675,7 @@ GameObject:
   m_Component:
   - component: {fileID: 128700274}
   - component: {fileID: 128700275}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -734,7 +738,7 @@ GameObject:
   - component: {fileID: 154769986}
   - component: {fileID: 154769985}
   - component: {fileID: 154769987}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -880,6 +884,10 @@ PrefabInstance:
       value: Durex
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -909,7 +917,7 @@ GameObject:
   m_Component:
   - component: {fileID: 221657249}
   - component: {fileID: 221657250}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Scratch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -997,7 +1005,7 @@ GameObject:
   - component: {fileID: 241086132}
   - component: {fileID: 241086134}
   - component: {fileID: 241086133}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Points Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1133,7 +1141,7 @@ GameObject:
   - component: {fileID: 301012823}
   - component: {fileID: 301012825}
   - component: {fileID: 301012824}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1396,7 +1404,7 @@ GameObject:
   - component: {fileID: 368792584}
   - component: {fileID: 368792583}
   - component: {fileID: 368792582}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1464,7 +1472,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!224 &368792585
 RectTransform:
@@ -1499,7 +1507,7 @@ GameObject:
   - component: {fileID: 414242365}
   - component: {fileID: 414242367}
   - component: {fileID: 414242366}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1574,7 +1582,7 @@ GameObject:
   m_Component:
   - component: {fileID: 418513278}
   - component: {fileID: 418513279}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Scratch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1663,7 +1671,7 @@ GameObject:
   - component: {fileID: 627419657}
   - component: {fileID: 627419656}
   - component: {fileID: 627419655}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1765,7 +1773,7 @@ GameObject:
   - component: {fileID: 653884072}
   - component: {fileID: 653884071}
   - component: {fileID: 653884070}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1865,7 +1873,7 @@ GameObject:
   m_Component:
   - component: {fileID: 660127612}
   - component: {fileID: 660127614}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1912,7 +1920,7 @@ GameObject:
   - component: {fileID: 696067507}
   - component: {fileID: 696067509}
   - component: {fileID: 696067508}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1988,7 +1996,7 @@ GameObject:
   - component: {fileID: 699496533}
   - component: {fileID: 699496535}
   - component: {fileID: 699496534}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2109,6 +2117,10 @@ PrefabInstance:
       value: Durex Broken
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -2142,7 +2154,7 @@ GameObject:
   - component: {fileID: 722570778}
   - component: {fileID: 722570780}
   - component: {fileID: 722570779}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2218,7 +2230,7 @@ GameObject:
   - component: {fileID: 725359887}
   - component: {fileID: 725359889}
   - component: {fileID: 725359888}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Success
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2339,6 +2351,10 @@ PrefabInstance:
       value: Durex Broken
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -2418,6 +2434,10 @@ PrefabInstance:
       value: Durex
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -2446,7 +2466,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 803483218}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Feedback
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2530,6 +2550,10 @@ PrefabInstance:
       value: Durex Caduced
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -2596,7 +2620,7 @@ GameObject:
   - component: {fileID: 863461307}
   - component: {fileID: 863461309}
   - component: {fileID: 863461308}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2732,7 +2756,7 @@ GameObject:
   - component: {fileID: 870992242}
   - component: {fileID: 870992244}
   - component: {fileID: 870992243}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2826,7 +2850,7 @@ GameObject:
   - component: {fileID: 927973682}
   - component: {fileID: 927973684}
   - component: {fileID: 927973683}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Success
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2902,7 +2926,7 @@ GameObject:
   - component: {fileID: 1003570533}
   - component: {fileID: 1003570532}
   - component: {fileID: 1003570531}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3003,7 +3027,7 @@ GameObject:
   - component: {fileID: 1007097274}
   - component: {fileID: 1007097276}
   - component: {fileID: 1007097275}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Points Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3080,7 +3104,7 @@ GameObject:
   - component: {fileID: 1020996625}
   - component: {fileID: 1020996624}
   - component: {fileID: 1020996623}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3180,7 +3204,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1027607890}
   - component: {fileID: 1027607891}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Scratch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3286,7 +3310,7 @@ GameObject:
   - component: {fileID: 1106322284}
   - component: {fileID: 1106322286}
   - component: {fileID: 1106322285}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3362,7 +3386,7 @@ GameObject:
   - component: {fileID: 1161860250}
   - component: {fileID: 1161860252}
   - component: {fileID: 1161860251}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3489,6 +3513,10 @@ PrefabInstance:
       value: Troyan Broken
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -3535,7 +3563,7 @@ GameObject:
   - component: {fileID: 1267967680}
   - component: {fileID: 1267967682}
   - component: {fileID: 1267967681}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3672,7 +3700,7 @@ GameObject:
   - component: {fileID: 1300048826}
   - component: {fileID: 1300048825}
   - component: {fileID: 1300048824}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3774,7 +3802,7 @@ GameObject:
   - component: {fileID: 1346398259}
   - component: {fileID: 1346398258}
   - component: {fileID: 1346398257}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3875,7 +3903,7 @@ GameObject:
   - component: {fileID: 1352007563}
   - component: {fileID: 1352007565}
   - component: {fileID: 1352007564}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3996,6 +4024,10 @@ PrefabInstance:
       value: Troyan Caduced
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -4026,7 +4058,7 @@ GameObject:
   - component: {fileID: 1390236221}
   - component: {fileID: 1390236223}
   - component: {fileID: 1390236222}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4102,7 +4134,7 @@ GameObject:
   - component: {fileID: 1498047571}
   - component: {fileID: 1498047573}
   - component: {fileID: 1498047572}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4238,7 +4270,7 @@ GameObject:
   - component: {fileID: 1518455958}
   - component: {fileID: 1518455960}
   - component: {fileID: 1518455959}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4314,7 +4346,7 @@ GameObject:
   - component: {fileID: 1545373900}
   - component: {fileID: 1545373902}
   - component: {fileID: 1545373901}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4389,7 +4421,7 @@ GameObject:
   - component: {fileID: 1559460686}
   - component: {fileID: 1559460688}
   - component: {fileID: 1559460687}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4525,7 +4557,7 @@ GameObject:
   - component: {fileID: 1668757153}
   - component: {fileID: 1668757155}
   - component: {fileID: 1668757154}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4602,7 +4634,7 @@ GameObject:
   - component: {fileID: 1669186218}
   - component: {fileID: 1669186217}
   - component: {fileID: 1669186219}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4701,7 +4733,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1686756688}
   - component: {fileID: 1686756689}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Scratch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4838,7 +4870,7 @@ GameObject:
   - component: {fileID: 1708327065}
   - component: {fileID: 1708327067}
   - component: {fileID: 1708327066}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4914,7 +4946,7 @@ GameObject:
   - component: {fileID: 1714594818}
   - component: {fileID: 1714594820}
   - component: {fileID: 1714594819}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4989,7 +5021,7 @@ GameObject:
   - component: {fileID: 1782420221}
   - component: {fileID: 1782420223}
   - component: {fileID: 1782420222}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5126,7 +5158,7 @@ GameObject:
   - component: {fileID: 1795260032}
   - component: {fileID: 1795260031}
   - component: {fileID: 1795260030}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5227,7 +5259,7 @@ GameObject:
   - component: {fileID: 1820305865}
   - component: {fileID: 1820305867}
   - component: {fileID: 1820305866}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5361,7 +5393,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1862049743}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Feedback
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5399,7 +5431,7 @@ GameObject:
   - component: {fileID: 1868206028}
   - component: {fileID: 1868206030}
   - component: {fileID: 1868206029}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5493,7 +5525,7 @@ GameObject:
   - component: {fileID: 1902026242}
   - component: {fileID: 1902026241}
   - component: {fileID: 1902026240}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5640,6 +5672,10 @@ PrefabInstance:
       value: Troyan
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -5683,7 +5719,7 @@ GameObject:
   - component: {fileID: 1929452525}
   - component: {fileID: 1929452527}
   - component: {fileID: 1929452526}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5883,6 +5919,10 @@ PrefabInstance:
       value: Troyan
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2e79d1f4de1ace24188fddf7651d4623, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -5968,7 +6008,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1152
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -6068,7 +6108,7 @@ GameObject:
   - component: {fileID: 2071606792}
   - component: {fileID: 2071606794}
   - component: {fileID: 2071606793}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

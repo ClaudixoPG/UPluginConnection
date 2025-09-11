@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,9 +32,16 @@ namespace QuestSystem
         public string interactionPOI_id;
         public string title;
         public string description;
+
+        /// <summary>
+        /// The number of time in minutes to complete a quest before turn it a incomplete quest. If '0' means not have timer.
+        /// </summary>
+        public long questCompletionTime;
+
         public List<MessageReward> messagesOnComplete = new List<MessageReward>();
         public DialogueSystem.DialogueModel dialogueOnComplete;
 
+        public List<MessageReward> messagesOnFail = new List<MessageReward>();
     }
 
     [System.Serializable]
@@ -41,6 +49,7 @@ namespace QuestSystem
     {
         public string questlineID;
         public int storedIndex;
+        public long acceptTime;
 
         public QuestlineCacheData()
         {
@@ -50,6 +59,7 @@ namespace QuestSystem
         {
             this.questlineID = questlineID;
             this.storedIndex = storedIndex;
+            acceptTime = DateTime.Now.Ticks;
         }
     }
 }

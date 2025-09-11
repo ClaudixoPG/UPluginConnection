@@ -3,24 +3,22 @@ using UnityEngine.InputSystem;
 
 public class CustomInputHandler : MonoBehaviour, IGameController
 {
-    [SerializeField] private InputActionAsset _inputActionAsset;
-
+    private PlayerInputActions inputActions;
+    
     public delegate void ReceiveKey(KeyCode key);
     public static event ReceiveKey onReceiveKey;
 
     private void Awake()
     {
+        inputActions = new PlayerInputActions();
+        inputActions.World.Enable();
+
         BindActions();
     }
 
     private void BindActions()
     {
-        var map = _inputActionAsset.FindActionMap("SignalBasedInputs");
-        var tapAction = map.FindAction("Tap");
-
-        tapAction.Enable();
-
-        tapAction.performed += ctx =>
+        inputActions.World.Tap.performed += ctx =>
         {
             onReceiveKey?.Invoke(KeyCode.KeypadEnter);
         };

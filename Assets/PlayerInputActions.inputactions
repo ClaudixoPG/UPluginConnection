@@ -709,6 +709,65 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "World",
+            "id": "da6580b5-382f-4d25-b7c6-621f1263590f",
+            "actions": [
+                {
+                    "name": "Enter",
+                    "type": "Button",
+                    "id": "f35a2d3a-5ff3-449a-8423-9f316df96646",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Tap",
+                    "type": "Button",
+                    "id": "d7ea6e93-9264-4eb0-8f90-7533ad4d6822",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3ca42b86-e56c-44db-bdb6-7b6e16de4128",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Enter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "388d023b-2111-491d-b4b7-c60700c6abb9",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3734848d-47bd-409a-90b8-2ef4a963be53",
+                    "path": "<Gamepad>/leftStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

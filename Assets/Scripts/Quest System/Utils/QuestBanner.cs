@@ -13,6 +13,7 @@ namespace QuestSystem.Utils
         {
             QuestSystemManager.onQuestStatusUpdate += Listener_QuestUpdate;
             QuestSystemManager.onQuestCompleted += Listener_QuestCompleted;
+            QuestSystemManager.onQuestFail += Listener_QuestFail;
         }
 
         private void Listener_QuestUpdate(QuestData questData, int currentPOI)
@@ -24,6 +25,12 @@ namespace QuestSystem.Utils
         private void Listener_QuestCompleted(QuestData questData)
         {
             DisplayBanner(questData.questName, "Completado");
+        }
+
+        private void Listener_QuestFail(QuestData questData, int currentPOI)
+        {
+            var objective = questData.POI_Ids[currentPOI];
+            DisplayBanner(objective.title, "Fallido");
         }
 
         public void DisplayBanner(string title, string subtext)

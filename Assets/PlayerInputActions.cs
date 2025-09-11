@@ -795,6 +795,65 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""World"",
+            ""id"": ""da6580b5-382f-4d25-b7c6-621f1263590f"",
+            ""actions"": [
+                {
+                    ""name"": ""Enter"",
+                    ""type"": ""Button"",
+                    ""id"": ""f35a2d3a-5ff3-449a-8423-9f316df96646"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Tap"",
+                    ""type"": ""Button"",
+                    ""id"": ""d7ea6e93-9264-4eb0-8f90-7533ad4d6822"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""3ca42b86-e56c-44db-bdb6-7b6e16de4128"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Enter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""388d023b-2111-491d-b4b7-c60700c6abb9"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Tap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3734848d-47bd-409a-90b8-2ef4a963be53"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Tap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -827,6 +886,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_FindYourCredentialGame = asset.FindActionMap("FindYourCredentialGame", throwIfNotFound: true);
         m_FindYourCredentialGame_Move = m_FindYourCredentialGame.FindAction("Move", throwIfNotFound: true);
         m_FindYourCredentialGame_Fire = m_FindYourCredentialGame.FindAction("Fire", throwIfNotFound: true);
+        // World
+        m_World = asset.FindActionMap("World", throwIfNotFound: true);
+        m_World_Enter = m_World.FindAction("Enter", throwIfNotFound: true);
+        m_World_Tap = m_World.FindAction("Tap", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -837,6 +900,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_FishingGame.enabled, "This will cause a leak and performance issues, PlayerInputActions.FishingGame.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_ReignsGame.enabled, "This will cause a leak and performance issues, PlayerInputActions.ReignsGame.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_FindYourCredentialGame.enabled, "This will cause a leak and performance issues, PlayerInputActions.FindYourCredentialGame.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_World.enabled, "This will cause a leak and performance issues, PlayerInputActions.World.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1594,6 +1658,113 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="FindYourCredentialGameActions" /> instance referencing this action map.
     /// </summary>
     public FindYourCredentialGameActions @FindYourCredentialGame => new FindYourCredentialGameActions(this);
+
+    // World
+    private readonly InputActionMap m_World;
+    private List<IWorldActions> m_WorldActionsCallbackInterfaces = new List<IWorldActions>();
+    private readonly InputAction m_World_Enter;
+    private readonly InputAction m_World_Tap;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "World".
+    /// </summary>
+    public struct WorldActions
+    {
+        private @PlayerInputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public WorldActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "World/Enter".
+        /// </summary>
+        public InputAction @Enter => m_Wrapper.m_World_Enter;
+        /// <summary>
+        /// Provides access to the underlying input action "World/Tap".
+        /// </summary>
+        public InputAction @Tap => m_Wrapper.m_World_Tap;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_World; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="WorldActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(WorldActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="WorldActions" />
+        public void AddCallbacks(IWorldActions instance)
+        {
+            if (instance == null || m_Wrapper.m_WorldActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_WorldActionsCallbackInterfaces.Add(instance);
+            @Enter.started += instance.OnEnter;
+            @Enter.performed += instance.OnEnter;
+            @Enter.canceled += instance.OnEnter;
+            @Tap.started += instance.OnTap;
+            @Tap.performed += instance.OnTap;
+            @Tap.canceled += instance.OnTap;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="WorldActions" />
+        private void UnregisterCallbacks(IWorldActions instance)
+        {
+            @Enter.started -= instance.OnEnter;
+            @Enter.performed -= instance.OnEnter;
+            @Enter.canceled -= instance.OnEnter;
+            @Tap.started -= instance.OnTap;
+            @Tap.performed -= instance.OnTap;
+            @Tap.canceled -= instance.OnTap;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="WorldActions.UnregisterCallbacks(IWorldActions)" />.
+        /// </summary>
+        /// <seealso cref="WorldActions.UnregisterCallbacks(IWorldActions)" />
+        public void RemoveCallbacks(IWorldActions instance)
+        {
+            if (m_Wrapper.m_WorldActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="WorldActions.AddCallbacks(IWorldActions)" />
+        /// <seealso cref="WorldActions.RemoveCallbacks(IWorldActions)" />
+        /// <seealso cref="WorldActions.UnregisterCallbacks(IWorldActions)" />
+        public void SetCallbacks(IWorldActions instance)
+        {
+            foreach (var item in m_Wrapper.m_WorldActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_WorldActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="WorldActions" /> instance referencing this action map.
+    /// </summary>
+    public WorldActions @World => new WorldActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "SpaceShipMinigame" which allows adding and removing callbacks.
     /// </summary>
@@ -1753,5 +1924,27 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnFire(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "World" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="WorldActions.AddCallbacks(IWorldActions)" />
+    /// <seealso cref="WorldActions.RemoveCallbacks(IWorldActions)" />
+    public interface IWorldActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Enter" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnEnter(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Tap" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTap(InputAction.CallbackContext context);
     }
 }
