@@ -41,9 +41,9 @@ namespace MinigameSystem
 
         protected abstract void OnStartGame();
         protected abstract void UpdateGame();
-        public void CompleteGame(string minigameName, string log)
+        public void CompleteGame(string minigameName, string log, float percentage)
         {
-            MinigamesManager.CloseMinigame(minigameName, log);
+            MinigamesManager.CloseMinigame(minigameName, log, percentage);
         }
     }
 }

@@ -6,6 +6,7 @@ namespace MinigameSystem.Minigames.FindYourCredentials
 {
     public class FindYourCredential_Minigame : MinigameHandler, IGameController
     {
+        private const float MAX_POINTS = 100f;
         private PlayerInputActions inputActions;
 
         [Header("Settings")]
@@ -128,7 +129,7 @@ namespace MinigameSystem.Minigames.FindYourCredentials
 
         public void UI_WinGame()
         {
-            CompleteGame("Find Your Credentials", $"Total Points: {_points}");
+            CompleteGame("Find Your Credentials", $"Total Points: {_points}", _points/ MAX_POINTS);
         }
 
         protected override void OnStartGame()

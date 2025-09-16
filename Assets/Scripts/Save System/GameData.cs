@@ -12,11 +12,13 @@ namespace SaveSystem
     {
         public string stadisticName;
         public string log;
+        public float percentage;
 
-        public StadisticsLog(string stadisticName, string log)
+        public StadisticsLog(string stadisticName, string log, float percentage)
         {
             this.stadisticName = stadisticName;
             this.log = log;
+            this.percentage = percentage;
         }
     }
 
@@ -47,9 +49,9 @@ namespace SaveSystem
         public delegate void OnMessageReceive(ConversationData conversation);
         public static event OnMessageReceive onMessageReceive;
 
-        public void AddLog(string stadisticName, string log)
+        public void AddLog(string stadisticName, string log, float percentage)
         {
-            stadisticsLog.Add(new StadisticsLog(stadisticName, log));
+            stadisticsLog.Add(new StadisticsLog(stadisticName, log, percentage));
             SaveHandler.Save();
         }
 

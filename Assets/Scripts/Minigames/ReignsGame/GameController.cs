@@ -7,6 +7,7 @@ namespace ReignsGame
 {
     public class GameController : MinigameHandler, IGameController
     {
+        private const float MAX_POINTS = 100f;
         [SerializeField] private TextMeshProUGUI _points_text;
         [SerializeField] private Transform _pivot;
         [SerializeField] private Animator _topAnimator;
@@ -84,7 +85,7 @@ namespace ReignsGame
 
             if (_currentIndex >= _pivot.childCount)
             {
-                CompleteGame("Reigns", $"Total Points: {_points}");
+                CompleteGame("Reigns", $"Total Points: {_points}", _points / MAX_POINTS);
                 return;
             }
 

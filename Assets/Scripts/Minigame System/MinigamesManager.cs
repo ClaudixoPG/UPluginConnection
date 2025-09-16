@@ -32,9 +32,9 @@ namespace MinigameSystem
             }
         }
 
-        public static void CloseMinigame(string minigameName, string log)
+        public static void CloseMinigame(string minigameName, string log, float percentage)
         {
-            SaveSystem.SaveHandler.GetGameData().AddLog($"Minigame Complete: {minigameName} retreived by Quest: {_currentQuestID }", log);
+            SaveSystem.SaveHandler.GetGameData().AddLog($"Minigame Complete: {minigameName} retreived by Quest: {_currentQuestID }", log, percentage);
             onCompleteGame?.Invoke(_currentQuestID, _currentPointInteractionID, log);
 
             Singleton._worldCamera.gameObject.SetActive(true);
