@@ -131,7 +131,7 @@ namespace MinigameSystem.Minigames
         /// </summary>
         private void Complete()
         {
-            CompleteGame();
+            CompleteGame("Scan Credential", "No log is aviable");
             ResetState();
         }
 

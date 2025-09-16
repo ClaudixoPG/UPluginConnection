@@ -124,7 +124,7 @@ namespace QuestSystem
             }
         }
 
-        private void Listener_MinigameComplete(string questID, string poiInteractionID)
+        private void Listener_MinigameComplete(string questID, string poiInteractionID, string log)
         {
             if (_currentQuest != null)
             {

@@ -12,7 +12,7 @@ namespace MinigameSystem
         [SerializeField] private Camera _worldCamera;
         [SerializeField] private EventSystem _worldEventSystem;
 
-        public delegate void OnCompleteGame(string questID, string _poiInteractionID);
+        public delegate void OnCompleteGame(string questID, string _poiInteractionID, string log);
         public static event OnCompleteGame onCompleteGame;
 
         private static string _currentQuestID;
@@ -32,9 +32,10 @@ namespace MinigameSystem
             }
         }
 
-        public static void CloseMinigame()
+        public static void CloseMinigame(string minigameName, string log)
         {
-            onCompleteGame?.Invoke(_currentQuestID, _currentPointInteractionID);
+            SaveSystem.SaveHandler.GetGameData().AddLog($"Minigame Complete: {minigameName} retreived by Quest: {_currentQuestID }", log);
+            onCompleteGame?.Invoke(_currentQuestID, _currentPointInteractionID, log);
 
             Singleton._worldCamera.gameObject.SetActive(true);
             Singleton._worldEventSystem.enabled = true;

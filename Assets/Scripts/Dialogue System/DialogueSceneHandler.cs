@@ -169,6 +169,8 @@ namespace DialogueSystem
         {
             _log += "\nEnd Dialogue";
 
+            SaveSystem.SaveHandler.GetGameData().AddLog($"Dialogue: {_currentDialogueModel.dialogueID}", _log);
+
             onEndDialogue?.Invoke(_currentDialogueModel.dialogueID);
             _onEndDialogueAction?.Invoke();
 

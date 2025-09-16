@@ -8,6 +8,19 @@ using static SaveSystem.GameData;
 namespace SaveSystem
 {
     [System.Serializable]
+    public struct StadisticsLog
+    {
+        public string stadisticName;
+        public string log;
+
+        public StadisticsLog(string stadisticName, string log)
+        {
+            this.stadisticName = stadisticName;
+            this.log = log;
+        }
+    }
+
+    [System.Serializable]
     public class GameData
     {
         public string username;
@@ -16,6 +29,8 @@ namespace SaveSystem
         public List<QuestlineCacheData> questlineCacheDatas = new List<QuestlineCacheData> ();
         public List<ConversationData> conversationData = new List<ConversationData>();
         public List<string> activatedPOIs = new List<string>();
+
+        public List<StadisticsLog> stadisticsLog = new List<StadisticsLog>();
 
         public GameData(string username, int age)
         {
@@ -31,6 +46,12 @@ namespace SaveSystem
 
         public delegate void OnMessageReceive(ConversationData conversation);
         public static event OnMessageReceive onMessageReceive;
+
+        public void AddLog(string stadisticName, string log)
+        {
+            stadisticsLog.Add(new StadisticsLog(stadisticName, log));
+            SaveHandler.Save();
+        }
 
         public QuestlineCacheData GetQuestCache(string questID)
         {

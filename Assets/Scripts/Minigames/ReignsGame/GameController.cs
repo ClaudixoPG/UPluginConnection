@@ -84,7 +84,7 @@ namespace ReignsGame
 
             if (_currentIndex >= _pivot.childCount)
             {
-                CompleteGame();
+                CompleteGame("Reigns", $"Total Points: {_points}");
                 return;
             }
 
