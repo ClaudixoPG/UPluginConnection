@@ -90,11 +90,11 @@ public class PointOfInterest : MonoBehaviour
     private float emissionIntensity = 0.5f;
     private float emissionPulseSpeed = .5f;
 
-    private POI_InteractionHandler[] interactionsInThisPOI;
+    private POI_InteractionHandler _interactionHandler;
 
     void Awake()
     {
-        interactionsInThisPOI = GetComponents<POI_InteractionHandler>();
+        _interactionHandler = GetComponent<POI_InteractionHandler>();
 
         POIManager.Instance?.RegisterPOI(this);
         if (rend == null) rend = GetComponent<Renderer>();
@@ -201,83 +201,11 @@ public class PointOfInterest : MonoBehaviour
         }
     }
 
-    public bool CanInteract()
+    public bool CanBeFoundByRadar()
     {
-        //Check if this poi contains any interactions
-        if (interactionsInThisPOI == null || interactionsInThisPOI.Length == 0) return false;
+        if (_interactionHandler == null) return false;
 
-        var priorityBasedInteractions = interactionsInThisPOI.OrderByDescending(x => x.Priority).ToArray();
-
-        foreach (var interaction in priorityBasedInteractions)
-        {
-            //Check if this interaction is the current objective of the questline
-            if (interaction.QuestMeetingConditions)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public bool CanInteract(out POI_InteractionHandler result)
-    {
-        result = null;
-
-        //Check if this poi contains any interactions
-        if (interactionsInThisPOI == null || interactionsInThisPOI.Length == 0) return false;
-
-        var priorityBasedInteractions = interactionsInThisPOI.OrderByDescending(x => x.Priority).ToArray();
-
-        foreach (var interaction in priorityBasedInteractions)
-        {
-            //Check if this interaction is the current objective of the questline
-            if (interaction.RequireQuest)
-            {
-                if (interaction.QuestMeetingConditions)
-                {
-                    //Check if was activated and if its repetable
-
-                    if (interaction.IsRepeatable)
-                    {
-                        result = interaction;
-                        return true;
-                    }
-                    else
-                    {
-                        var gameData = SaveSystem.SaveHandler.GetGameData();
-
-                        if (!gameData.activatedPOIs.Contains(interaction.GetInteractionID))
-                        {
-                            result = interaction;
-                            return true;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                //Check if was activated and if its repetable
-
-                if (interaction.IsRepeatable)
-                {
-                    result = interaction;
-                    return true;
-                }
-                else
-                {
-                    var gameData = SaveSystem.SaveHandler.GetGameData();
-
-                    if (!gameData.activatedPOIs.Contains(interaction.GetInteractionID))
-                    {
-                        result = interaction;
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
+        return _interactionHandler.CanBeInteractWithAny();
     }
 
     private void OnDestroy()

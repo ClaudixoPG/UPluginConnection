@@ -16,7 +16,7 @@ namespace MinigameSystem
         public static event OnCompleteGame onCompleteGame;
 
         private static string _currentQuestID;
-        private static string _currentPointInteractionID;
+        private static string _currentQuestObjective_ID;
         private static Scene _minigameScene;
 
         private static MinigamesManager _singleton;
@@ -32,16 +32,16 @@ namespace MinigameSystem
             }
         }
 
-        public static void CloseMinigame(string minigameName, string log, float percentage)
+        public static void CloseMinigame(string minigameName, float percentage)
         {
-            SaveSystem.SaveHandler.GetGameData().AddLog($"Minigame Complete: {minigameName} retreived by Quest: {_currentQuestID }", log, percentage);
-            onCompleteGame?.Invoke(_currentQuestID, _currentPointInteractionID, log);
+            SaveSystem.SaveHandler.GetGameData().AddLog("[MINIGAME]", minigameName, percentage);
+            onCompleteGame?.Invoke(_currentQuestID, _currentQuestObjective_ID, minigameName);
 
             Singleton._worldCamera.gameObject.SetActive(true);
             Singleton._worldEventSystem.enabled = true;
 
             _currentQuestID = string.Empty;
-            _currentPointInteractionID = string.Empty;
+            _currentQuestObjective_ID = string.Empty;
 
             if (UnityEngine.SceneManagement.SceneManager.sceneCount > 1)
             {
@@ -50,17 +50,17 @@ namespace MinigameSystem
             }
         }
 
-        public static void PlayMinigame(string minigameScene, string questID, string poiInteractionID)
+        public static void PlayMinigame(string minigameScene, string questID, string objectiveID)
         {
             Singleton._worldCamera.gameObject.SetActive(false);
             Singleton._worldEventSystem.enabled = false;
 
             _currentQuestID = questID;
-            _currentPointInteractionID = poiInteractionID;
-            Singleton.StartCoroutine(Singleton.LoadGame(minigameScene, questID, poiInteractionID));
+            _currentQuestObjective_ID = objectiveID;
+            Singleton.StartCoroutine(Singleton.LoadGame(minigameScene));
         }
 
-        private IEnumerator LoadGame(string minigameSceneName, string questID, string poiInteractionID)
+        private IEnumerator LoadGame(string minigameSceneName)
         {
             // Cargar la escena de forma aditiva
             AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(minigameSceneName, LoadSceneMode.Additive);
@@ -85,7 +85,7 @@ namespace MinigameSystem
                     var handler = root.GetComponentInChildren<MinigameHandler>(true);
                     if (handler != null)
                     {
-                        handler.Init(questID, poiInteractionID);
+                        handler.Init();
                         Debug.Log($"MinigameHandler encontrado en escena {minigameSceneName} y inicializado.");
                         yield break;
                     }

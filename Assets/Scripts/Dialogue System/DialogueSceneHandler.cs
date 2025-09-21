@@ -68,7 +68,7 @@ namespace DialogueSystem
         {
             _onEndDialogueAction = onEndDailogueAction;
 
-            _log = $"Init Dialogue: {model.dialogueID}";
+            _log = string.Empty;
 
             _currentDialogueModel = model;
 
@@ -158,18 +158,37 @@ namespace DialogueSystem
 
                 _options[i].message_text.text = message;
 
+                string lastMessage = _currentFinalText;
+                string answerMessage = message;
+                string answerLetter = GetAnswerLetter(i);
+
                 _options[i].Button.onClick.AddListener(() => {
-                    _log += $"\nChose: {i}/{message}";
+                    _log += $"[{lastMessage}/{answerLetter}/{answerMessage}]";
                     NextDialogue();
                 });
             }
         }
 
+        private string GetAnswerLetter(int i)
+        {
+            switch (i)
+            {
+                case 0:
+                    return "A";
+                case 1:
+                    return "B";
+                case 2:
+                    return "C";
+                default:
+                    break;
+            }
+
+            return "X";
+        }
+
         private void FinishDialogue()
         {
-            _log += "\nEnd Dialogue";
-
-            SaveSystem.SaveHandler.GetGameData().AddLog($"Dialogue: {_currentDialogueModel.dialogueID}", _log, 100);
+            SaveSystem.SaveHandler.GetGameData().AddLog($"[DIALOGUE]/{_currentDialogueModel.dialogueID}", _log, 100);
 
             onEndDialogue?.Invoke(_currentDialogueModel.dialogueID);
             _onEndDialogueAction?.Invoke();

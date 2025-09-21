@@ -2,66 +2,92 @@ using DialogueSystem;
 using MinigameSystem;
 using QuestSystem;
 using SaveSystem;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(PointOfInterest))]
 public class POI_InteractionHandler : MonoBehaviour
 {
-    [Header("Mandatory Settings")]
-    [SerializeField] private string poi_interaction_id;
-    [Tooltip("The dialogue triggered by this interaction POI")]
-    [SerializeField] private DialogueModel _triggeredDialogue;
+    [System.Serializable]
+    public struct InteractionData
+    {
+        [Header("Mandatory Settings")]
+        [SerializeField] public string poi_interaction_id;
+        [Tooltip("The dialogue triggered by this interaction POI")]
+        [SerializeField] public DialogueModel triggeredDialogue;
 
-    [Header("Optional Settings")]
-    [Tooltip("If its in blank not trigger minigame after dialogue")]
-    [SerializeField] private string minigame_name;
-    [Tooltip("If its in blank is not required to be in a quest to trigger")]
-    [SerializeField] private string requiredQuestID;
-    [Tooltip("Can repeat this interaction")]
-    [SerializeField] private bool isRepeatable;
-    [Tooltip("The higher the number trigger first")]
-    [SerializeField] private int priority;
+        [Header("Optional Settings")]
+        [Tooltip("If its in blank not need any quest to trigger")]
+        [SerializeField] public string quest_id;
+        [Tooltip("If its in blank only need to be in the same quest id, must need 'quest_id' not be blank")]
+        [SerializeField] public string quest_objective_id;
+        [Tooltip("If its in blank not trigger minigame after dialogue")]
+        [SerializeField] public string minigame_name;
+        [Tooltip("Can repeat this interaction")]
+        [SerializeField] public bool isRepeatable;
+
+        public string GetInteractionID => quest_objective_id;
+
+        public readonly bool CanBeActivated
+        {
+            get
+            {
+                //Check if need quest for interaction
+                if (quest_id != string.Empty)
+                {
+                    //Check if not need objective
+                    if(quest_objective_id == string.Empty)
+                    {
+                        //Check if can repeat this interaction
+                        if (isRepeatable) return true;
+
+                        //Check if was interacted previusly
+                        return !SaveHandler.GetGameData().completedQuestObjectiveIDs.Contains(poi_interaction_id);
+                    }
+
+                    //Check if the player is in the matching quest
+                    if (quest_id != QuestSystemManager.Singleton.GetCurrentQuestID()) return false;
+
+                    var currentObjective = QuestSystemManager.Singleton.GetCurrentQuestObjective();
+
+                    if (currentObjective != null)
+                    {
+                        //Match current quest objective
+                        if (currentObjective.quest_objective_id == quest_objective_id)
+                        {
+                            //Check if can repeat this interaction
+                            if (isRepeatable) return true;
+
+                            //Check if was interacted previusly
+                            return !SaveHandler.GetGameData().completedQuestObjectiveIDs.Contains(poi_interaction_id);
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+
+                    return false;
+                }
+                else
+                {
+                    //Check if can repeat this interaction
+                    if (isRepeatable) return true;
+
+                    //Check if was interacted previusly
+                    return !SaveHandler.GetGameData().completedQuestObjectiveIDs.Contains(poi_interaction_id);
+                }
+            }
+        }
+    }
+
+    [SerializeField] private InteractionData[] aviableInteractions;
 
     private PointOfInterest _myPOI;
 
-    public int Priority => priority;
+    private static InteractionData? _currentInteracting;
 
-    public string GetInteractionID => poi_interaction_id;
-
-    public bool QuestMeetingConditions
-    {
-        get
-        {
-            if (requiredQuestID == string.Empty) return true;
-
-            //Match current Quest
-            if(requiredQuestID == QuestSystemManager.Singleton.GetCurrentQuestID())
-            {
-                var currentObjective = QuestSystemManager.Singleton.GetCurrentQuestObjective();
-
-                if (currentObjective == null) return true;
-
-                //Match current quest objective
-                if (currentObjective.interactionPOI_id == poi_interaction_id)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
-
-    public bool RequireQuest
-    {
-        get
-        {
-            return requiredQuestID != string.Empty;
-        }
-    }
-
-    public bool IsRepeatable => isRepeatable;
 
     void Awake()
     {
@@ -71,19 +97,19 @@ public class POI_InteractionHandler : MonoBehaviour
     private void Start()
     {
         CustomInputHandler.onReceiveKey += ListenKey;
-        DialogueSceneHandler.onEndDialogue += ListenEndDialogue;
     }
 
-    private void ListenEndDialogue(string dialogueID)
+    private void ListenEndDialogue()
     {
-        if (_triggeredDialogue == null) return;
-        
-        if (dialogueID == _triggeredDialogue.dialogueID)
+        if (_currentInteracting == null) return;
+
+        if (_currentInteracting.Value.minigame_name != string.Empty)
         {
-            if (minigame_name != string.Empty)
-            {
-                MinigamesManager.PlayMinigame(minigame_name, requiredQuestID, poi_interaction_id);
-            }
+            MinigamesManager.PlayMinigame(_currentInteracting.Value.minigame_name, _currentInteracting.Value.quest_id, _currentInteracting.Value.quest_objective_id);
+        }
+        else
+        {
+            QuestSystem.QuestSystemManager.Singleton.CheckQuest(_currentInteracting.Value.quest_id, _currentInteracting.Value.quest_objective_id);
         }
     }
 
@@ -95,11 +121,12 @@ public class POI_InteractionHandler : MonoBehaviour
 
                 if (_myPOI.IsDetected)
                 {
-                    if (_myPOI.CanInteract(out var poiInteraction))
+                    foreach (var interaction in aviableInteractions)
                     {
-                        if (poiInteraction != null && poiInteraction.poi_interaction_id == poi_interaction_id)
+                        if (interaction.CanBeActivated)
                         {
-                            BeginInteraction();
+                            BeginInteraction(interaction);
+                            return;
                         }
                     }
                 }
@@ -108,12 +135,29 @@ public class POI_InteractionHandler : MonoBehaviour
         }
     }
 
-    public void BeginInteraction()
+    public bool CanBeInteractWithAny()
     {
-        if(_triggeredDialogue != null)
+        foreach (var interaction in aviableInteractions)
         {
-            SaveHandler.GetGameData().MarkPOIasVisited(poi_interaction_id);
-            DialogueManager.PlayDialogue(_triggeredDialogue);
+            if (interaction.CanBeActivated)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void BeginInteraction(InteractionData interactionData)
+    {
+        _currentInteracting = interactionData;
+
+        if (_currentInteracting.Value.triggeredDialogue != null)
+        {
+            if(_currentInteracting.Value.quest_objective_id != string.Empty)
+                SaveHandler.GetGameData().MarkQuestObjectiveCompleted(_currentInteracting.Value.quest_objective_id);
+
+            DialogueManager.PlayDialogue(_currentInteracting.Value.triggeredDialogue, ListenEndDialogue);
         }
     }
 }

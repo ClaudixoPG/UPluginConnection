@@ -30,7 +30,7 @@ namespace SaveSystem
 
         public List<QuestlineCacheData> questlineCacheDatas = new List<QuestlineCacheData> ();
         public List<ConversationData> conversationData = new List<ConversationData>();
-        public List<string> activatedPOIs = new List<string>();
+        public List<string> completedQuestObjectiveIDs = new List<string>();
 
         public List<StadisticsLog> stadisticsLog = new List<StadisticsLog>();
 
@@ -98,7 +98,7 @@ namespace SaveSystem
             {
                 if (questlineCacheDatas[i].questlineID == questlineID)
                 {
-                    questlineCacheDatas[i].storedIndex = currentIndex;
+                    questlineCacheDatas[i].SetIndex(currentIndex);
                     return;
                 }
             }
@@ -109,13 +109,13 @@ namespace SaveSystem
             SaveHandler.Save();
         }
 
-        public void MarkPOIasVisited(string poiInteractableID)
+        public void MarkQuestObjectiveCompleted(string questObjectiveID)
         {
-            if (activatedPOIs == null) activatedPOIs = new List<string>();
+            if (completedQuestObjectiveIDs == null) completedQuestObjectiveIDs = new List<string>();
 
-            if (!activatedPOIs.Contains(poiInteractableID))
+            if (!completedQuestObjectiveIDs.Contains(questObjectiveID))
             {
-                activatedPOIs.Add(poiInteractableID);
+                completedQuestObjectiveIDs.Add(questObjectiveID);
                 SaveHandler.Save();
             }
         }

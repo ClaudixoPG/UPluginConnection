@@ -28,8 +28,8 @@ namespace QuestSystem
             public string message;
         }
 
+        public string quest_objective_id;
         public string targetPOI_id;
-        public string interactionPOI_id;
         public string title;
         public string description;
 
@@ -59,7 +59,13 @@ namespace QuestSystem
         {
             this.questlineID = questlineID;
             this.storedIndex = storedIndex;
-            acceptTime = DateTime.Now.Ticks;
+            acceptTime = DateTime.Now.ToBinary();
+        }
+
+        public void SetIndex(int storedIndex)
+        {
+            this.storedIndex = storedIndex;
+            acceptTime = DateTime.Now.ToBinary();
         }
     }
 }

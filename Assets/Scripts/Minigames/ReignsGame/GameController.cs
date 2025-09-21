@@ -85,7 +85,7 @@ namespace ReignsGame
 
             if (_currentIndex >= _pivot.childCount)
             {
-                CompleteGame("Reigns", $"Total Points: {_points}", _points / MAX_POINTS);
+                CompleteGame("Reigns", _points/MAX_POINTS);
                 return;
             }
 
@@ -94,27 +94,30 @@ namespace ReignsGame
 
         public void CheckTarget(int side)
         {
-            if (!_pivot.GetChild(_currentIndex).GetComponent<CondomBox>().isCorrect)
+            var isValid = _pivot.GetChild(_currentIndex).GetComponent<CondomBox>().isCorrect;
+
+            if (side == 1)
             {
-                if (side == 1)
+                if (isValid)
                 {
                     _topAnimator.SetTrigger("Success");
-                }else if( side == -1)
+                }
+                else
+                {
+                    _topAnimator.SetTrigger("Fail");
+                    _points = Mathf.Clamp(_points - 10, 0, 100);
+                }
+
+            }else if (side == -1)
+            {
+                if (!isValid)
                 {
                     _bottomAnimator.SetTrigger("Success");
                 }
-            }
-            else
-            {
-                _points = Mathf.Clamp(_points - 10, 0, 100);
-
-                if (side == 1)
-                {
-                    _topAnimator.SetTrigger("Fail");
-                }
-                else if (side == -1)
+                else
                 {
                     _bottomAnimator.SetTrigger("Fail");
+                    _points = Mathf.Clamp(_points - 10, 0, 100);
                 }
             }
 

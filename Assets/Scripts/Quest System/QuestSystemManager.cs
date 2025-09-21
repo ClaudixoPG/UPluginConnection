@@ -19,6 +19,7 @@ namespace QuestSystem
 
         [Header("Components")]
         [SerializeField] private GameObject _questMark; //The GameObject used as a visual marker displayed above the target POI.
+        [SerializeField] private StatsWindow _statsWindow; 
 
         private static QuestSystemManager _singleton;
 
@@ -66,9 +67,17 @@ namespace QuestSystem
                     {
                         _currentQuest = quest;
                         _questIndex = lastQuest.storedIndex;
-                        SaveHandler.GetGameData().activatedPOIs.Remove(_currentQuest.POI_Ids[_questIndex].interactionPOI_id); //Se remueve este id para garantizar que sea interactable
-                        QuestView.Singleton.Paint(_currentQuest, _questIndex);
-                        onQuestStatusUpdate?.Invoke(quest, _questIndex);
+
+                        if (_questIndex < _currentQuest.POI_Ids.Length)
+                        {
+                            SaveHandler.GetGameData().completedQuestObjectiveIDs.Remove(_currentQuest.POI_Ids[_questIndex].quest_objective_id); //Se remueve este id para garantizar que sea interactable
+                            QuestView.Singleton.Paint(_currentQuest, _questIndex);
+                            onQuestStatusUpdate?.Invoke(quest, _questIndex);
+                        }
+                        else
+                        {
+                            _statsWindow.DisplayStats(SaveHandler.GetGameData().stadisticsLog.ToArray());
+                        }
                         break;
                     }
                 }
@@ -87,7 +96,7 @@ namespace QuestSystem
                     var questCache = SaveHandler.GetGameData().GetQuestCache(_currentQuest.questID);
 
                     // Tiempo de aceptación
-                    DateTime acceptTime = new DateTime(questCache.acceptTime);
+                    DateTime acceptTime = DateTime.FromBinary(questCache.acceptTime);
 
                     // Duración (en minutos)
                     long durationMinutes = objective.questCompletionTime;
@@ -124,11 +133,16 @@ namespace QuestSystem
             }
         }
 
-        private void Listener_MinigameComplete(string questID, string poiInteractionID, string log)
+        private void Listener_MinigameComplete(string questID, string questObjectiveID, string log)
+        {
+            CheckQuest(questID, questObjectiveID);
+        }
+
+        public void CheckQuest(string questID, string questObjectiveID)
         {
             if (_currentQuest != null)
             {
-                if (_currentQuest.questID == questID && GetCurrentQuestObjective() != null && GetCurrentQuestObjective().interactionPOI_id == poiInteractionID)
+                if (_currentQuest.questID == questID && GetCurrentQuestObjective() != null && GetCurrentQuestObjective().quest_objective_id == questObjectiveID)
                 {
                     if (_currentQuest.POI_Ids[_questIndex].dialogueOnComplete != null)
                     {
@@ -202,6 +216,8 @@ namespace QuestSystem
                 onQuestCompleted?.Invoke(_currentQuest);
                 QuestView.Singleton.Hide();
                 _currentQuest = null;
+
+                _statsWindow.DisplayStats(SaveHandler.GetGameData().stadisticsLog.ToArray());
             }
         }
 
@@ -235,7 +251,7 @@ namespace QuestSystem
             }
 
             SaveHandler.GetGameData().SaveQuestline(_currentQuest.questID, _questIndex);
-            SaveHandler.GetGameData().activatedPOIs.Remove(_currentQuest.POI_Ids[_questIndex].interactionPOI_id); //Se remueve este id para garantizar que sea interactable
+            SaveHandler.GetGameData().completedQuestObjectiveIDs.Remove(_currentQuest.POI_Ids[_questIndex].quest_objective_id); //Se remueve este id para garantizar que sea interactable
             SaveHandler.Save();
 
             onQuestStatusUpdate?.Invoke(questData, _questIndex);

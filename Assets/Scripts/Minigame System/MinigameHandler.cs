@@ -8,8 +8,6 @@ namespace MinigameSystem
 {
     public abstract class MinigameHandler : MonoBehaviour
     {
-        private string _questID, _poiInteractionID;
-
         private bool _wasInit;
 
         private void Awake()
@@ -17,15 +15,12 @@ namespace MinigameSystem
             //Execute the scene without other systems
             if (UnityEngine.SceneManagement.SceneManager.sceneCount == 1)
             {
-                Init(string.Empty, string.Empty);
+                Init();
             }
         }
 
-        public void Init(string questID, string poiInteractionID)
+        public void Init()
         {
-            _questID = questID;
-            _poiInteractionID = poiInteractionID;
-
             OnStartGame();
 
             _wasInit = true;
@@ -41,9 +36,9 @@ namespace MinigameSystem
 
         protected abstract void OnStartGame();
         protected abstract void UpdateGame();
-        public void CompleteGame(string minigameName, string log, float percentage)
+        public void CompleteGame(string minigameName, float percentage)
         {
-            MinigamesManager.CloseMinigame(minigameName, log, percentage);
+            MinigamesManager.CloseMinigame(minigameName, percentage);
         }
     }
 }

@@ -129,7 +129,7 @@ namespace MinigameSystem.Minigames.FindYourCredentials
 
         public void UI_WinGame()
         {
-            CompleteGame("Find Your Credentials", $"Total Points: {_points}", _points/ MAX_POINTS);
+            CompleteGame("Find Your Credentials", _points/ MAX_POINTS);
         }
 
         protected override void OnStartGame()

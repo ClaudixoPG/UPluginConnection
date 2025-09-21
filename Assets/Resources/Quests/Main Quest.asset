@@ -16,8 +16,8 @@ MonoBehaviour:
   questName: Bienvenido a la Brigada
   questDescription: La brigada te necesita y tu eres el candidato perfecto para ayudarnos
   POI_Ids:
-  - targetPOI_id: vg_carrier
-    interactionPOI_id: vg_carrier_credential
+  - quest_objective_id: get_credential
+    targetPOI_id: vg_carrier
     title: La Credencial
     description: Reunete con Ramon en la Carrera de Videojuegos
     questCompletionTime: 0
@@ -30,8 +30,8 @@ MonoBehaviour:
       message: No te me pierdas u.u
     dialogueOnComplete: {fileID: 11400000, guid: 93aaa817f81878f479a59f962a969b95, type: 2}
     messagesOnFail: []
-  - targetPOI_id: rueda_poi
-    interactionPOI_id: rueda_quest
+  - quest_objective_id: go_to_rueda
+    targetPOI_id: rueda_poi
     title: Los Preservativos pt.1
     description: Reunete con Camila en la Rueda
     questCompletionTime: 60
@@ -46,11 +46,11 @@ MonoBehaviour:
     - senderID: Player
       message: Que bueno que todo salio bien, una disculpa no tuve tiempo para ayudarles
         esta vez
-  - targetPOI_id: vg_carrier
-    interactionPOI_id: vg_carrier_end
+  - quest_objective_id: return_to_vg
+    targetPOI_id: vg_carrier
     title: Los Preservativos pt.2
     description: Lleva los preservativos a la Carrera de Videojuegos
     questCompletionTime: 0
     messagesOnComplete: []
-    dialogueOnComplete: {fileID: 11400000, guid: dbe023a212d03d7459efb0bddf1bbb17, type: 2}
+    dialogueOnComplete: {fileID: 0}
     messagesOnFail: []
