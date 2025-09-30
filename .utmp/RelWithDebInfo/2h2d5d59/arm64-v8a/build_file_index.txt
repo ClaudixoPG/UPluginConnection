@@ -1,0 +1,2 @@
+C:\Users\santi\OneDrive\Documentos\Git Projects\DoctoralThesis\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\Users\santi\OneDrive\Documentos\Git Projects\DoctoralThesis\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt

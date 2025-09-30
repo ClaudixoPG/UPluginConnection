@@ -156,7 +156,38 @@ namespace ReignsGame
 
         protected override void UpdateGame()
         {
-            
+            if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+
+                if (touch.phase == TouchPhase.Moved)
+                {
+                    Vector2 delta = touch.deltaPosition;
+
+                    // Checar si se mueve más en X o en Y
+                    if (Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
+                    {
+                        // Movimiento horizontal
+                        if (delta.x > 0)
+                            HandleMessage("Joystick:1,0");  // Right
+                        else
+                            HandleMessage("Joystick:-1,0"); // Left
+                    }
+                    else
+                    {
+                        // Movimiento vertical
+                        if (delta.y > 0)
+                            HandleMessage("Joystick:0,1");  // Up
+                        else
+                            HandleMessage("Joystick:0,-1"); // Down
+                    }
+                }
+
+                if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+                {
+                    HandleMessage("JoystickRelease:0,0");
+                }
+            }
         }
     }
 }
