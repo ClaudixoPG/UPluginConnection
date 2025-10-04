@@ -1,3 +1,4 @@
+using FirebaseSystem;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace SaveSystem
 
             _stadisticsLog = new Queue<StadisticsLog>(stadistics);
 
-            FirebaseHandler.StorePlayer(SaveHandler.GetGameData().username, stadistics);
+            FirebaseHandler.StorePlayer(SaveHandler.GetGameData().UniqueID, SaveHandler.GetGameData().username, stadistics);
 
             NextStat();
         }

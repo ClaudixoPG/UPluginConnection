@@ -4,23 +4,26 @@ using Firebase;
 using Firebase.Extensions;
 using UnityEngine.Events;
 
-public class FirebaseInit : MonoBehaviour
+namespace FirebaseSystem
 {
-    public UnityEvent onFirebaseReady;
-
-    private void Start()
+    public class FirebaseInit : MonoBehaviour
     {
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
-            var dependencyStatus = task.Result;
-            if (dependencyStatus == DependencyStatus.Available)
-            {
-                Debug.Log("Firebase listo!");
-                onFirebaseReady.Invoke();
-            }
-            else
-            {
-                Debug.LogError($"No se pudo inicializar Firebase: {dependencyStatus}");
-            }
-        });
+        public UnityEvent onFirebaseReady;
+
+        private void Start()
+        {
+            FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
+                var dependencyStatus = task.Result;
+                if (dependencyStatus == DependencyStatus.Available)
+                {
+                    Debug.Log("Firebase listo!");
+                    onFirebaseReady.Invoke();
+                }
+                else
+                {
+                    Debug.LogError($"No se pudo inicializar Firebase: {dependencyStatus}");
+                }
+            });
+        }
     }
 }

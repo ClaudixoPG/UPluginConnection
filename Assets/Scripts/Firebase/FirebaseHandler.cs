@@ -6,43 +6,50 @@ using SaveSystem;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class FirebaseHandler
+namespace FirebaseSystem
 {
-    [System.Serializable]
-    public class PlayerData
+    public static class FirebaseHandler
     {
-        public string username;
-        public List<StadisticsLog> statistics;
+        private const string GAME_VERSION = "v1";
 
-        public PlayerData(string username, List<StadisticsLog> statistics)
+        [System.Serializable]
+        public class PlayerData
         {
-            this.username = username;
-            this.statistics = statistics;
-        }
-    }
+            public string username;
+            public List<StadisticsLog> statistics;
 
-    public static void StorePlayer(string playerId, StadisticsLog[] logs)
-    {
-        List<Dictionary<string, object>> statisticsList = new List<Dictionary<string, object>>();
-        
-        foreach (var log in logs)
-        {
-            statisticsList.Add(new Dictionary<string, object>
-        {
-            { "stadisticName", log.stadisticName },
-            { "log", log.log },
-            { "percentage", log.percentage }
-        });
+            public PlayerData(string username, List<StadisticsLog> statistics)
+            {
+                this.username = username;
+                this.statistics = statistics;
+            }
         }
 
-        Dictionary<string, object> data = new Dictionary<string, object>
+        public static void StorePlayer(string uniqueID, string username, StadisticsLog[] logs)
         {
-            { "username", playerId },
-            { "statistics", statisticsList }
-        };
+            List<Dictionary<string, object>> statisticsList = new List<Dictionary<string, object>>();
 
-        DatabaseReference reference = FirebaseDatabase.GetInstance("https://doctoralthesis-4ddda-default-rtdb.firebaseio.com/").RootReference;
+            foreach (var log in logs)
+            {
+                statisticsList.Add(new Dictionary<string, object>
+                {
+                    { "stadisticName", log.stadisticName },
+                    { "log", log.log },
+                    { "percentage", log.percentage }
+                });
+            }
 
-        reference.Child("players_V1").Child(playerId).SetValueAsync(data);
+            Dictionary<string, object> data = new Dictionary<string, object>
+            {
+                { "username", username },
+                { "statistics", statisticsList }
+            };
+
+            DatabaseReference reference = FirebaseDatabase.GetInstance("https://doctoralthesis-4ddda-default-rtdb.firebaseio.com/").RootReference;
+
+            var dataEntry = $"players_{GAME_VERSION}_{uniqueID}";
+
+            reference.Child(dataEntry).SetValueAsync(data);
+        }
     }
 }

@@ -2,6 +2,7 @@ using MessageSystem;
 using QuestSystem;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using static SaveSystem.GameData;
 
@@ -26,6 +27,7 @@ namespace SaveSystem
     public class GameData
     {
         public string username;
+        public string uniqueID;
         public int age;
 
         public List<QuestlineCacheData> questlineCacheDatas = new List<QuestlineCacheData> ();
@@ -34,10 +36,25 @@ namespace SaveSystem
 
         public List<StadisticsLog> stadisticsLog = new List<StadisticsLog>();
 
+        public string UniqueID
+        {
+            get
+            {
+                if (uniqueID == null || uniqueID == string.Empty)
+                {
+                    uniqueID = GenerateCode();
+                    SaveHandler.Save();
+                }
+
+                return uniqueID;
+            }
+        }
+
         public GameData(string username, int age)
         {
             this.username = username;
             this.age = age;
+            uniqueID = GenerateCode();
         }
 
         public GameData()
@@ -165,6 +182,21 @@ namespace SaveSystem
         public ConversationData GetConversation(string id)
         {
             return conversationData.Find(c => c.ID == id);
+        }
+
+        public static string GenerateCode(int length = 10)
+        {
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+            StringBuilder result = new StringBuilder(length);
+
+            for (int i = 0; i < length; i++)
+            {
+                int index = Random.Range(0, chars.Length);
+                result.Append(chars[index]);
+            }
+
+            return result.ToString();
         }
     }
 }

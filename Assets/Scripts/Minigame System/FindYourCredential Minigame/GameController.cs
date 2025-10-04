@@ -1,10 +1,11 @@
+using MinigameSystem;
 using SaveSystem;
 using TMPro;
 using UnityEngine;
 
-namespace MinigameSystem.Minigames.FindYourCredentials
+namespace FindYourCredentials
 {
-    public class FindYourCredential_Minigame : MinigameHandler, IGameController
+    public class GameController : MinigameHandler, IGameController
     {
         private const float MAX_POINTS = 100f;
         private PlayerInputActions inputActions;
@@ -15,12 +16,11 @@ namespace MinigameSystem.Minigames.FindYourCredentials
         [Header("Components")]
         [SerializeField] private TextMeshProUGUI _points_text;
         [SerializeField] private Animator _animator;
-        [SerializeField] private InfiniteCarousel _carousel;
-
-        [SerializeField] private CardInfo[] _cards;
-
-        private int _playerIndex;
+        [SerializeField] private CredentialsCarousel _carousel;
+        
         private int _points = 100;
+
+        public CredentialData currentInspectingData;
 
         private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
@@ -84,25 +84,24 @@ namespace MinigameSystem.Minigames.FindYourCredentials
         {
             if (direction.x != 0 && direction.x > 0.5f)
             {
-                _carousel.MoveRight();
+                _carousel.Next();
             }
 
             if (direction.x != 0 && direction.x < 0.5f)
             {
-                _carousel.MoveLeft();
+                _carousel.Previous();
             }
         }
 
         public void Fire()
         {
-            _carousel.enabled = false;
             inputActions.FindYourCredentialGame.Disable();
             _animator.SetTrigger("Scan");
         }
 
         public void EndScan()
         {
-            if (_playerIndex == _carousel.CurrentIndex)
+            if (currentInspectingData != null && currentInspectingData.isCorrect)
             {
                 SuccessScan();
             }
@@ -121,7 +120,6 @@ namespace MinigameSystem.Minigames.FindYourCredentials
         {
             _animator.SetTrigger("Fail");
             inputActions.FindYourCredentialGame.Enable();
-            _carousel.enabled = true;
 
             _points = Mathf.Clamp(_points - 10, 0, 100);
             _points_text.text = _points.ToString();
@@ -134,15 +132,19 @@ namespace MinigameSystem.Minigames.FindYourCredentials
 
         protected override void OnStartGame()
         {
-            foreach (var card in _cards)
+            var credentials = new CredentialData[10];
+
+            for (int i = 0; i < credentials.Length; i++)
             {
-                card.SetCardInfo(_randomNames[Random.Range(0, _randomNames.Length)], Random.Range(18, 42).ToString());
+                credentials[i] = new CredentialData(Random.Range(0, 10), _randomNames[Random.Range(0, _randomNames.Length)], Random.Range(18, 42).ToString());
             }
 
-            _playerIndex = Random.Range(0, _cards.Length);
-
             var gameData = SaveHandler.GetGameData();
-            _cards[_playerIndex].SetCardInfo(gameData.username, gameData.age.ToString());
+            var myCredential = new CredentialData(Random.Range(0, 10), gameData.username, gameData.age.ToString());
+            myCredential.isCorrect = true;
+            credentials[Random.Range(0, credentials.Length)] = myCredential;
+
+            _carousel.SetData(credentials);
 
             // Inputs
             inputActions = new PlayerInputActions();
