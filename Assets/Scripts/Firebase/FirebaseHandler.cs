@@ -33,16 +33,16 @@ namespace FirebaseSystem
             {
                 statisticsList.Add(new Dictionary<string, object>
                 {
-                    { "stadisticName", log.stadisticName },
+                    { "category", log.stadisticName },
                     { "log", log.log },
-                    { "percentage", log.percentage }
+                    { "percentage", Mathf.Round(log.percentage * 10f) / 10f}
                 });
             }
 
             Dictionary<string, object> data = new Dictionary<string, object>
             {
                 { "username", username },
-                { "statistics", statisticsList }
+                { "gameHistory", statisticsList }
             };
 
             DatabaseReference reference = FirebaseDatabase.GetInstance("https://doctoralthesis-4ddda-default-rtdb.firebaseio.com/").RootReference;

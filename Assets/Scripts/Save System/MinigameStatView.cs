@@ -18,10 +18,13 @@ namespace SaveSystem
         {
             _onCompleteCallback = onCompleteDisplay;
             _minigameName_text.text = stadistic.log;
-            _percentage_text.text = $"{stadistic.percentage * 100}%";
 
-            SetStarsValue(stadistic.percentage, _stars);
-            _stars_anim.SetInteger("Stars", GetStarsFromValue(stadistic.percentage));
+            var p = stadistic.percentage;
+
+            _percentage_text.text = $"{p * 100}%";
+
+            SetStarsValue(p, _stars);
+            _stars_anim.SetInteger("Stars", GetStarsFromValue(p));
         }
 
         private void Update()

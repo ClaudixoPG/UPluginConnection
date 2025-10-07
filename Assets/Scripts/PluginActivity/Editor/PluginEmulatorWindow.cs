@@ -14,7 +14,17 @@ public class EmulatorButton
 public class PluginEmulatorWindow : EditorWindow
 {
     [SerializeField]
-    private List<EmulatorButton> buttons = new List<EmulatorButton>()
+    private List<EmulatorButton> digitalButtons = new List<EmulatorButton>()
+    {
+        new EmulatorButton()
+        {
+            label = "Tap",
+            onClickMessage = "Tap",
+            onHoldMessage = "Tap_hold",
+            onReleaseMessage = "Tap_release"
+        },
+    };
+    private List<EmulatorButton> joystickButtons = new List<EmulatorButton>()
     {
         new EmulatorButton()
         {
@@ -47,11 +57,47 @@ public class PluginEmulatorWindow : EditorWindow
             onHoldMessage = "Joystick:-1,0",
             onReleaseMessage = "JoystickRelease:-1,0"
         },
-
-         new EmulatorButton()
+    };
+    private List<EmulatorButton> dpadButtons = new List<EmulatorButton>()
+    {
+        new EmulatorButton()
         {
-            label = "Tap",
-            onClickMessage = "Tap",
+            label = "Up",
+            onClickMessage = "Dpad:0,1",
+            onHoldMessage = "Dpad:0,1",
+            onReleaseMessage = "DpadRelease:0,1"
+        },
+
+        new EmulatorButton()
+        {
+            label = "Right",
+            onClickMessage = "Dpad:1,0",
+            onHoldMessage = "Dpad:1,0",
+            onReleaseMessage = "DpadRelease:1,0"
+        },
+
+        new EmulatorButton()
+        {
+            label = "Down",
+            onClickMessage = "Dpad:0,-1",
+            onHoldMessage = "Dpad:0,-1",
+            onReleaseMessage = "DpadRelease:0,-1"
+        },
+
+        new EmulatorButton()
+        {
+            label = "Left",
+            onClickMessage = "Dpad:-1,0",
+            onHoldMessage = "Dpad:-1,0",
+            onReleaseMessage = "DpadRelease:-1,0"
+        },
+    };
+    private List<EmulatorButton> sensorButtons = new List<EmulatorButton>()
+    {
+        new EmulatorButton()
+        {
+            label = "Force",
+            onClickMessage = "Force",
             onHoldMessage = string.Empty,
             onReleaseMessage = string.Empty
         },
@@ -60,6 +106,8 @@ public class PluginEmulatorWindow : EditorWindow
     private string customMessage = "";
     private bool isHolding = false;
     private int holdingButtonIndex = -1;
+
+    private int _tab;
 
     [MenuItem("Tools/Plugin Activity/Emulator")]
     public static void ShowWindow()
@@ -72,8 +120,45 @@ public class PluginEmulatorWindow : EditorWindow
         EditorGUILayout.LabelField("Plugin Emulator", EditorStyles.boldLabel);
         EditorGUILayout.Space();
 
-        // Draw all configurable buttons
-        for (int i = 0; i < buttons.Count; i++)
+        string[] tabs = new string[] { "Buttons", "Joystick", "D-Pad", "Sensors" }; 
+        _tab = GUILayout.Toolbar(_tab, tabs);
+        EditorGUILayout.Space();
+
+        switch (_tab)
+        {
+            case 0:
+                DrawButtons(digitalButtons.ToArray());
+                break;
+            case 1:
+                DrawButtons(joystickButtons.ToArray());
+                break;
+            case 2:
+                DrawButtons(dpadButtons.ToArray());
+                break;
+            case 3:
+                DrawButtons(sensorButtons.ToArray());
+                break;
+        }
+
+        
+
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Custom Message", EditorStyles.boldLabel);
+
+        customMessage = EditorGUILayout.TextField("Message", customMessage);
+        if (GUILayout.Button("Send", GUILayout.Height(25)))
+        {
+            if (!string.IsNullOrEmpty(customMessage))
+            {
+                SendMessage(customMessage);
+                customMessage = "";
+            }
+        }
+    }
+
+    private void DrawButtons(EmulatorButton[] buttons)
+    {
+        for (int i = 0; i < buttons.Length; i++)
         {
             var btn = buttons[i];
             Rect rect = GUILayoutUtility.GetRect(100, 30);
@@ -83,7 +168,7 @@ public class PluginEmulatorWindow : EditorWindow
 
             if (isThisHeld)
                 style.normal = style.active;
-            
+
             GUI.Box(rect, btn.label, style);
 
             Event e = Event.current;
@@ -110,23 +195,10 @@ public class PluginEmulatorWindow : EditorWindow
         }
 
         // If holding, repeatedly send hold message
-        if (isHolding && holdingButtonIndex >= 0 && holdingButtonIndex < buttons.Count)
+        if (isHolding && holdingButtonIndex >= 0 && holdingButtonIndex < buttons.Length)
         {
             SendMessage(buttons[holdingButtonIndex].onHoldMessage);
             Repaint(); // force redraw every frame while holding
-        }
-
-        EditorGUILayout.Space();
-        EditorGUILayout.LabelField("Custom Message", EditorStyles.boldLabel);
-
-        customMessage = EditorGUILayout.TextField("Message", customMessage);
-        if (GUILayout.Button("Send", GUILayout.Height(25)))
-        {
-            if (!string.IsNullOrEmpty(customMessage))
-            {
-                SendMessage(customMessage);
-                customMessage = "";
-            }
         }
     }
 
