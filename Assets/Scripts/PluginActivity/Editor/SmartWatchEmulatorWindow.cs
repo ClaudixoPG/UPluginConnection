@@ -78,7 +78,7 @@ public class SmartWatchEmulatorWindow : EditorWindow
     private float _sensorTimer = 1;
     private float _sensorScale = 1;
     private float _sensorBarValue = 0;
-    private bool _slowReset;
+    private bool _autoResetTime;
     private float _slowResetValue = 1;
     private bool _isPressed = false; // flag persistente entre frames
     double lastTime;
@@ -117,7 +117,7 @@ public class SmartWatchEmulatorWindow : EditorWindow
             _tab = EditorGUILayout.Popup("Mode", _tab, tabs);
         }
         
-        EditorGUILayout.Space(50);
+        EditorGUILayout.Space(20);
 
         switch (_tab)
         {
@@ -161,7 +161,6 @@ public class SmartWatchEmulatorWindow : EditorWindow
 
                 if (_sensorMode == InputType.RELEASE)
                 {
-                    _sensorBarValue = 0;
                     SendMessage($"Time:{value}");
                     _joystickMode = InputType.NONE;
                 }
@@ -203,9 +202,19 @@ public class SmartWatchEmulatorWindow : EditorWindow
         // === PRIMERA FILA ===
         GUILayout.BeginHorizontal();
 
+        GUILayout.BeginVertical();
+        
+        GUILayout.Label("Max Time");
+        GUILayout.Space(30);
         // Campo de timer
         timer = EditorGUILayout.FloatField(timer, GUILayout.Width(150));
 
+        GUILayout.EndVertical();
+
+        GUILayout.BeginVertical();
+
+        GUILayout.Label("Progress");
+        GUILayout.Space(30);
         // Barra de progreso
         float progress = Mathf.Clamp01(value / Mathf.Max(timer, 0.0001f));
         Rect progressRect = GUILayoutUtility.GetRect(100, 18);
@@ -226,13 +235,32 @@ public class SmartWatchEmulatorWindow : EditorWindow
             GUI.Label(new Rect(tooltipRect.x + 3, tooltipRect.y + 2, tooltipSize.x, tooltipSize.y), tooltipText);
         }
 
+        GUILayout.EndVertical();
+
         GUILayout.Label("X", GUILayout.Width(20));
 
+        GUILayout.BeginVertical();
+
+        GUILayout.Label("Scale");
+        GUILayout.Space(30);
         // Campo de scale
         scale = EditorGUILayout.FloatField(scale, GUILayout.Width(80));
 
+        GUILayout.EndVertical();
+
         GUILayout.EndHorizontal();
-        GUILayout.Space(5);
+
+        _autoResetTime = GUILayout.Toggle( _autoResetTime, "Auto-Reset");
+
+        if (!_autoResetTime)
+        {
+            _slowResetValue = EditorGUILayout.FloatField("Reset Time", _slowResetValue);
+
+            if (_slowResetValue < 0 )
+                _slowResetValue = 0;
+        }
+
+        GUILayout.Space(10);
 
         Rect buttonRect = GUILayoutUtility.GetRect(80, 25);
 
@@ -258,6 +286,7 @@ public class SmartWatchEmulatorWindow : EditorWindow
 
         GUI.Button(buttonRect, "Press");
 
+        GUILayout.Space(30);
 
         // === LÓGICA DE ESTADOS usando _isPressed ===
         switch (current)
@@ -266,8 +295,23 @@ public class SmartWatchEmulatorWindow : EditorWindow
                 if (_isPressed)
                 {
                     // Comenzar la barra
-                    value = 0f;
+                    
+                    if(_autoResetTime)
+                    {
+                        value = 0f;
+                    }
+
                     return InputType.HOLD;
+                }
+                else
+                {
+                    if(!_autoResetTime)
+                    {
+                        double currentTime = EditorApplication.timeSinceStartup;
+                        float deltaTime = (float)(currentTime - lastTime);
+                        lastTime = currentTime;
+                        value = Mathf.MoveTowards(value, 0, deltaTime * _slowResetValue);
+                    }
                 }
                 break;
 
@@ -293,8 +337,12 @@ public class SmartWatchEmulatorWindow : EditorWindow
             case InputType.RELEASE:
                 if (!_isPressed)
                 {
-                    // Reiniciar
-                    value = 0f;
+                    if (_autoResetTime)
+                    {
+                        // Reiniciar
+                        value = 0f;
+                    }
+
                     return InputType.NONE;
                 }
                 break;
