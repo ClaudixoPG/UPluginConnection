@@ -66,6 +66,7 @@ public class SmartWatchEmulatorWindow : EditorWindow
         },
     };
 
+    private bool _tabMode = true;
 
     //JoystickMode
     private InputType _joystickMode = InputType.NONE;
@@ -99,9 +100,22 @@ public class SmartWatchEmulatorWindow : EditorWindow
         EditorGUILayout.LabelField("Smartwatch Emulator", EditorStyles.boldLabel);
         EditorGUILayout.Space();
 
-        string[] tabs = new string[] { "Buttons", "Joystick", "D-Pad", "Sensors" }; 
-        _tab = GUILayout.Toolbar(_tab, tabs);
+        _tabMode = EditorGUILayout.Toggle("Tab Display", _tabMode);
+
         EditorGUILayout.Space();
+
+        string[] tabs = new string[] { "Buttons", "Joystick", "D-Pad", "Sensors" };
+
+        if (_tabMode)
+        {
+            _tab = GUILayout.Toolbar(_tab, tabs);
+        }
+        else
+        {
+            _tab = EditorGUILayout.Popup("Mode", _tab, tabs);
+        }
+        
+        EditorGUILayout.Space(50);
 
         switch (_tab)
         {
