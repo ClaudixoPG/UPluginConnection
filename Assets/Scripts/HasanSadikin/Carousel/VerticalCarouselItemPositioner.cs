@@ -42,8 +42,9 @@ namespace HasanSadikin.Carousel
             {
                 return;
             }
-
+#if UNITY_EDITOR
             EditorApplication.delayCall += UpdateSizeDelta;
+#endif
         }
 
         public void SetPosition(RectTransform rectTransform, int index)
@@ -82,7 +83,9 @@ namespace HasanSadikin.Carousel
                 }
             }
 
+#if UNITY_EDITOR
             EditorApplication.delayCall -= UpdateSizeDelta;
+#endif
         }
     }
 }

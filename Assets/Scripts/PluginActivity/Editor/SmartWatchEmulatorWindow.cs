@@ -78,6 +78,8 @@ public class SmartWatchEmulatorWindow : EditorWindow
     private float _sensorTimer = 1;
     private float _sensorScale = 1;
     private float _sensorBarValue = 0;
+    private bool _slowReset;
+    private float _slowResetValue = 1;
     private bool _isPressed = false; // flag persistente entre frames
     double lastTime;
 
