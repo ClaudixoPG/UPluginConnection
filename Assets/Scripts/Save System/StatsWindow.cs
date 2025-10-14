@@ -1,8 +1,10 @@
 using FirebaseSystem;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.EventSystems.EventTrigger;
 
 namespace SaveSystem
 {
@@ -12,11 +14,16 @@ namespace SaveSystem
         [SerializeField] private ScrollRect _scrollRect;
         [SerializeField] private Scrollbar _verticalScrollbar;
         [SerializeField] private StatView _minigameStat, _dialogueStat;
+        [SerializeField] private Button _formButton;
 
         private Queue<StadisticsLog> _stadisticsLog;
 
         public void DisplayStats(StadisticsLog[] stadistics)
         {
+            _formButton.onClick.RemoveAllListeners();
+
+            _formButton.onClick.AddListener(CreateFormCallback);
+
             gameObject.SetActive(true);
 
             _verticalScrollbar.gameObject.SetActive(false);
@@ -26,6 +33,16 @@ namespace SaveSystem
             FirebaseHandler.StorePlayer(SaveHandler.GetGameData().UniqueID, SaveHandler.GetGameData().username, stadistics);
 
             NextStat();
+        }
+
+        private void CreateFormCallback()
+        {
+            string formBaseUrl = "https://docs.google.com/forms/d/e/1FAIpQLScyUYSsr76WIswVNaun6INJAqEbQuVrCVrPDR4S4Nu8R6wyaA/viewform";
+            string userEntryID = "entry.1058937621";
+            var userID =$"players_{FirebaseHandler.GAME_VERSION}_{SaveHandler.GetGameData().UniqueID}";
+            string url = $"{formBaseUrl}?usp=pp_url&{userEntryID}={userID}";
+
+            Application.OpenURL(url);
         }
 
         private void NextStat()

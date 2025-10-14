@@ -10,7 +10,7 @@ namespace FirebaseSystem
 {
     public static class FirebaseHandler
     {
-        private const string GAME_VERSION = "v1";
+        public const string GAME_VERSION = "v1";
 
         [System.Serializable]
         public class PlayerData

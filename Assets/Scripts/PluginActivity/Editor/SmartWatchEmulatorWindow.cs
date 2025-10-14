@@ -106,7 +106,7 @@ public class SmartWatchEmulatorWindow : EditorWindow
 
         EditorGUILayout.Space();
 
-        string[] tabs = new string[] { "Buttons", "Joystick", "D-Pad", "Sensors" };
+        string[] tabs = new string[] { "Buttons", "Joystick", "D-Pad", "Time" };
 
         if (_tabMode)
         {
@@ -427,6 +427,68 @@ public class SmartWatchEmulatorWindow : EditorWindow
         Handles.color = Color.gray;
         Handles.DrawLine(new Vector2(center.x, rect.yMin), new Vector2(center.x, rect.yMax));
         Handles.DrawLine(new Vector2(rect.xMin, center.y), new Vector2(rect.xMax, center.y));
+
+        // === Dibujar puntos de referencia y etiquetas ===
+        Handles.color = new Color(1f, 1f, 1f, 0.2f); // color tenue
+
+        if (isNormalized)
+        {
+            // Radio del círculo
+            float circleRadius = Mathf.Min(rect.width, rect.height) * 0.25f;
+
+            // Puntos en los extremos del círculo
+            Vector2 right = center + Vector2.right * circleRadius;
+            Vector2 left = center + Vector2.left * circleRadius;
+            Vector2 up = center + Vector2.up * circleRadius;
+            Vector2 down = center + Vector2.down * circleRadius;
+
+            Handles.DrawSolidDisc(right, Vector3.forward, 3);
+            Handles.DrawSolidDisc(left, Vector3.forward, 3);
+            Handles.DrawSolidDisc(up, Vector3.forward, 3);
+            Handles.DrawSolidDisc(down, Vector3.forward, 3);
+
+            // Etiquetas ±1
+            GUI.Label(new Rect(right.x + 4, right.y - 8, 30, 16), "1");
+            GUI.Label(new Rect(left.x - 16, left.y - 8, 30, 16), "-1");
+            GUI.Label(new Rect(up.x - 8, up.y - 20, 30, 16), "-1");
+            GUI.Label(new Rect(down.x - 8, down.y + 8, 30, 16), "1");
+        }
+        else
+        {
+            // Escalas proporcionales a range
+            int midValue = Mathf.RoundToInt(range / 2f);
+
+            // Coordenadas horizontales
+            float midX = Mathf.Lerp(center.x, rect.xMax, 0.5f);
+            float minX = Mathf.Lerp(center.x, rect.xMin, 0.5f);
+            float maxX = rect.xMax - 10f;
+            float minXX = rect.xMin + 10f;
+
+            // Coordenadas verticales
+            float midY = Mathf.Lerp(center.y, rect.yMin, 0.5f);
+
+            // Dibujar puntos
+            Handles.DrawSolidDisc(new Vector2(midX, center.y), Vector3.forward, 3);
+            Handles.DrawSolidDisc(new Vector2(minX, center.y), Vector3.forward, 3);
+            Handles.DrawSolidDisc(new Vector2(center.x, midY), Vector3.forward, 3);
+            Handles.DrawSolidDisc(new Vector2(center.x, (center.y + (rect.yMax - center.y) * 0.5f)), Vector3.forward, 3);
+
+            // Etiquetas de valores
+            GUI.Label(new Rect(maxX - 5, center.y - 20, 30, 16), range.ToString());
+            GUI.Label(new Rect(minXX - 20, center.y - 20, 30, 16), (-range).ToString());
+
+            GUI.Label(new Rect(center.x + 4, rect.yMin + 4, 30, 16), range.ToString());
+            GUI.Label(new Rect(center.x + 4, rect.yMax - 20, 30, 16), (-range).ToString());
+
+            // Mitad de rango
+            GUI.Label(new Rect(midX - 5, center.y - 20, 30, 16), midValue.ToString());
+            GUI.Label(new Rect(minX - 5, center.y - 20, 30, 16), (-midValue).ToString());
+
+            float lowerMidY = Mathf.Lerp(center.y, rect.yMax, 0.5f);
+
+            GUI.Label(new Rect(center.x + 4, midY - 8, 30, 16), midValue.ToString());
+            GUI.Label(new Rect(center.x + 4, lowerMidY - 8, 30, 16), (-midValue).ToString());
+        }
 
         // Toggle de normalización
         isNormalized = GUILayout.Toggle(isNormalized, "Normalized");

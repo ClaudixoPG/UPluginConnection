@@ -2,6 +2,7 @@ using MinigameSystem;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace ReignsGame
 {
@@ -15,6 +16,10 @@ namespace ReignsGame
 
         private int _currentIndex;
         private int _points = 100;
+
+        private Vector2 touchPosition;
+        private Vector2 touchDelta;
+        private bool isTouching;
 
         private PlayerInputActions inputActions;
         public PlayerController playerController;
@@ -68,6 +73,12 @@ namespace ReignsGame
             //inputActions.ReignsGame.Move.canceled += ctx => playerController.moveInput = Vector2.zero;
             inputActions.ReignsGame.Move.canceled += ctx => playerController.OnJoystickRelease(playerController.moveInput);
 
+            inputActions.ReignsGame.TouchContact.started += OnTouchStart;
+            inputActions.ReignsGame.TouchContact.canceled += OnTouchEnd;
+
+            inputActions.ReignsGame.TouchPosition.performed += ctx => touchPosition = ctx.ReadValue<Vector2>();
+            inputActions.ReignsGame.TouchDelta.performed += ctx => touchDelta = ctx.ReadValue<Vector2>();
+
             foreach (Transform child in _pivot)
             {
                 child.gameObject.SetActive(false);
@@ -75,6 +86,17 @@ namespace ReignsGame
 
             ShuffleChildren(_pivot);
             _pivot.GetChild(_currentIndex).gameObject.SetActive(true);
+        }
+
+        private void OnTouchStart(InputAction.CallbackContext ctx)
+        {
+            isTouching = true;
+        }
+
+        private void OnTouchEnd(InputAction.CallbackContext ctx)
+        {
+            isTouching = false;
+            HandleMessage("JoystickRelease:0,0");
         }
 
         public void NextTarget()
@@ -156,38 +178,27 @@ namespace ReignsGame
 
         protected override void UpdateGame()
         {
-            if (Input.touchCount > 0)
+            if (!isTouching)
+                return;
+
+            if (touchDelta.sqrMagnitude > 0.01f)
             {
-                Touch touch = Input.GetTouch(0);
-
-                if (touch.phase == TouchPhase.Moved)
+                if (Mathf.Abs(touchDelta.x) > Mathf.Abs(touchDelta.y))
                 {
-                    Vector2 delta = touch.deltaPosition;
-
-                    // Checar si se mueve más en X o en Y
-                    if (Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
-                    {
-                        // Movimiento horizontal
-                        if (delta.x > 0)
-                            HandleMessage("Joystick:1,0");  // Right
-                        else
-                            HandleMessage("Joystick:-1,0"); // Left
-                    }
+                    if (touchDelta.x > 0)
+                        HandleMessage("Joystick:1,0");  // Right
                     else
-                    {
-                        // Movimiento vertical
-                        if (delta.y > 0)
-                            HandleMessage("Joystick:0,1");  // Up
-                        else
-                            HandleMessage("Joystick:0,-1"); // Down
-                    }
+                        HandleMessage("Joystick:-1,0"); // Left
                 }
-
-                if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+                else
                 {
-                    HandleMessage("JoystickRelease:0,0");
+                    if (touchDelta.y > 0)
+                        HandleMessage("Joystick:0,1");  // Up
+                    else
+                        HandleMessage("Joystick:0,-1"); // Down
                 }
             }
         }
+
     }
 }

@@ -611,6 +611,33 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""TouchContact"",
+                    ""type"": ""Button"",
+                    ""id"": ""fe9d8a2b-27ce-462c-8798-520af904fdc6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TouchPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""ad9f493a-3dbe-4d64-9b86-81abd3c9b8c7"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""TouchDelta"",
+                    ""type"": ""Value"",
+                    ""id"": ""ca4e430e-7759-4329-9735-b611a296f1fa"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -679,6 +706,39 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3adb3441-b6b4-49fe-8594-6b097b5c14d9"",
+                    ""path"": ""<Touchscreen>/touch*/Press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TouchContact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""46fc5541-3ca1-49e3-a0c5-534db46905f0"",
+                    ""path"": ""<Touchscreen>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TouchPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ebd837da-0b04-44e4-a1b8-037bce24cb3d"",
+                    ""path"": ""<Touchscreen>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TouchDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -882,6 +942,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         // ReignsGame
         m_ReignsGame = asset.FindActionMap("ReignsGame", throwIfNotFound: true);
         m_ReignsGame_Move = m_ReignsGame.FindAction("Move", throwIfNotFound: true);
+        m_ReignsGame_TouchContact = m_ReignsGame.FindAction("TouchContact", throwIfNotFound: true);
+        m_ReignsGame_TouchPosition = m_ReignsGame.FindAction("TouchPosition", throwIfNotFound: true);
+        m_ReignsGame_TouchDelta = m_ReignsGame.FindAction("TouchDelta", throwIfNotFound: true);
         // FindYourCredentialGame
         m_FindYourCredentialGame = asset.FindActionMap("FindYourCredentialGame", throwIfNotFound: true);
         m_FindYourCredentialGame_Move = m_FindYourCredentialGame.FindAction("Move", throwIfNotFound: true);
@@ -1460,6 +1523,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_ReignsGame;
     private List<IReignsGameActions> m_ReignsGameActionsCallbackInterfaces = new List<IReignsGameActions>();
     private readonly InputAction m_ReignsGame_Move;
+    private readonly InputAction m_ReignsGame_TouchContact;
+    private readonly InputAction m_ReignsGame_TouchPosition;
+    private readonly InputAction m_ReignsGame_TouchDelta;
     /// <summary>
     /// Provides access to input actions defined in input action map "ReignsGame".
     /// </summary>
@@ -1475,6 +1541,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "ReignsGame/Move".
         /// </summary>
         public InputAction @Move => m_Wrapper.m_ReignsGame_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "ReignsGame/TouchContact".
+        /// </summary>
+        public InputAction @TouchContact => m_Wrapper.m_ReignsGame_TouchContact;
+        /// <summary>
+        /// Provides access to the underlying input action "ReignsGame/TouchPosition".
+        /// </summary>
+        public InputAction @TouchPosition => m_Wrapper.m_ReignsGame_TouchPosition;
+        /// <summary>
+        /// Provides access to the underlying input action "ReignsGame/TouchDelta".
+        /// </summary>
+        public InputAction @TouchDelta => m_Wrapper.m_ReignsGame_TouchDelta;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1504,6 +1582,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @TouchContact.started += instance.OnTouchContact;
+            @TouchContact.performed += instance.OnTouchContact;
+            @TouchContact.canceled += instance.OnTouchContact;
+            @TouchPosition.started += instance.OnTouchPosition;
+            @TouchPosition.performed += instance.OnTouchPosition;
+            @TouchPosition.canceled += instance.OnTouchPosition;
+            @TouchDelta.started += instance.OnTouchDelta;
+            @TouchDelta.performed += instance.OnTouchDelta;
+            @TouchDelta.canceled += instance.OnTouchDelta;
         }
 
         /// <summary>
@@ -1518,6 +1605,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @TouchContact.started -= instance.OnTouchContact;
+            @TouchContact.performed -= instance.OnTouchContact;
+            @TouchContact.canceled -= instance.OnTouchContact;
+            @TouchPosition.started -= instance.OnTouchPosition;
+            @TouchPosition.performed -= instance.OnTouchPosition;
+            @TouchPosition.canceled -= instance.OnTouchPosition;
+            @TouchDelta.started -= instance.OnTouchDelta;
+            @TouchDelta.performed -= instance.OnTouchDelta;
+            @TouchDelta.canceled -= instance.OnTouchDelta;
         }
 
         /// <summary>
@@ -1902,6 +1998,27 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TouchContact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTouchContact(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TouchPosition" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTouchPosition(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TouchDelta" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTouchDelta(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "FindYourCredentialGame" which allows adding and removing callbacks.
