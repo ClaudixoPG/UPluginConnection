@@ -2,6 +2,118 @@
     "name": "PlayerInputActions",
     "maps": [
         {
+            "name": "GolfMiniGame",
+            "id": "33e2e48c-ac02-40cc-b972-d4b8b1646749",
+            "actions": [
+                {
+                    "name": "LeftDirection",
+                    "type": "Button",
+                    "id": "3b2fb3d0-78ae-43df-9b0a-768dbad52b89",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RightDirection",
+                    "type": "Button",
+                    "id": "66b3b540-8925-4aaf-add0-bb57ca024737",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LaunchForce",
+                    "type": "Button",
+                    "id": "0e33e8a6-8e67-4c35-a0fd-240702d21ae0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "cbc70e60-8fe2-4e38-833d-256f76cb11d6",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftDirection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6df932b1-47b8-4e1f-a10d-26afea855d5a",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftDirection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5d71485b-1d96-4200-9ff4-1ff520b8b800",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightDirection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "95d3a56d-ae7b-40af-ace0-5bae9b6ea75e",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightDirection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b77dbdf3-05e5-4447-914a-e86d26695feb",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LaunchForce",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cefcadd4-32d8-4427-ba19-60d5d924a3b4",
+                    "path": "<Mouse>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LaunchForce",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c7e33e35-fbd0-4727-aa87-ba82456fda65",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LaunchForce",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "SpaceShipMinigame",
             "id": "c1a7c4c3-45d8-4632-8423-57df7e96b09e",
             "actions": [
