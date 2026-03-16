@@ -8,12 +8,14 @@ public class GyroInputSystemDebug : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Gyroscope.current == null ? " + (UnityEngine.InputSystem.Gyroscope.current == null));
-
         if (UnityEngine.InputSystem.Gyroscope.current != null)
         {
             InputSystem.EnableDevice(UnityEngine.InputSystem.Gyroscope.current);
             Debug.Log("Gyroscope enabled: " + UnityEngine.InputSystem.Gyroscope.current.enabled);
+        }
+        else
+        {
+            Debug.Log("Gyroscope.current is null");
         }
     }
 
@@ -33,8 +35,6 @@ public class GyroInputSystemDebug : MonoBehaviour
             $"angVel x: {angularVelocity.x:F3}\n" +
             $"angVel y: {angularVelocity.y:F3}\n" +
             $"angVel z: {angularVelocity.z:F3}";
-
-        Debug.Log(msg);
 
         if (debugText != null)
             debugText.text = msg;

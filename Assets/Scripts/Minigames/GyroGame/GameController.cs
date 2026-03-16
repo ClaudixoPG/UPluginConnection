@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace GyroMiniGame
 {
@@ -7,52 +8,46 @@ namespace GyroMiniGame
     {
         [Header("References")]
         public PlayerController playerController;
+        public Transform targetZone;
         public TextMeshProUGUI sourceText;
         public TextMeshProUGUI debugText;
+        public TextMeshProUGUI statusText;
+        public TextMeshProUGUI progressText;
 
         [Header("Input Source")]
         public InputSourceMode inputSourceMode = InputSourceMode.LocalPhone;
 
-        [Header("Tuning")]
-        public float localSensitivity = 5f;
+        [Header("Input Tuning")]
+        public float localSensitivity = 2f;
         public float remoteSensitivity = 2f;
         public bool invertAxis = false;
         public float deadZone = 0.05f;
 
+        [Header("MiniGame")]
+        public float targetHalfWidth = 1.5f;
+        public float requiredTimeInTarget = 5f;
+
         private Vector3 _remoteGyro;
         private bool _hasRemoteData = false;
 
-        private void Awake()
-        {
-            Debug.Log("[GyroMiniGame] Awake llamado.");
-        }
+        private float _timeInsideTarget = 0f;
+        private bool _completed = false;
 
         private void Start()
         {
-            Debug.Log("[GyroMiniGame] Start llamado.");
-            Debug.Log("[GyroMiniGame] InputSourceMode = " + inputSourceMode);
-
-            Input.gyro.enabled = true;
-            UpdateSourceLabel();
-
-            if (debugText != null)
+            if (inputSourceMode == InputSourceMode.LocalPhone && UnityEngine.InputSystem.Gyroscope.current != null)
             {
-                debugText.text = "GameController iniciado.\nEsperando datos...";
+                InputSystem.EnableDevice(UnityEngine.InputSystem.Gyroscope.current);
             }
+
+            UpdateSourceLabel();
+            UpdateUI();
         }
 
         private void Update()
         {
-            if (debugText == null)
-            {
-                Debug.LogWarning("[GyroMiniGame] debugText no asignado.");
-            }
-
-            if (playerController == null)
-            {
-                Debug.LogError("[GyroMiniGame] playerController no asignado.");
+            if (_completed)
                 return;
-            }
 
             switch (inputSourceMode)
             {
@@ -64,6 +59,9 @@ namespace GyroMiniGame
                     UpdateRemoteWearInput();
                     break;
             }
+
+            UpdateMiniGameState();
+            UpdateUI();
         }
 
         public void HandleMessage(string message)
@@ -75,47 +73,18 @@ namespace GyroMiniGame
             {
                 _remoteGyro = gyro;
                 _hasRemoteData = true;
-
-                Debug.Log($"[GyroMiniGame] Mensaje remoto recibido: {gyro}");
             }
         }
-        /*
+
         private void UpdateLocalPhoneInput()
         {
-            Vector3 accel = Input.acceleration;
-            float horizontal = accel.x;
-
-            if (Mathf.Abs(horizontal) < deadZone)
-                horizontal = 0f;
-
-            horizontal *= localSensitivity;
-
-            if (invertAxis)
-                horizontal *= -1f;
-
-            Debug.Log("[GyroMiniGame] Local accel: " + accel + ", horizontal: " + horizontal);
-
-            playerController.SetInput(horizontal);
-
-            if (sourceText != null)
-                sourceText.text = "Input Source: LocalPhone";
-
-            if (debugText != null)
+            if (UnityEngine.InputSystem.Gyroscope.current == null || !UnityEngine.InputSystem.Gyroscope.current.enabled)
             {
-                debugText.text =
-                    $"SOURCE: LocalPhone\n" +
-                    $"accelX: {accel.x:F3}\n" +
-                    $"accelY: {accel.y:F3}\n" +
-                    $"accelZ: {accel.z:F3}\n" +
-                    $"horizontal: {horizontal:F3}\n" +
-                    $"playerX: {playerController.transform.position.x:F3}";
+                playerController.SetInput(0f);
+                return;
             }
-        }*/
 
-        private void UpdateLocalPhoneInput()
-        {
-            Vector3 gyro = Input.gyro.rotationRateUnbiased;
-
+            Vector3 gyro = UnityEngine.InputSystem.Gyroscope.current.angularVelocity.ReadValue();
             float horizontal = gyro.y * localSensitivity;
 
             if (Mathf.Abs(horizontal) < deadZone)
@@ -126,9 +95,6 @@ namespace GyroMiniGame
 
             playerController.SetInput(horizontal);
 
-            if (sourceText != null)
-                sourceText.text = "Input Source: LocalPhone";
-
             if (debugText != null)
             {
                 debugText.text =
@@ -136,7 +102,7 @@ namespace GyroMiniGame
                     $"gyroX: {gyro.x:F3}\n" +
                     $"gyroY: {gyro.y:F3}\n" +
                     $"gyroZ: {gyro.z:F3}\n" +
-                    $"horizontal: {horizontal:F3}\n" +
+                    $"move: {horizontal:F3}\n" +
                     $"playerX: {playerController.transform.position.x:F3}";
             }
         }
@@ -147,32 +113,24 @@ namespace GyroMiniGame
             {
                 playerController.SetInput(0f);
 
-                if (sourceText != null)
-                    sourceText.text = "Input Source: RemoteWear";
-
                 if (debugText != null)
                 {
                     debugText.text =
-                        $"SOURCE: RemoteWear\n" +
-                        $"Sin datos remotos";
+                        "SOURCE: RemoteWear\n" +
+                        "Waiting remote data...";
                 }
                 return;
             }
 
-            float horizontal = _remoteGyro.y;
+            float horizontal = _remoteGyro.y * remoteSensitivity;
 
             if (Mathf.Abs(horizontal) < deadZone)
                 horizontal = 0f;
-
-            horizontal *= remoteSensitivity;
 
             if (invertAxis)
                 horizontal *= -1f;
 
             playerController.SetInput(horizontal);
-
-            if (sourceText != null)
-                sourceText.text = "Input Source: RemoteWear";
 
             if (debugText != null)
             {
@@ -181,8 +139,49 @@ namespace GyroMiniGame
                     $"gyroX: {_remoteGyro.x:F3}\n" +
                     $"gyroY: {_remoteGyro.y:F3}\n" +
                     $"gyroZ: {_remoteGyro.z:F3}\n" +
-                    $"horizontal: {horizontal:F3}\n" +
+                    $"move: {horizontal:F3}\n" +
                     $"playerX: {playerController.transform.position.x:F3}";
+            }
+        }
+
+        private void UpdateMiniGameState()
+        {
+            float zoneCenterX = targetZone.position.x;
+            float playerX = playerController.transform.position.x;
+
+            bool insideTarget = Mathf.Abs(playerX - zoneCenterX) <= targetHalfWidth;
+
+            if (insideTarget)
+            {
+                _timeInsideTarget += Time.deltaTime;
+
+                if (_timeInsideTarget >= requiredTimeInTarget)
+                {
+                    _timeInsideTarget = requiredTimeInTarget;
+                    _completed = true;
+                }
+            }
+            else
+            {
+                _timeInsideTarget = Mathf.Max(0f, _timeInsideTarget - Time.deltaTime * 0.5f);
+            }
+
+            if (statusText != null)
+            {
+                statusText.text = _completed
+                    ? "Status: Completed"
+                    : insideTarget
+                        ? "Status: Inside target"
+                        : "Status: Outside target";
+            }
+        }
+
+        private void UpdateUI()
+        {
+            if (progressText != null)
+            {
+                float progress = Mathf.Clamp01(_timeInsideTarget / requiredTimeInTarget);
+                progressText.text = $"Progress: {Mathf.RoundToInt(progress * 100f)}%";
             }
         }
 
@@ -191,6 +190,14 @@ namespace GyroMiniGame
             if (sourceText != null)
             {
                 sourceText.text = $"Input Source: {inputSourceMode}";
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (UnityEngine.InputSystem.Gyroscope.current != null && UnityEngine.InputSystem.Gyroscope.current.enabled)
+            {
+                InputSystem.DisableDevice(UnityEngine.InputSystem.Gyroscope.current);
             }
         }
     }

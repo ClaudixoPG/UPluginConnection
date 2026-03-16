@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scripts/Minigames/GyroGame/New Scene.unity
-    guid: 2f68c80575d41ad4a903497a8efa2a5f
-  - enabled: 1
     path: Assets/Scenes/Minigames/GyroGame/GyroGame.unity
     guid: b2da963a3a16b264aba49a69a21e1743
   - enabled: 1
