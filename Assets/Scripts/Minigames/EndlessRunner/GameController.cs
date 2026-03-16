@@ -1,5 +1,4 @@
-﻿using SpaceShip;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace EndlessRunner
 {
