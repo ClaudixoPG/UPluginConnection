@@ -1,126 +1,78 @@
-﻿using TMPro;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
 public class PluginActivity : MonoBehaviour
 {
-    //Private Variables
-    AndroidJavaObject _pluginActivity;
+    private AndroidJavaObject _pluginActivity;
 
-    //Public Variables
-    //public TextMeshProUGUI messageToSend;
-    //public TextMeshProUGUI messageReceived;
+    public static PluginActivity Instance { get; private set; }
 
-    //public PanelManager panelManager;
-
-    public static PluginActivity Instance;
-
-    private int currentControlIndex = 1; // comienza en 1
-    //private int maxControls = 2;
-
-    void Awake()
+    private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-
-        //if (FindObjectsOfType<PluginActivity>().Length > 1)
-        if (FindFirstObjectByType<PluginActivity>() != this)
-        {
-            Destroy(gameObject); // evitar duplicados si vuelves a la escena inicial
+            Destroy(gameObject);
             return;
         }
 
+        Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
         _pluginActivity = new AndroidJavaObject("com.randomadjective.uactivity.PluginActivity");
-        //maxControls = panelManager.panels.Count; // Asignar el número de controles según la cantidad de paneles
+#endif
     }
 
-    public void Add()
+    public void ShowToast(string message)
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (_pluginActivity != null)
         {
-            var result = _pluginActivity.Call<int>("Add", 5, 10);
-            Debug.Log("Add Output: " + result);
+            _pluginActivity.Call("ShowToast", message);
         }
+#else
+        Debug.Log($"[PluginActivity] Toast: {message}");
+#endif
     }
-    
-    public void ShowToast()
-    {
-        if (_pluginActivity != null)
-        {
-            _pluginActivity.Call("ShowToast", "Hello from Unity!");
-        }
-    }
-
-    public void SendMessage()
-    {
-        if (_pluginActivity != null)
-        {
-            /*var message = messageToSend.text;
-            Debug.Log("Message to send: " + message);
-            _pluginActivity.Call("sendMessageToSmartwatch", message);*/
-        }
-    }
-
-    /*public void OnMessageReceived(string message)
-    {
-        Debug.Log("Mensaje recibido en Unity: " + message);
-        messageReceived.text = "Mensaje recibido: " + message;
-        panelManager.HandleIncomingMessage(message);
-    }*/
 
     public void OnMessageReceived(string message)
     {
-        //Debug.Log("Mensaje recibido en Unity: " + message);
-        //messageReceived.text = "Mensaje recibido: " + message;
-
-        // Buscar el controlador de la escena actual
-        //var controller = GameObject.FindObjectOfType<IGameController>();
         GameObject controllerObject = GameObject.Find("GameController");
         var controller = controllerObject?.GetComponent<IGameController>();
         controller?.HandleMessage(message);
     }
 
-    /*public void NextControl()
+    public void UpdateControl(int controlIndex)
     {
-        if (_pluginActivity != null)
-        {
-            currentControlIndex++;
-            if (currentControlIndex > maxControls) currentControlIndex = 1;
-            UpdateControl();
-
-        }
+        SendMessageToSmartwatch($"control_{controlIndex}");
     }
 
-    public void PreviousControl()
+    public void UpdateControl(string controlName)
     {
-        if (_pluginActivity != null)
+        if (string.IsNullOrWhiteSpace(controlName))
         {
-            currentControlIndex--;
-            if (currentControlIndex < 1) currentControlIndex = maxControls;
-            UpdateControl();
+            Debug.LogWarning("[PluginActivity] controlName vacío.");
+            return;
         }
-    }*/
 
-    public void UpdateControl(int currentControlIndex)
-    {
-        //string sceneName = $"MiniGame_{currentControlIndex}";
-        //Debug.Log("Cargando escena: " + sceneName);
-
-        // Enviar al smartwatch
-        if (_pluginActivity != null)
-            _pluginActivity.Call("sendMessageToSmartwatch", $"control_{currentControlIndex}");
-
-        // Cargar escena del minijuego
-        //UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+        SendMessageToSmartwatch(controlName);
     }
 
+    public void SendMessageToSmartwatch(string message)
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        if (_pluginActivity != null)
+        {
+            _pluginActivity.Call("sendMessageToSmartwatch", message);
+        }
+        else
+        {
+            Debug.LogWarning("[PluginActivity] _pluginActivity es null.");
+        }
+#else
+        Debug.Log($"[PluginActivity] Mensaje a smartwatch: {message}");
+#endif
+    }
 }
