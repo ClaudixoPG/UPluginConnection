@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PluginActivity : MonoBehaviour
 {
@@ -39,9 +40,29 @@ public class PluginActivity : MonoBehaviour
 
     public void OnMessageReceived(string message)
     {
+        string finalMessage = message;
+
+        if (TryParseTelemetry(message, out TelemetryPayload payload))
+        {
+            payload.receive_ts_unity_ns = GetUnityTimestampNs();
+
+            finalMessage = payload.raw_message;
+
+            Debug.Log(
+                $"[Telemetry] event_id={payload.event_id} " +
+                $"type={payload.event_type} " +
+                $"family={payload.input_family} " +
+                $"raw={payload.raw_message} " +
+                $"watch={payload.send_ts_watch_ns} " +
+                $"phone_recv={payload.receive_ts_phone_native_ns} " +
+                $"phone_fwd={payload.forward_ts_phone_native_ns} " +
+                $"unity_recv={payload.receive_ts_unity_ns}"
+            );
+        }
+
         GameObject controllerObject = GameObject.Find("GameController");
         var controller = controllerObject?.GetComponent<IGameController>();
-        controller?.HandleMessage(message);
+        controller?.HandleMessage(finalMessage);
     }
 
     public void UpdateControl(int controlIndex)
@@ -74,5 +95,31 @@ public class PluginActivity : MonoBehaviour
 #else
         Debug.Log($"[PluginActivity] Mensaje a smartwatch: {message}");
 #endif
+    }
+
+    private bool TryParseTelemetry(string message, out TelemetryPayload payload)
+    {
+        payload = null;
+
+        if (string.IsNullOrWhiteSpace(message))
+            return false;
+
+        try
+        {
+            payload = JsonUtility.FromJson<TelemetryPayload>(message);
+
+            return payload != null
+                   && payload.schema_version > 0
+                   && !string.IsNullOrWhiteSpace(payload.raw_message);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    private long GetUnityTimestampNs()
+    {
+        return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() * 1_000_000L;
     }
 }
