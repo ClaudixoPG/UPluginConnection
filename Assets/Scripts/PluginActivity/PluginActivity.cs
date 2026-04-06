@@ -45,18 +45,18 @@ public class PluginActivity : MonoBehaviour
         if (TryParseTelemetry(message, out TelemetryPayload payload))
         {
             payload.receive_ts_unity_ns = GetUnityTimestampNs();
-
             finalMessage = payload.raw_message;
+
+            if (TelemetryCsvLogger.Instance != null)
+            {
+                TelemetryCsvLogger.Instance.Log(payload);
+            }
 
             Debug.Log(
                 $"[Telemetry] event_id={payload.event_id} " +
                 $"type={payload.event_type} " +
                 $"family={payload.input_family} " +
-                $"raw={payload.raw_message} " +
-                $"watch={payload.send_ts_watch_ns} " +
-                $"phone_recv={payload.receive_ts_phone_native_ns} " +
-                $"phone_fwd={payload.forward_ts_phone_native_ns} " +
-                $"unity_recv={payload.receive_ts_unity_ns}"
+                $"raw={payload.raw_message}"
             );
         }
 
@@ -120,6 +120,18 @@ public class PluginActivity : MonoBehaviour
 
     private long GetUnityTimestampNs()
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
+    try
+    {
+        using var systemClock = new AndroidJavaClass("android.os.SystemClock");
+        return systemClock.CallStatic<long>("elapsedRealtimeNanos");
+    }
+    catch (Exception e)
+    {
+        Debug.LogWarning($"[PluginActivity] Failed to get elapsedRealtimeNanos: {e.Message}");
+    }
+#endif
+
         return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() * 1_000_000L;
     }
 }
