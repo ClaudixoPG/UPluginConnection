@@ -93,22 +93,26 @@ public class TelemetryCsvLogger : MonoBehaviour
             "raw_message",
             "smartwatch_model",
             "smartphone_model",
-            "send_ts_watch_ns",
-            "receive_ts_phone_native_ns",
-            "forward_ts_phone_native_ns",
-            "receive_ts_unity_ns",
-            "phone_to_unity_ms",
-            "phone_forward_ms",
-            "unity_minus_phone_receive_ms",
-            "test_timestamp_utc"
+            "scene_name",
+            "minigame_id",
+            "wear_to_phone_latency_ms",
+            "phone_processing_latency_ms",
+            "phone_to_unity_latency_ms",
+            "end_to_end_latency_ms",
+            "test_timestamp_utc",
+            "battery_level_watch",
+            "temperature_watch_c",
+            "battery_level_phone",
+            "temperature_phone_c"
         );
     }
 
     private string BuildRow(TelemetryPayload p)
     {
+        double wearToPhoneMs = NsToMs(p.receive_ts_phone_native_ns - p.send_ts_watch_ns);
+        double phoneProcessingMs = NsToMs(p.forward_ts_phone_native_ns - p.receive_ts_phone_native_ns);
         double phoneToUnityMs = NsToMs(p.receive_ts_unity_ns - p.forward_ts_phone_native_ns);
-        double phoneForwardMs = NsToMs(p.forward_ts_phone_native_ns - p.receive_ts_phone_native_ns);
-        double unityMinusPhoneReceiveMs = NsToMs(p.receive_ts_unity_ns - p.receive_ts_phone_native_ns);
+        double endToEndMs = NsToMs(p.receive_ts_unity_ns - p.send_ts_watch_ns);
 
         return string.Join(",",
             Escape(p.event_id),
@@ -118,14 +122,21 @@ public class TelemetryCsvLogger : MonoBehaviour
             Escape(p.raw_message),
             Escape(p.smartwatch_model),
             Escape(p.smartphone_model),
-            p.send_ts_watch_ns.ToString(CultureInfo.InvariantCulture),
-            p.receive_ts_phone_native_ns.ToString(CultureInfo.InvariantCulture),
-            p.forward_ts_phone_native_ns.ToString(CultureInfo.InvariantCulture),
-            p.receive_ts_unity_ns.ToString(CultureInfo.InvariantCulture),
+            Escape(p.scene_name),
+            Escape(p.minigame_id),
+
+            wearToPhoneMs.ToString("F4", CultureInfo.InvariantCulture),
+            phoneProcessingMs.ToString("F4", CultureInfo.InvariantCulture),
             phoneToUnityMs.ToString("F4", CultureInfo.InvariantCulture),
-            phoneForwardMs.ToString("F4", CultureInfo.InvariantCulture),
-            unityMinusPhoneReceiveMs.ToString("F4", CultureInfo.InvariantCulture),
-            Escape(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture))
+            endToEndMs.ToString("F4", CultureInfo.InvariantCulture),
+
+            Escape(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)),
+
+            // ?? batería y temperatura
+            p.battery_level_watch.ToString("F2", CultureInfo.InvariantCulture),
+            p.temperature_watch_c.ToString("F2", CultureInfo.InvariantCulture),
+            p.battery_level_phone.ToString("F2", CultureInfo.InvariantCulture),
+            p.temperature_phone_c.ToString("F2", CultureInfo.InvariantCulture)
         );
     }
 

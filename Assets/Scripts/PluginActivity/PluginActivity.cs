@@ -21,6 +21,8 @@ public class PluginActivity : MonoBehaviour
 
     private void Start()
     {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
 #if UNITY_ANDROID && !UNITY_EDITOR
         _pluginActivity = new AndroidJavaObject("com.randomadjective.uactivity.PluginActivity");
 #endif
@@ -45,6 +47,9 @@ public class PluginActivity : MonoBehaviour
         if (TryParseTelemetry(message, out TelemetryPayload payload))
         {
             payload.receive_ts_unity_ns = GetUnityTimestampNs();
+            payload.scene_name = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            payload.minigame_id = MinigameContext.CurrentMinigameId;
+
             finalMessage = payload.raw_message;
 
             if (TelemetryCsvLogger.Instance != null)
@@ -56,6 +61,8 @@ public class PluginActivity : MonoBehaviour
                 $"[Telemetry] event_id={payload.event_id} " +
                 $"type={payload.event_type} " +
                 $"family={payload.input_family} " +
+                $"scene={payload.scene_name} " +
+                $"minigame={payload.minigame_id} " +
                 $"raw={payload.raw_message}"
             );
         }
@@ -121,17 +128,16 @@ public class PluginActivity : MonoBehaviour
     private long GetUnityTimestampNs()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
-    try
-    {
-        using var systemClock = new AndroidJavaClass("android.os.SystemClock");
-        return systemClock.CallStatic<long>("elapsedRealtimeNanos");
-    }
-    catch (Exception e)
-    {
-        Debug.LogWarning($"[PluginActivity] Failed to get elapsedRealtimeNanos: {e.Message}");
-    }
+        try
+        {
+            using var systemClock = new AndroidJavaClass("android.os.SystemClock");
+            return systemClock.CallStatic<long>("elapsedRealtimeNanos");
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[PluginActivity] Failed to get elapsedRealtimeNanos: {e.Message}");
+        }
 #endif
-
         return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() * 1_000_000L;
     }
 }
