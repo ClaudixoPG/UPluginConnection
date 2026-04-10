@@ -4,11 +4,14 @@ using System;
 public class TelemetryPayload
 {
     public int schema_version;
+    public string record_type;
     public string event_type;
     public string event_id;
     public string session_id;
     public string input_family;
     public string raw_message;
+    public bool latency_sampled;
+
     public string smartwatch_model;
     public string smartphone_model;
     public string scene_name;

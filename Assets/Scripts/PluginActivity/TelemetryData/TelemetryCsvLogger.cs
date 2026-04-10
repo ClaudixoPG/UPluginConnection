@@ -88,17 +88,21 @@ public class TelemetryCsvLogger : MonoBehaviour
         return string.Join(",",
             "event_id",
             "session_id",
+            "record_type",
             "event_type",
             "input_family",
             "raw_message",
+            "latency_sampled",
             "smartwatch_model",
             "smartphone_model",
             "scene_name",
             "minigame_id",
-            "wear_to_phone_latency_ms",
+            "send_ts_watch_ns",
+            "receive_ts_phone_native_ns",
+            "forward_ts_phone_native_ns",
+            "receive_ts_unity_ns",
             "phone_processing_latency_ms",
             "phone_to_unity_latency_ms",
-            "end_to_end_latency_ms",
             "test_timestamp_utc",
             "battery_level_watch",
             "temperature_watch_c",
@@ -109,30 +113,32 @@ public class TelemetryCsvLogger : MonoBehaviour
 
     private string BuildRow(TelemetryPayload p)
     {
-        double wearToPhoneMs = NsToMs(p.receive_ts_phone_native_ns - p.send_ts_watch_ns);
         double phoneProcessingMs = NsToMs(p.forward_ts_phone_native_ns - p.receive_ts_phone_native_ns);
         double phoneToUnityMs = NsToMs(p.receive_ts_unity_ns - p.forward_ts_phone_native_ns);
-        double endToEndMs = NsToMs(p.receive_ts_unity_ns - p.send_ts_watch_ns);
 
         return string.Join(",",
             Escape(p.event_id),
             Escape(p.session_id),
+            Escape(p.record_type),
             Escape(p.event_type),
             Escape(p.input_family),
             Escape(p.raw_message),
+            Escape(p.latency_sampled ? "true" : "false"),
             Escape(p.smartwatch_model),
             Escape(p.smartphone_model),
             Escape(p.scene_name),
             Escape(p.minigame_id),
 
-            wearToPhoneMs.ToString("F4", CultureInfo.InvariantCulture),
+            p.send_ts_watch_ns.ToString(CultureInfo.InvariantCulture),
+            p.receive_ts_phone_native_ns.ToString(CultureInfo.InvariantCulture),
+            p.forward_ts_phone_native_ns.ToString(CultureInfo.InvariantCulture),
+            p.receive_ts_unity_ns.ToString(CultureInfo.InvariantCulture),
+
             phoneProcessingMs.ToString("F4", CultureInfo.InvariantCulture),
             phoneToUnityMs.ToString("F4", CultureInfo.InvariantCulture),
-            endToEndMs.ToString("F4", CultureInfo.InvariantCulture),
 
             Escape(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)),
 
-            // ?? batería y temperatura
             p.battery_level_watch.ToString("F2", CultureInfo.InvariantCulture),
             p.temperature_watch_c.ToString("F2", CultureInfo.InvariantCulture),
             p.battery_level_phone.ToString("F2", CultureInfo.InvariantCulture),

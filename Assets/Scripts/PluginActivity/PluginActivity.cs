@@ -61,6 +61,7 @@ public class PluginActivity : MonoBehaviour
                 $"[Telemetry] event_id={payload.event_id} " +
                 $"type={payload.event_type} " +
                 $"family={payload.input_family} " +
+                $"sampled={payload.latency_sampled} " +
                 $"scene={payload.scene_name} " +
                 $"minigame={payload.minigame_id} " +
                 $"raw={payload.raw_message}"
