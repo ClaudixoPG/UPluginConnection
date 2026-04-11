@@ -10,17 +10,31 @@ namespace EndlessRunner
         [SerializeField] private Transform feetPos;
         [SerializeField] private float groundDistance = 0.25f;
         [SerializeField] private float jumpoTime = 0.3f;
-
-        //crouch
         [SerializeField] private float crouchHight = 0.5f;
 
         private bool isGrounded;
         private bool isJumping;
         private float jumpTimer;
+        private bool gameplayEnabled = true;
+
+        private Vector3 _originalScale;
+        private Vector3 _originalPosition;
+
+        private bool IsGameplayActive =>
+            gameplayEnabled &&
+            !GameController.IsGameOver &&
+            MinigameContext.IsMeasurementActive;
+
+        private void Awake()
+        {
+            _originalScale = transform.localScale;
+            _originalPosition = transform.position;
+        }
 
         private void Update()
         {
-            // Solo verificamos el estado del suelo
+            if (!IsGameplayActive) return;
+
             isGrounded = Physics2D.OverlapCircle(feetPos.position, groundDistance, groundLayer);
 
             if (isGrounded && !isJumping)
@@ -28,7 +42,6 @@ namespace EndlessRunner
                 jumpTimer = 0f;
             }
 
-            // Si estamos saltando y el tiempo extra sigue corriendo
             if (isJumping && jumpTimer > 0f)
             {
                 rb.AddForce(new Vector2(0, jumpForce * Time.deltaTime), ForceMode2D.Impulse);
@@ -36,9 +49,10 @@ namespace EndlessRunner
             }
         }
 
-        // --- Métodos públicos llamados desde GameController ---
         public void Jump()
         {
+            if (!IsGameplayActive) return;
+
             if (isGrounded)
             {
                 isJumping = true;
@@ -49,32 +63,54 @@ namespace EndlessRunner
 
         public void CancelJump()
         {
+            if (!IsGameplayActive) return;
             isJumping = false;
         }
 
         public void Crounch()
         {
+            if (!IsGameplayActive) return;
+
             if (isGrounded)
             {
-                transform.localScale = new Vector3(transform.localScale.x, crouchHight, transform.localScale.z);
-                //move player position down
-                transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
+                transform.localScale = new Vector3(_originalScale.x, crouchHight, _originalScale.z);
+                transform.position = new Vector3(transform.position.x, _originalPosition.y - 0.5f, transform.position.z);
             }
         }
+
         public void StandUp()
         {
-            transform.localScale = new Vector3(transform.localScale.x, 1f, transform.localScale.z);
-            //move player position up
-            transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+            transform.localScale = _originalScale;
+            transform.position = new Vector3(transform.position.x, _originalPosition.y, transform.position.z);
+        }
+
+        public void SetGameplayEnabled(bool value)
+        {
+            gameplayEnabled = value;
+        }
+
+        public void ResetState()
+        {
+            isJumping = false;
+            jumpTimer = 0f;
+            transform.localScale = _originalScale;
+            transform.position = _originalPosition;
+
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+                rb.Sleep();
+                rb.WakeUp();
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
+            if (!IsGameplayActive) return;
+
             if (collision.gameObject.CompareTag("Obstacle"))
             {
-                // Aquí puedes manejar lo que sucede cuando el jugador choca con un obstáculo
-                Debug.Log("Game Over!");
-                Destroy(gameObject);
                 GameController.Instance.GameOver();
             }
         }

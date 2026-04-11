@@ -139,7 +139,7 @@ public class TransitionOverlayUI : MonoBehaviour
 
     public void FadeOut(float duration, Action onComplete = null)
     {
-        Debug.Log("[TransitionOverlayUI] FadeOut()");
+        //Debug.Log("[TransitionOverlayUI] FadeOut()");
         LeanTween.cancel(gameObject);
 
         _instructionText.gameObject.SetActive(false);
@@ -152,14 +152,14 @@ public class TransitionOverlayUI : MonoBehaviour
             .setOnUpdate((float alpha) => SetBackgroundAlpha(alpha))
             .setOnComplete(() =>
             {
-                Debug.Log("[TransitionOverlayUI] FadeOut complete");
+                //Debug.Log("[TransitionOverlayUI] FadeOut complete");
                 onComplete?.Invoke();
             });
     }
 
     public void FadeIn(float duration, Action onComplete = null)
     {
-        Debug.Log("[TransitionOverlayUI] FadeIn()");
+        //Debug.Log("[TransitionOverlayUI] FadeIn()");
         LeanTween.cancel(gameObject);
 
         _instructionText.gameObject.SetActive(false);
@@ -172,7 +172,7 @@ public class TransitionOverlayUI : MonoBehaviour
             .setOnUpdate((float alpha) => SetBackgroundAlpha(alpha))
             .setOnComplete(() =>
             {
-                Debug.Log("[TransitionOverlayUI] FadeIn complete");
+                //Debug.Log("[TransitionOverlayUI] FadeIn complete");
                 SetInputBlocking(false);
                 onComplete?.Invoke();
             });
@@ -180,7 +180,7 @@ public class TransitionOverlayUI : MonoBehaviour
 
     public void ShowInstruction(string message, float duration, Action onComplete = null)
     {
-        Debug.Log("[TransitionOverlayUI] ShowInstruction()");
+        //Debug.Log("[TransitionOverlayUI] ShowInstruction()");
 
         _countdownText.gameObject.SetActive(false);
         _instructionText.gameObject.SetActive(true);
@@ -191,14 +191,14 @@ public class TransitionOverlayUI : MonoBehaviour
         LeanTween.delayedCall(gameObject, duration, () =>
         {
             _instructionText.gameObject.SetActive(false);
-            Debug.Log("[TransitionOverlayUI] ShowInstruction complete");
+            //Debug.Log("[TransitionOverlayUI] ShowInstruction complete");
             onComplete?.Invoke();
         }).setIgnoreTimeScale(true);
     }
 
     public void ShowCountdown(int startValue, float stepDuration, Action onComplete = null)
     {
-        Debug.Log("[TransitionOverlayUI] ShowCountdown()");
+        //Debug.Log("[TransitionOverlayUI] ShowCountdown()");
         _instructionText.gameObject.SetActive(false);
         _countdownText.gameObject.SetActive(true);
 
@@ -232,7 +232,7 @@ public class TransitionOverlayUI : MonoBehaviour
 
             _countdownText.gameObject.SetActive(false);
             SetInputBlocking(false);
-            Debug.Log("[TransitionOverlayUI] ShowCountdown complete");
+            //Debug.Log("[TransitionOverlayUI] ShowCountdown complete");
             onComplete?.Invoke();
         }).setIgnoreTimeScale(true);
     }

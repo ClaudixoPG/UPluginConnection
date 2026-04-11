@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,11 +10,13 @@ namespace EndlessRunner
 
         private float timer;
 
+        private bool IsGameplayActive =>
+            !GameController.IsGameOver &&
+            MinigameContext.IsMeasurementActive;
 
-        // Update is called once per frame
-        void Update()
+        private void Update()
         {
-            if (GameController.IsGameOver) return;
+            if (!IsGameplayActive) return;
             SpawnLoop();
         }
 
@@ -29,13 +30,24 @@ namespace EndlessRunner
             }
         }
 
-        void Spawn()
+        private void Spawn()
         {
             if (objectsToSpawn.Count == 0) return;
 
             int index = Random.Range(0, objectsToSpawn.Count);
-            //var obj = objectsToSpawn[index];
-            objectsToSpawn[index].Spawn(transform.position);
+            Obstacle selectedObstacle = objectsToSpawn[index];
+
+            if (GameController.Instance != null)
+            {
+                selectedObstacle.Speed = GameController.Instance.CurrentObstacleSpeed;
+            }
+
+            selectedObstacle.Spawn(transform.position);
+        }
+
+        public void ResetSpawner()
+        {
+            timer = 0f;
         }
     }
 }

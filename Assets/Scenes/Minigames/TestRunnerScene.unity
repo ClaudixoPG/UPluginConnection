@@ -543,7 +543,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   filePrefix: telemetry
-  autoFlushEveryEvent: 1
+  autoFlushEveryEvent: 0
 --- !u!4 &857706559
 Transform:
   m_ObjectHideFlags: 0
@@ -838,11 +838,11 @@ MonoBehaviour:
     controlName: sensor_gyro
     minigameId: GyroGame
     instructionText: "Mueve tu mu\xF1eca.  Inclina el reloj para controlar la direcci\xF3n."
-  durationPerMinigame: 10
+  durationPerMinigame: 30
   controlSettleDelay: 1.5
   postMinigameDelay: 0.5
   fadeOutDuration: 0.5
-  instructionDuration: 20
+  instructionDuration: 5
   fadeInDuration: 0.5
   countdownStart: 3
   countdownStepDuration: 1

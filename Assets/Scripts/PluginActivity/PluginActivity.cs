@@ -59,7 +59,7 @@ public class PluginActivity : MonoBehaviour
                 TelemetryCsvLogger.Instance.Log(payload);
             }
 
-            Debug.Log(
+            /*Debug.Log(
                 $"[Telemetry] event_id={payload.event_id} " +
                 $"record_type={payload.record_type} " +
                 $"type={payload.event_type} " +
@@ -70,7 +70,7 @@ public class PluginActivity : MonoBehaviour
                 $"phase={payload.measurement_phase} " +
                 $"active={payload.measurement_active} " +
                 $"raw={payload.raw_message}"
-            );
+            );*/
 
             if (!payload.measurement_active)
             {
