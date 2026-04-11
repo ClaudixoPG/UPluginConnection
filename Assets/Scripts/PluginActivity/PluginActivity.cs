@@ -49,6 +49,8 @@ public class PluginActivity : MonoBehaviour
             payload.receive_ts_unity_ns = GetUnityTimestampNs();
             payload.scene_name = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
             payload.minigame_id = MinigameContext.CurrentMinigameId;
+            payload.measurement_active = MinigameContext.IsMeasurementActive;
+            payload.measurement_phase = MinigameContext.CurrentPhase;
 
             finalMessage = payload.raw_message;
 
@@ -59,13 +61,21 @@ public class PluginActivity : MonoBehaviour
 
             Debug.Log(
                 $"[Telemetry] event_id={payload.event_id} " +
+                $"record_type={payload.record_type} " +
                 $"type={payload.event_type} " +
                 $"family={payload.input_family} " +
                 $"sampled={payload.latency_sampled} " +
                 $"scene={payload.scene_name} " +
                 $"minigame={payload.minigame_id} " +
+                $"phase={payload.measurement_phase} " +
+                $"active={payload.measurement_active} " +
                 $"raw={payload.raw_message}"
             );
+
+            if (!payload.measurement_active)
+            {
+                return;
+            }
         }
 
         GameObject controllerObject = GameObject.Find("GameController");

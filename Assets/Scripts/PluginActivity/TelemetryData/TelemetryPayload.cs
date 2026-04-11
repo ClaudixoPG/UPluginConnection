@@ -26,4 +26,7 @@ public class TelemetryPayload
     public double temperature_watch_c;
     public double battery_level_phone;
     public double temperature_phone_c;
+
+    public bool measurement_active;
+    public string measurement_phase;
 }

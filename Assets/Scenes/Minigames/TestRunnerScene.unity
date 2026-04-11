@@ -524,7 +524,7 @@ GameObject:
   - component: {fileID: 857706559}
   - component: {fileID: 857706558}
   m_Layer: 0
-  m_Name: TelemetryLogger
+  m_Name: TelemetryCsvLogger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -817,21 +817,35 @@ MonoBehaviour:
   - sceneName: EndlessRunnerScene
     controlName: control_1
     minigameId: RunnerGame
+    instructionText: "Toca la pantalla para saltar.  Presiona en el momento justo
+      para evitar obst\xE1culos."
   - sceneName: RhythmScene
     controlName: control_2
     minigameId: RhythmGame
+    instructionText: "Toca la pantalla en la direcci\xF3n indicada.  Arriba, abajo,
+      izquierda o derecha siguiendo el ritmo."
   - sceneName: SpaceShipScene
     controlName: control_3
     minigameId: SpaceShipGame
+    instructionText: "Mueve tu dedo como joystick.  Controla la direcci\xF3n de la
+      nave en todas las direcciones."
   - sceneName: FishingGameScene
     controlName: control_4
     minigameId: FishingGame
+    instructionText: "Mant\xE9n presionada la pantalla.  Suelta en el momento correcto
+      para completar la acci\xF3n."
   - sceneName: GyroGameScene
     controlName: sensor_gyro
     minigameId: GyroGame
+    instructionText: "Mueve tu mu\xF1eca.  Inclina el reloj para controlar la direcci\xF3n."
   durationPerMinigame: 10
-  transitionDelay: 2
   controlSettleDelay: 1.5
+  postMinigameDelay: 0.5
+  fadeOutDuration: 0.5
+  instructionDuration: 20
+  fadeInDuration: 0.5
+  countdownStart: 3
+  countdownStepDuration: 1
   returnSceneName: TestRunnerScene
   returnToStartScene: 1
   quitAppWhenFinished: 0
@@ -842,6 +856,50 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1693859402}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 17.195541, y: -12.722137, z: -44.646076}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2086584128
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2086584130}
+  - component: {fileID: 2086584129}
+  m_Layer: 0
+  m_Name: InstructionsOverlayBootstrap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2086584129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086584128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f76cd5c15dab2b34abb700d02208c570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2086584130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086584128}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 17.195541, y: -12.722137, z: -44.646076}
@@ -944,7 +1002,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
 --- !u!114 &2142269072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -994,3 +1052,4 @@ SceneRoots:
   - {fileID: 1693859404}
   - {fileID: 1487849474}
   - {fileID: 857706559}
+  - {fileID: 2086584130}

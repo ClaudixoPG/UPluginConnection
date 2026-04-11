@@ -97,6 +97,8 @@ public class TelemetryCsvLogger : MonoBehaviour
             "smartphone_model",
             "scene_name",
             "minigame_id",
+            "measurement_active",
+            "measurement_phase",
             "send_ts_watch_ns",
             "receive_ts_phone_native_ns",
             "forward_ts_phone_native_ns",
@@ -128,6 +130,8 @@ public class TelemetryCsvLogger : MonoBehaviour
             Escape(p.smartphone_model),
             Escape(p.scene_name),
             Escape(p.minigame_id),
+            Escape(p.measurement_active ? "true" : "false"),
+            Escape(p.measurement_phase),
 
             p.send_ts_watch_ns.ToString(CultureInfo.InvariantCulture),
             p.receive_ts_phone_native_ns.ToString(CultureInfo.InvariantCulture),
