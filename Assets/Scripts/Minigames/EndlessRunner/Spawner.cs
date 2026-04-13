@@ -6,7 +6,11 @@ namespace EndlessRunner
     public class Spawner : MonoBehaviour
     {
         [SerializeField] private List<Obstacle> objectsToSpawn;
-        [SerializeField] private float spawnInterval = 2f;
+        [SerializeField] private float baseSpawnInterval = 2f;
+        [SerializeField] private float minSpawnInterval = 0.8f;
+        [SerializeField] private float spawnAcceleration = 0.02f;
+
+        private float currentSpawnInterval;
 
         private float timer;
 
@@ -14,16 +18,25 @@ namespace EndlessRunner
             !GameController.IsGameOver &&
             MinigameContext.IsMeasurementActive;
 
+        private void Start()
+        {
+            currentSpawnInterval = baseSpawnInterval;
+        }
+
         private void Update()
         {
             if (!IsGameplayActive) return;
+            currentSpawnInterval = Mathf.Max(
+                minSpawnInterval,
+                currentSpawnInterval - spawnAcceleration * Time.deltaTime
+            );
             SpawnLoop();
         }
 
         private void SpawnLoop()
         {
             timer += Time.deltaTime;
-            if (timer >= spawnInterval)
+            if (timer >= currentSpawnInterval)
             {
                 Spawn();
                 timer = 0f;

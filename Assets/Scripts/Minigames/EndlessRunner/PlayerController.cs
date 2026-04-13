@@ -25,6 +25,9 @@ namespace EndlessRunner
             !GameController.IsGameOver &&
             MinigameContext.IsMeasurementActive;
 
+        private float _crouchOffset = 0.5f;
+        private bool isCrouching = false;
+
         private void Awake()
         {
             _originalScale = transform.localScale;
@@ -69,19 +72,25 @@ namespace EndlessRunner
 
         public void Crounch()
         {
-            if (!IsGameplayActive) return;
+            if (!IsGameplayActive || isCrouching) return;
 
             if (isGrounded)
             {
+                isCrouching = true;
+
                 transform.localScale = new Vector3(_originalScale.x, crouchHight, _originalScale.z);
-                transform.position = new Vector3(transform.position.x, _originalPosition.y - 0.5f, transform.position.z);
+                transform.position += Vector3.down * _crouchOffset;
             }
         }
 
         public void StandUp()
         {
+            if (!isCrouching) return;
+
+            isCrouching = false;
+
             transform.localScale = _originalScale;
-            transform.position = new Vector3(transform.position.x, _originalPosition.y, transform.position.z);
+            transform.position += Vector3.up * _crouchOffset;
         }
 
         public void SetGameplayEnabled(bool value)

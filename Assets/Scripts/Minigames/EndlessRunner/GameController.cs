@@ -35,7 +35,7 @@ namespace EndlessRunner
 
         private bool IsGameplayActive =>
             !IsGameOver && MinigameContext.IsMeasurementActive;
-
+        [SerializeField] private CameraShake cameraShake;
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -128,6 +128,14 @@ namespace EndlessRunner
             IsGameOver = true;
             inputActions.Disable();
 
+            Time.timeScale = 0.2f;
+            StartCoroutine(RestoreTime());
+
+            if (cameraShake != null)
+            {
+                cameraShake.Shake(0.3f, 0.2f);
+            }
+
             if (uiManager != null)
             {
                 uiManager.ShowLoseScreen(currentScore);
@@ -140,6 +148,11 @@ namespace EndlessRunner
             }
 
             StartCoroutine(RestartFlow());
+        }
+        private IEnumerator RestoreTime()
+        {
+            yield return new WaitForSecondsRealtime(0.3f);
+            Time.timeScale = 1f;
         }
 
         private IEnumerator RestartFlow()

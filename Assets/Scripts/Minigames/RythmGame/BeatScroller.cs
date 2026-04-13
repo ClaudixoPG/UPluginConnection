@@ -4,21 +4,42 @@ namespace RythmGame
 {
     public class BeatScroller : MonoBehaviour
     {
-        public float beatTempo; // Beats per minute
-        public bool hasStarted; // Has the song started?
+        [SerializeField] private float beatTempo = 120f;
+
+        private Vector3 initialPosition;
+        private float beatsPerSecond;
+
+        public bool hasStarted { get; private set; }
+        public float ScrollSpeedUnitsPerSecond => beatsPerSecond;
+        public float BeatTempo => beatTempo;
+        public float SecondsPerBeat => 60f / beatTempo;
+
+        private void Awake()
+        {
+            initialPosition = transform.position;
+        }
 
         private void Start()
         {
-            beatTempo = beatTempo / 60f; // Convert to beats per second
+            beatsPerSecond = beatTempo / 60f;
         }
 
-        void Update()
+        private void Update()
         {
-            if (hasStarted)
-            {
-                transform.position -= new Vector3(0f, beatTempo * Time.deltaTime, 0f);
-            }
+            if (!hasStarted) return;
+
+            transform.position -= new Vector3(0f, beatsPerSecond * Time.deltaTime, 0f);
         }
 
+        public void SetStarted(bool value)
+        {
+            hasStarted = value;
+        }
+
+        public void ResetScroller()
+        {
+            hasStarted = false;
+            transform.position = initialPosition;
+        }
     }
 }

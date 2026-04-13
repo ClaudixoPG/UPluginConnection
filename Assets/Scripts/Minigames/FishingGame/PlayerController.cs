@@ -4,150 +4,202 @@ namespace FishingGame
 {
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] Transform topPivot;
-        [SerializeField] Transform bottomPivot;
-        [SerializeField] Transform fish;
+        [Header("Rail")]
+        [SerializeField] private Transform topPivot;
+        [SerializeField] private Transform bottomPivot;
 
-        float fishPosition;
-        float fishDestination;
-        float fishTimer;
+        [Header("Fish")]
+        [SerializeField] private Transform fish;
+        [SerializeField] private float fishMoveIntervalMultiplier = 3f;
+        [SerializeField] private float fishSmoothMotion = 1f;
 
-        [SerializeField] float timerMultiplicator = 3f;
-        float fishSpeed;
-        [SerializeField] float smoothMotion = 1f;
+        [Header("Hook")]
+        [SerializeField] private Transform hook;
+        [SerializeField] private float hookPullPower = 2.5f;
+        [SerializeField] private float hookGravityPower = 1.5f;
+        [SerializeField] private float hookSizeNormalized = 0.2f;
 
-        [SerializeField] Transform hook;
-        float hookPosition;
-        [SerializeField] float hookSize = 12f;
-        [SerializeField] float hookPower = 5f;
-        float hookProgress;
-        float hookPullVelocity;
-        [SerializeField] float hookPullPower = 0.01f;
-        [SerializeField] float hookGravityPower = 0.005f;
-        [SerializeField] float hookProgressDegradationPower = 0.1f;
+        [Header("Progress")]
+        [SerializeField] private Transform progressBarContainer;
+        [SerializeField] private float catchProgressIncreasePerSecond = 0.45f;
+        [SerializeField] private float catchProgressDecreasePerSecond = 0.35f;
 
-        [SerializeField] Transform progressBarContainer;
+        [Header("Failure")]
+        [SerializeField] private float roundFailDuration = 10f;
 
-        [SerializeField] float failTimer = 10f;
-        bool isReeling = false;
+        private float fishPositionNormalized;
+        private float fishDestinationNormalized;
+        private float fishTimer;
+        private float fishVelocity;
 
-        void Start()
+        private float hookPositionNormalized;
+        private float hookPullVelocity;
+        private float holdInputNormalized;
+        private float catchProgressNormalized;
+        private float failTimer;
+
+        private bool gameplayEnabled;
+
+        private void Start()
         {
-            hookSize = ComputeHookSizeNormalized(); // ahora sí, hookSize vuelve a ser 0..1
+            ResetRound();
         }
 
-        float ComputeHookSizeNormalized()
+        private void Update()
         {
-            float railHeight = Vector3.Distance(bottomPivot.position, topPivot.position);
+            if (!gameplayEnabled) return;
 
-            // SpriteRenderer
-            var sr = hook.GetComponent<SpriteRenderer>();
-            if (sr != null)
-                return Mathf.Clamp01(sr.bounds.size.y / railHeight);
-
-            // UI (RectTransform)
-            var rt = hook.GetComponent<RectTransform>();
-            if (rt != null)
-                return Mathf.Clamp01((rt.rect.height * hook.lossyScale.y) / railHeight);
-
-            // Fallback (menos preciso)
-            return Mathf.Clamp01(hook.lossyScale.y / railHeight);
+            UpdateFish();
+            UpdateHook();
+            UpdateProgress();
         }
 
-        void Update()
+        public void SetGameplayEnabled(bool value)
         {
-            Fish();
-            HookSequence();
-            ProgressCheck();
+            gameplayEnabled = value;
         }
 
-        void ProgressCheck()
+        public void SetHoldInput(float value)
         {
-            Vector3 ls = progressBarContainer.localScale;
-            ls.y = hookProgress;
-            progressBarContainer.localScale = ls;
+            holdInputNormalized = Mathf.Clamp01(value);
+        }
 
-            float min = hookPosition;
-            float max = hookPosition + hookSize;
+        public void ResetRound()
+        {
+            fishPositionNormalized = 0.5f;
+            fishDestinationNormalized = 0.5f;
+            fishTimer = 0f;
+            fishVelocity = 0f;
 
-            if (min < fishPosition && fishPosition < max)
+            hookPositionNormalized = 0.5f;
+            hookPullVelocity = 0f;
+            holdInputNormalized = 0f;
+
+            catchProgressNormalized = 0.5f;
+            failTimer = roundFailDuration;
+
+            UpdateFishTransform();
+            UpdateHookTransform();
+            UpdateProgressBar();
+        }
+
+        private void UpdateFish()
+        {
+            fishTimer -= Time.deltaTime;
+
+            if (fishTimer <= 0f)
             {
-                hookProgress += hookPower * Time.deltaTime;
+                fishTimer = Random.value * fishMoveIntervalMultiplier;
+                fishDestinationNormalized = Random.value;
+            }
+
+            fishPositionNormalized = Mathf.SmoothDamp(
+                fishPositionNormalized,
+                fishDestinationNormalized,
+                ref fishVelocity,
+                fishSmoothMotion
+            );
+
+            fishPositionNormalized = Mathf.Clamp01(fishPositionNormalized);
+            UpdateFishTransform();
+        }
+
+        private void UpdateHook()
+        {
+            hookPullVelocity += holdInputNormalized * hookPullPower * Time.deltaTime;
+            hookPullVelocity -= hookGravityPower * Time.deltaTime;
+
+            hookPositionNormalized += hookPullVelocity * Time.deltaTime;
+
+            float maxHookPos = 1f - hookSizeNormalized;
+
+            if (hookPositionNormalized <= 0f && hookPullVelocity < 0f)
+            {
+                hookPositionNormalized = 0f;
+                hookPullVelocity = 0f;
+            }
+
+            if (hookPositionNormalized >= maxHookPos && hookPullVelocity > 0f)
+            {
+                hookPositionNormalized = maxHookPos;
+                hookPullVelocity = 0f;
+            }
+
+            hookPositionNormalized = Mathf.Clamp(hookPositionNormalized, 0f, maxHookPos);
+            UpdateHookTransform();
+        }
+
+        private void UpdateProgress()
+        {
+            float hookMin = hookPositionNormalized;
+            float hookMax = hookPositionNormalized + hookSizeNormalized;
+
+            bool fishInside = fishPositionNormalized >= hookMin && fishPositionNormalized <= hookMax;
+
+            if (fishInside)
+            {
+                catchProgressNormalized += catchProgressIncreasePerSecond * Time.deltaTime;
             }
             else
             {
-                hookProgress -= hookProgressDegradationPower * Time.deltaTime;
-                failTimer -= failTimer * Time.deltaTime;
-                if (failTimer < 0)
+                catchProgressNormalized -= catchProgressDecreasePerSecond * Time.deltaTime;
+                failTimer -= Time.deltaTime;
+
+                if (failTimer <= 0f)
                 {
                     Lose();
+                    return;
                 }
             }
 
-            if (hookProgress >= 1f)
+            catchProgressNormalized = Mathf.Clamp01(catchProgressNormalized);
+            UpdateProgressBar();
+
+            if (catchProgressNormalized >= 1f)
             {
                 Win();
             }
-            hookProgress = Mathf.Clamp(hookProgress, 0f, 1f);
         }
 
-        public void HookInput()
+        private void UpdateFishTransform()
         {
-            isReeling = true;
-            
+            if (fish == null) return;
+            fish.position = Vector3.Lerp(bottomPivot.position, topPivot.position, fishPositionNormalized);
         }
 
-        public void CancelHookInput()
+        private void UpdateHookTransform()
         {
-            isReeling = false;
+            if (hook == null) return;
+            hook.position = Vector3.Lerp(bottomPivot.position, topPivot.position, hookPositionNormalized);
         }
 
-        void HookSequence()
+        private void UpdateProgressBar()
         {
-            if (isReeling) // ------------------------------------------------------------ Cambiar input
+            if (progressBarContainer == null) return;
+
+            Vector3 localScale = progressBarContainer.localScale;
+            localScale.y = catchProgressNormalized;
+            progressBarContainer.localScale = localScale;
+        }
+
+        private void Win()
+        {
+            gameplayEnabled = false;
+            GameController controller = FindFirstObjectByType<GameController>();
+            if (controller != null)
             {
-                hookPullVelocity += hookPullPower * Time.deltaTime;
+                controller.OnCatchSuccess();
             }
-            hookPullVelocity -= hookGravityPower * Time.deltaTime;
-
-            hookPosition += hookPullVelocity;
-
-            if (hookPosition <= 0f && hookPullVelocity < 0f) // Está abajo intentando bajar
-            {
-                hookPullVelocity = 0f;
-            }
-            if (hookPosition + hookSize >= 1f && hookPullVelocity > 0f) // Está arriba intentando subir
-            {
-                hookPullVelocity = 0f;
-            }
-
-            hookPosition = Mathf.Clamp(hookPosition, 0, topPivot.position.y - hookSize);
-            hook.position = Vector3.Lerp(bottomPivot.position, topPivot.position, hookPosition);
         }
 
-        void Fish()
+        private void Lose()
         {
-            fishTimer -= Time.deltaTime;
-            if (fishTimer < 0f)
+            gameplayEnabled = false;
+            GameController controller = FindFirstObjectByType<GameController>();
+            if (controller != null)
             {
-                fishTimer = UnityEngine.Random.value * timerMultiplicator;
-
-                fishDestination = UnityEngine.Random.value;
+                controller.OnCatchFailed();
             }
-
-            fishPosition = Mathf.SmoothDamp(fishPosition, fishDestination, ref fishSpeed, smoothMotion);
-            fish.position = Vector3.Lerp(bottomPivot.position, topPivot.position, fishPosition);
-        }
-
-        void Win()
-        {
-
-        }
-
-        void Lose()
-        {
-
         }
     }
-
 }

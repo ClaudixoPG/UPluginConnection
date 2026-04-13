@@ -814,31 +814,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minigames:
-  - sceneName: EndlessRunnerScene
-    controlName: control_1
-    minigameId: RunnerGame
-    instructionText: "Toca la pantalla para saltar.  Presiona en el momento justo
-      para evitar obst\xE1culos."
-  - sceneName: RhythmScene
-    controlName: control_2
-    minigameId: RhythmGame
-    instructionText: "Toca la pantalla en la direcci\xF3n indicada.  Arriba, abajo,
-      izquierda o derecha siguiendo el ritmo."
-  - sceneName: SpaceShipScene
-    controlName: control_3
-    minigameId: SpaceShipGame
-    instructionText: "Mueve tu dedo como joystick.  Controla la direcci\xF3n de la
-      nave en todas las direcciones."
   - sceneName: FishingGameScene
     controlName: control_4
     minigameId: FishingGame
     instructionText: "Mant\xE9n presionada la pantalla.  Suelta en el momento correcto
       para completar la acci\xF3n."
+  - sceneName: RhythmScene
+    controlName: control_2
+    minigameId: RhythmGame
+    instructionText: "Toca la pantalla en la direcci\xF3n indicada.  Arriba, abajo,
+      izquierda o derecha siguiendo el ritmo."
+  - sceneName: EndlessRunnerScene
+    controlName: control_1
+    minigameId: RunnerGame
+    instructionText: "Toca la pantalla para saltar.  Presiona en el momento justo
+      para evitar obst\xE1culos."
+  - sceneName: SpaceShipScene
+    controlName: control_3
+    minigameId: SpaceShipGame
+    instructionText: "Mueve tu dedo como joystick.  Controla la direcci\xF3n de la
+      nave en todas las direcciones."
   - sceneName: GyroGameScene
     controlName: sensor_gyro
     minigameId: GyroGame
     instructionText: "Mueve tu mu\xF1eca.  Inclina el reloj para controlar la direcci\xF3n."
-  durationPerMinigame: 30
+  durationPerMinigame: 60
   controlSettleDelay: 1.5
   postMinigameDelay: 0.5
   fadeOutDuration: 0.5
