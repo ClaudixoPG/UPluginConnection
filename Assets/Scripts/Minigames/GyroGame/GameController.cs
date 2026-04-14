@@ -42,6 +42,15 @@ namespace GyroMiniGame
         public TextMeshProUGUI holdProgressText;
         public TextMeshProUGUI statusText;
 
+        public enum GameState
+        {
+            Waiting,
+            Playing,
+            Results
+        }
+
+        public GameState CurrentState { get; private set; } = GameState.Waiting;
+
         private float _remainingTime;
         private int _score;
         private int _streak;
@@ -56,23 +65,41 @@ namespace GyroMiniGame
 
         private void Awake()
         {
-            _remainingTime = totalTime;
-        }
-
-        private void Start()
-        {
             if (goalTracker != null)
             {
                 goalTracker.OnGoalCompleted += HandleGoalCompleted;
             }
 
-            SpawnNewTarget(true);
-            SetTemporaryStatus("Status: Reach the target");
-            UpdateAllUI();
+            ResetRun();
+            SetGameplayEnabled(false);
+        }
+
+        private void OnDestroy()
+        {
+            if (goalTracker != null)
+            {
+                goalTracker.OnGoalCompleted -= HandleGoalCompleted;
+            }
         }
 
         private void Update()
         {
+            if (CurrentState == GameState.Waiting && MinigameContext.IsMeasurementActive)
+            {
+                StartRun();
+            }
+
+            if (CurrentState == GameState.Playing && !MinigameContext.IsMeasurementActive)
+            {
+                StopRun();
+            }
+
+            if (CurrentState != GameState.Playing)
+            {
+                UpdateAllUI();
+                return;
+            }
+
             if (_isGameOver)
             {
                 UpdateAllUI();
@@ -84,7 +111,9 @@ namespace GyroMiniGame
             {
                 _remainingTime = 0f;
                 _isGameOver = true;
+                CurrentState = GameState.Results;
                 SetTemporaryStatus("Status: Game Over");
+                SetGameplayEnabled(false);
                 UpdateAllUI();
                 return;
             }
@@ -122,9 +151,10 @@ namespace GyroMiniGame
             CheckBallFall();
             UpdateAllUI();
         }
+
         private void FixedUpdate()
         {
-            if (_isGameOver)
+            if (CurrentState != GameState.Playing || _isGameOver)
                 return;
 
             if (goalTracker != null)
@@ -132,8 +162,12 @@ namespace GyroMiniGame
                 goalTracker.ManualFixedUpdate();
             }
         }
+
         public void HandleMessage(string message)
         {
+            if (CurrentState != GameState.Playing)
+                return;
+
             if (boardTiltController == null)
                 return;
 
@@ -144,6 +178,63 @@ namespace GyroMiniGame
             {
                 boardTiltController.SetRemoteGyro(gyro);
             }
+        }
+
+        private void StartRun()
+        {
+            ResetRun();
+            CurrentState = GameState.Playing;
+            SetGameplayEnabled(true);
+        }
+
+        private void StopRun()
+        {
+            CurrentState = GameState.Waiting;
+            SetGameplayEnabled(false);
+            SetTemporaryStatus("Status: Waiting");
+            UpdateAllUI();
+        }
+
+        private void SetGameplayEnabled(bool enabled)
+        {
+            if (boardTiltController != null)
+            {
+                boardTiltController.SetGameplayEnabled(enabled);
+            }
+
+            if (!enabled)
+            {
+                if (ballRigidbody != null)
+                {
+                    ballRigidbody.linearVelocity = Vector3.zero;
+                    ballRigidbody.angularVelocity = Vector3.zero;
+                    ballRigidbody.Sleep();
+                }
+            }
+            else
+            {
+                if (ballRigidbody != null)
+                {
+                    ballRigidbody.WakeUp();
+                }
+            }
+        }
+
+        private void ResetRun()
+        {
+            _remainingTime = totalTime;
+            _score = 0;
+            _streak = 0;
+            _comboWindowRemaining = 0f;
+            _isGameOver = false;
+
+            _fallCooldownRemaining = 0f;
+            _statusMessageRemaining = 0f;
+            _temporaryStatusMessage = "Status: Reach the target";
+
+            RespawnBall();
+            SpawnNewTarget(true);
+            UpdateAllUI();
         }
 
         private void HandleGoalCompleted()
@@ -187,10 +278,6 @@ namespace GyroMiniGame
             if (targetPoint == null || tiltBoard == null)
                 return;
 
-            // Como TargetPoint es hijo de TiltBoard y usamos localPosition,
-            // trabajamos en espacio local del tablero.
-            // Un Cube base en Unity va de -0.5 a 0.5 en X y Z.
-
             float boardHalfLocalX = 0.5f;
             float boardHalfLocalZ = 0.5f;
 
@@ -225,6 +312,7 @@ namespace GyroMiniGame
             targetPoint.localPosition = localPos;
             _lastTargetLocalPos = localPos;
         }
+
         private float GetTargetLocalHeight()
         {
             float boardTopLocalY = 0.5f;
@@ -291,7 +379,7 @@ namespace GyroMiniGame
             {
                 Vector3 input = boardTiltController.CurrentInputVector;
                 Vector2 tilt = boardTiltController.CurrentTilt;
-                Vector3 tp = targetPoint.localPosition;
+                Vector3 tp = targetPoint != null ? targetPoint.localPosition : Vector3.zero;
 
                 debugText.text =
                     $"gyroX: {input.x:F3}\n" +
@@ -333,6 +421,10 @@ namespace GyroMiniGame
                 if (_isGameOver)
                 {
                     statusText.text = "Status: Game Over";
+                }
+                else if (CurrentState != GameState.Playing)
+                {
+                    statusText.text = "Status: Waiting";
                 }
                 else if (!string.IsNullOrEmpty(_temporaryStatusMessage))
                 {

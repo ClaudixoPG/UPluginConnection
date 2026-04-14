@@ -22,6 +22,7 @@ namespace GyroMiniGame
         [Header("Noise Filtering")]
         public float deadZoneX = 0.08f;
         public float deadZoneZ = 0.08f;
+        public float remoteInputTimeout = 0.12f;
 
         [Header("Axis Invert")]
         public bool invertX = false;
@@ -35,12 +36,15 @@ namespace GyroMiniGame
 
         private Vector3 _remoteGyro;
         private bool _hasRemoteData;
+        private float _remoteDataAge;
 
         private float _targetTiltX;
         private float _targetTiltZ;
 
         private float _currentTiltX;
         private float _currentTiltZ;
+
+        private bool _gameplayEnabled;
 
         public Vector3 CurrentInputVector { get; private set; }
         public Vector2 CurrentTilt => new Vector2(_currentTiltX, _currentTiltZ);
@@ -60,6 +64,19 @@ namespace GyroMiniGame
 
         private void Update()
         {
+            if (!_gameplayEnabled)
+            {
+                CurrentInputVector = Vector3.zero;
+
+                if (autoReturnToCenter)
+                {
+                    _targetTiltX = Mathf.MoveTowards(_targetTiltX, 0f, autoReturnSpeed * Time.deltaTime);
+                    _targetTiltZ = Mathf.MoveTowards(_targetTiltZ, 0f, autoReturnSpeed * Time.deltaTime);
+                }
+
+                return;
+            }
+
             switch (inputSourceMode)
             {
                 case InputSourceMode.LocalPhone:
@@ -90,10 +107,28 @@ namespace GyroMiniGame
             _rb.MoveRotation(targetRotation);
         }
 
+        public void SetGameplayEnabled(bool enabled)
+        {
+            _gameplayEnabled = enabled;
+
+            if (!enabled)
+            {
+                _hasRemoteData = false;
+                _remoteGyro = Vector3.zero;
+                _remoteDataAge = 0f;
+                CurrentInputVector = Vector3.zero;
+                ResetBoardTilt();
+            }
+        }
+
         public void SetRemoteGyro(Vector3 gyro)
         {
+            if (!_gameplayEnabled)
+                return;
+
             _remoteGyro = gyro;
             _hasRemoteData = true;
+            _remoteDataAge = 0f;
         }
 
         public void ResetBoardTilt()
@@ -102,7 +137,11 @@ namespace GyroMiniGame
             _targetTiltZ = 0f;
             _currentTiltX = 0f;
             _currentTiltZ = 0f;
-            _rb.MoveRotation(Quaternion.identity);
+
+            if (_rb != null)
+            {
+                _rb.MoveRotation(Quaternion.identity);
+            }
         }
 
         private void UpdateLocalInput()
@@ -121,9 +160,12 @@ namespace GyroMiniGame
 
         private void UpdateRemoteInput()
         {
-            if (!_hasRemoteData)
+            _remoteDataAge += Time.deltaTime;
+
+            if (!_hasRemoteData || _remoteDataAge > remoteInputTimeout)
             {
                 CurrentInputVector = Vector3.zero;
+                ApplyIncrementalTilt(Vector3.zero, remoteSensitivity);
                 return;
             }
 
