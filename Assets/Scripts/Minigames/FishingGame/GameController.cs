@@ -1,6 +1,5 @@
-using System.Collections;
-using TMPro;
 using UnityEngine;
+using System.Collections;
 
 namespace FishingGame
 {
@@ -10,12 +9,15 @@ namespace FishingGame
 
         [Header("References")]
         [SerializeField] private PlayerController playerController;
-        [SerializeField] private FishingUIManager uiManager;
+        [SerializeField] private UIManager uiManager;
 
-        [Header("Loop")]
-        [SerializeField] private float resultsScreenDuration = 2f;
-        [SerializeField] private int countdownStart = 3;
-        [SerializeField] private float countdownStepDuration = 1f;
+        [Header("Session")]
+        [SerializeField] private float sessionDurationSeconds = 280f; // 4:40
+
+        [Header("Fish rarity probabilities")]
+        [SerializeField, Range(0f, 1f)] private float normalChance = 0.70f;
+        [SerializeField, Range(0f, 1f)] private float rareChance = 0.25f;
+        [SerializeField, Range(0f, 1f)] private float legendaryChance = 0.05f;
 
         public enum GameState
         {
@@ -24,12 +26,34 @@ namespace FishingGame
             Results
         }
 
+        public enum FishRarity
+        {
+            Normal,
+            Rare,
+            Legendary
+        }
+
+        private Coroutine nextFishRoutine;
+        [SerializeField] private float nextFishDelay = 0.8f;
+
         public GameState CurrentState { get; private set; } = GameState.Waiting;
+        public FishRarity CurrentFishRarity { get; private set; } = FishRarity.Normal;
 
-        public int fishCaught;
-        public int fishMissed;
+        public int normalCaught { get; private set; }
+        public int rareCaught { get; private set; }
+        public int legendaryCaught { get; private set; }
 
-        private Coroutine restartLoopRoutine;
+        public int normalEscaped { get; private set; }
+        public int rareEscaped { get; private set; }
+        public int legendaryEscaped { get; private set; }
+
+        public int TotalScore =>
+            (normalCaught * 1) +
+            (rareCaught * 2) +
+            (legendaryCaught * 3);
+
+        private float remainingTime;
+        private bool roundResolved;
 
         private bool IsGameplayActive =>
             CurrentState == GameState.Playing &&
@@ -55,14 +79,14 @@ namespace FishingGame
 
         private void Start()
         {
-            CurrentState = GameState.Waiting;
-            fishCaught = 0;
-            fishMissed = 0;
+            ResetSession();
 
             if (uiManager != null)
             {
-                uiManager.UpdateFishCounter(fishCaught, fishMissed);
-                uiManager.HideResultPanel();
+                uiManager.HideFinalResults();
+                uiManager.UpdateTimer(remainingTime);
+                uiManager.UpdateCurrentFishRarity(CurrentFishRarity);
+                uiManager.UpdateFishCounters(normalCaught, rareCaught, legendaryCaught);
             }
 
             if (playerController != null)
@@ -77,24 +101,29 @@ namespace FishingGame
         private void OnDisable()
         {
             inputActions.Disable();
-
-            if (restartLoopRoutine != null)
-            {
-                StopCoroutine(restartLoopRoutine);
-                restartLoopRoutine = null;
-            }
         }
 
         private void Update()
         {
             if (CurrentState == GameState.Waiting && MinigameContext.IsMeasurementActive)
             {
-                StartLoop();
+                StartSession();
             }
 
-            if (CurrentState == GameState.Playing && !MinigameContext.IsMeasurementActive)
+            if (!IsGameplayActive)
+                return;
+
+            remainingTime -= Time.deltaTime;
+            remainingTime = Mathf.Max(0f, remainingTime);
+
+            if (uiManager != null)
             {
-                StopLoopSilently();
+                uiManager.UpdateTimer(remainingTime);
+            }
+
+            if (remainingTime <= 0f)
+            {
+                EndSession();
             }
         }
 
@@ -117,65 +146,22 @@ namespace FishingGame
             }
         }
 
-        private void StartLoop()
+        private void StartSession()
         {
             CurrentState = GameState.Playing;
+            roundResolved = false;
 
             if (uiManager != null)
             {
-                uiManager.HideResultPanel();
-                uiManager.UpdateFishCounter(fishCaught, fishMissed);
+                uiManager.HideFinalResults();
+                uiManager.UpdateTimer(remainingTime);
+                uiManager.UpdateFishCounters(normalCaught, rareCaught, legendaryCaught);
             }
 
-            if (playerController != null)
-            {
-                playerController.ResetRound();
-                playerController.SetGameplayEnabled(true);
-            }
+            StartNextFish();
         }
 
-        private void StopLoopSilently()
-        {
-            CurrentState = GameState.Waiting;
-
-            if (playerController != null)
-            {
-                playerController.SetGameplayEnabled(false);
-                playerController.SetHoldInput(0f);
-            }
-        }
-
-        public void OnCatchSuccess()
-        {
-            if (CurrentState != GameState.Playing) return;
-
-            fishCaught++;
-
-            if (uiManager != null)
-            {
-                uiManager.UpdateFishCounter(fishCaught, fishMissed);
-                uiManager.ShowResultPanel("Fish Caught!", fishCaught, fishMissed);
-            }
-
-            EndRoundAndRestart();
-        }
-
-        public void OnCatchFailed()
-        {
-            if (CurrentState != GameState.Playing) return;
-
-            fishMissed++;
-
-            if (uiManager != null)
-            {
-                uiManager.UpdateFishCounter(fishCaught, fishMissed);
-                uiManager.ShowResultPanel("Fish Escaped!", fishCaught, fishMissed);
-            }
-
-            EndRoundAndRestart();
-        }
-
-        private void EndRoundAndRestart()
+        private void EndSession()
         {
             CurrentState = GameState.Results;
 
@@ -185,40 +171,133 @@ namespace FishingGame
                 playerController.SetHoldInput(0f);
             }
 
-            if (restartLoopRoutine != null)
+            if (uiManager != null)
             {
-                StopCoroutine(restartLoopRoutine);
+                uiManager.ShowFinalResults(
+                    normalCaught,
+                    rareCaught,
+                    legendaryCaught,
+                    normalEscaped,
+                    rareEscaped,
+                    legendaryEscaped,
+                    TotalScore
+                );
             }
-
-            restartLoopRoutine = StartCoroutine(RestartLoopFlow());
         }
 
-        private IEnumerator RestartLoopFlow()
+        private void StartNextFish()
         {
-            yield return new WaitForSeconds(resultsScreenDuration);
+            if (CurrentState != GameState.Playing || playerController == null)
+                return;
 
-            if (!MinigameContext.IsMeasurementActive)
+            roundResolved = false;
+            CurrentFishRarity = RollFishRarity();
+
+            playerController.ConfigureFish(CurrentFishRarity);
+            playerController.ResetRound();
+            playerController.SetHoldInput(0f);
+            playerController.BeginFishEncounter();
+
+            if (uiManager != null)
             {
-                restartLoopRoutine = null;
-                yield break;
+                uiManager.UpdateCurrentFishRarity(CurrentFishRarity);
+            }
+        }
+
+        public void OnFishCaught()
+        {
+            if (!IsGameplayActive || roundResolved) return;
+            roundResolved = true;
+
+            switch (CurrentFishRarity)
+            {
+                case FishRarity.Normal: normalCaught++; break;
+                case FishRarity.Rare: rareCaught++; break;
+                case FishRarity.Legendary: legendaryCaught++; break;
             }
 
-            bool countdownDone = false;
-
-            TransitionOverlayUI.Instance.ShowCountdown(
-                countdownStart,
-                countdownStepDuration,
-                () => countdownDone = true
-            );
-
-            yield return new WaitUntil(() => countdownDone);
-
-            if (MinigameContext.IsMeasurementActive)
+            if (uiManager != null)
             {
-                CurrentState = GameState.Waiting;
+                uiManager.UpdateFishCounters(normalCaught, rareCaught, legendaryCaught);
+                uiManager.ShowCatchFeedback(CurrentFishRarity);
             }
 
-            restartLoopRoutine = null;
+            QueueNextFish();
+        }
+
+        public void OnFishEscaped()
+        {
+            if (!IsGameplayActive || roundResolved) return;
+            roundResolved = true;
+
+            switch (CurrentFishRarity)
+            {
+                case FishRarity.Normal: normalEscaped++; break;
+                case FishRarity.Rare: rareEscaped++; break;
+                case FishRarity.Legendary: legendaryEscaped++; break;
+            }
+            if (uiManager != null)
+            {
+                uiManager.ShowEscapeFeedback(CurrentFishRarity);
+            }
+            QueueNextFish();
+        }
+
+        private void QueueNextFish()
+        {
+            if (nextFishRoutine != null)
+                StopCoroutine(nextFishRoutine);
+
+            nextFishRoutine = StartCoroutine(NextFishRoutine());
+        }
+
+        private IEnumerator NextFishRoutine()
+        {
+            yield return new WaitForSeconds(nextFishDelay);
+            if (uiManager != null)
+            {
+                uiManager.HideFeedback();
+            }
+            if (IsGameplayActive)
+                StartNextFish();
+
+            nextFishRoutine = null;
+        }
+
+        private FishRarity RollFishRarity()
+        {
+            float total = normalChance + rareChance + legendaryChance;
+            if (total <= 0f)
+                return FishRarity.Normal;
+
+            float value = Random.value * total;
+
+            if (value < normalChance)
+                return FishRarity.Normal;
+
+            value -= normalChance;
+            if (value < rareChance)
+                return FishRarity.Rare;
+
+            return FishRarity.Legendary;
+        }
+
+        private void ResetSession()
+        {
+            CurrentState = GameState.Waiting;
+            CurrentFishRarity = FishRarity.Normal;
+
+            remainingTime = sessionDurationSeconds;
+
+            normalCaught = 0;
+            rareCaught = 0;
+            legendaryCaught = 0;
+
+            normalEscaped = 0;
+            rareEscaped = 0;
+            legendaryEscaped = 0;
+
+            roundResolved = false;
         }
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 namespace FishingGame
 {
@@ -10,22 +11,21 @@ namespace FishingGame
 
         [Header("Fish")]
         [SerializeField] private Transform fish;
-        [SerializeField] private float fishMoveIntervalMultiplier = 3f;
-        [SerializeField] private float fishSmoothMotion = 1f;
 
         [Header("Hook")]
         [SerializeField] private Transform hook;
+        [SerializeField] private float hookSizeNormalized = 0.2f;
         [SerializeField] private float hookPullPower = 2.5f;
         [SerializeField] private float hookGravityPower = 1.5f;
-        [SerializeField] private float hookSizeNormalized = 0.2f;
 
         [Header("Progress")]
         [SerializeField] private Transform progressBarContainer;
-        [SerializeField] private float catchProgressIncreasePerSecond = 0.45f;
-        [SerializeField] private float catchProgressDecreasePerSecond = 0.35f;
+        [SerializeField] private float initialCatchProgress = 0.5f;
 
-        [Header("Failure")]
-        [SerializeField] private float roundFailDuration = 10f;
+        [Header("Rarity presets")]
+        [SerializeField] private FishBehaviourPreset normalPreset;
+        [SerializeField] private FishBehaviourPreset rarePreset;
+        [SerializeField] private FishBehaviourPreset legendaryPreset;
 
         private float fishPositionNormalized;
         private float fishDestinationNormalized;
@@ -36,12 +36,64 @@ namespace FishingGame
         private float hookPullVelocity;
         private float holdInputNormalized;
         private float catchProgressNormalized;
-        private float failTimer;
 
         private bool gameplayEnabled;
+        private bool hasReceivedRemoteInput;
+        private FishBehaviourPreset currentPreset;
+
+        private enum FishEncounterState
+        {
+            Hidden,
+            Entering,
+            Active,
+            Caught,
+            Escaped
+        }
+
+        private FishEncounterState fishState = FishEncounterState.Hidden;
+        private bool IsFishActive => fishState == FishEncounterState.Active;
+
+        [System.Serializable]
+        public class FishBehaviourPreset
+        {
+            [Header("Movement")]
+            public float moveIntervalMultiplier = 3f;
+            public float smoothMotion = 1f;
+
+            [Header("Catch Balance")]
+            public float catchFillPerSecond = 0.45f;
+            public float catchDrainPerSecond = 0.35f;
+        }
+
+        private Coroutine encounterRoutine;
 
         private void Start()
         {
+            if (normalPreset == null) normalPreset = new FishBehaviourPreset
+            {
+                moveIntervalMultiplier = 3f,
+                smoothMotion = 1f,
+                catchFillPerSecond = 0.55f,
+                catchDrainPerSecond = 0.22f
+            };
+
+            if (rarePreset == null) rarePreset = new FishBehaviourPreset
+            {
+                moveIntervalMultiplier = 1.8f,
+                smoothMotion = 0.7f,
+                catchFillPerSecond = 0.38f,
+                catchDrainPerSecond = 0.38f
+            };
+
+            if (legendaryPreset == null) legendaryPreset = new FishBehaviourPreset
+            {
+                moveIntervalMultiplier = 0.9f,
+                smoothMotion = 0.4f,
+                catchFillPerSecond = 0.22f,
+                catchDrainPerSecond = 0.55f
+            };
+
+            currentPreset = normalPreset;
             ResetRound();
         }
 
@@ -49,7 +101,10 @@ namespace FishingGame
         {
             if (!gameplayEnabled) return;
 
-            UpdateFish();
+            UpdateFishVisualMotion();
+
+            if (!IsFishActive) return;
+
             UpdateHook();
             UpdateProgress();
         }
@@ -62,6 +117,26 @@ namespace FishingGame
         public void SetHoldInput(float value)
         {
             holdInputNormalized = Mathf.Clamp01(value);
+            hasReceivedRemoteInput = true;
+        }
+
+        public void ConfigureFish(GameController.FishRarity rarity)
+        {
+            switch (rarity)
+            {
+                case GameController.FishRarity.Normal:
+                    currentPreset = normalPreset;
+                    break;
+                case GameController.FishRarity.Rare:
+                    currentPreset = rarePreset;
+                    break;
+                case GameController.FishRarity.Legendary:
+                    currentPreset = legendaryPreset;
+                    break;
+                default:
+                    currentPreset = normalPreset;
+                    break;
+            }
         }
 
         public void ResetRound()
@@ -74,22 +149,27 @@ namespace FishingGame
             hookPositionNormalized = 0.5f;
             hookPullVelocity = 0f;
             holdInputNormalized = 0f;
+            hasReceivedRemoteInput = false;
 
-            catchProgressNormalized = 0.5f;
-            failTimer = roundFailDuration;
+            catchProgressNormalized = initialCatchProgress;
+
+            fishState = FishEncounterState.Hidden;
 
             UpdateFishTransform();
             UpdateHookTransform();
             UpdateProgressBar();
         }
 
-        private void UpdateFish()
+        private void UpdateFishVisualMotion()
         {
+            if (fishState != FishEncounterState.Active)
+                return;
+
             fishTimer -= Time.deltaTime;
 
             if (fishTimer <= 0f)
             {
-                fishTimer = Random.value * fishMoveIntervalMultiplier;
+                fishTimer = Random.value * currentPreset.moveIntervalMultiplier;
                 fishDestinationNormalized = Random.value;
             }
 
@@ -97,7 +177,7 @@ namespace FishingGame
                 fishPositionNormalized,
                 fishDestinationNormalized,
                 ref fishVelocity,
-                fishSmoothMotion
+                currentPreset.smoothMotion
             );
 
             fishPositionNormalized = Mathf.Clamp01(fishPositionNormalized);
@@ -106,6 +186,14 @@ namespace FishingGame
 
         private void UpdateHook()
         {
+            if (!hasReceivedRemoteInput)
+            {
+                hookPositionNormalized = 0.5f;
+                hookPullVelocity = 0f;
+                UpdateHookTransform();
+                return;
+            }
+
             hookPullVelocity += holdInputNormalized * hookPullPower * Time.deltaTime;
             hookPullVelocity -= hookGravityPower * Time.deltaTime;
 
@@ -138,18 +226,11 @@ namespace FishingGame
 
             if (fishInside)
             {
-                catchProgressNormalized += catchProgressIncreasePerSecond * Time.deltaTime;
+                catchProgressNormalized += currentPreset.catchFillPerSecond * Time.deltaTime;
             }
             else
             {
-                catchProgressNormalized -= catchProgressDecreasePerSecond * Time.deltaTime;
-                failTimer -= Time.deltaTime;
-
-                if (failTimer <= 0f)
-                {
-                    Lose();
-                    return;
-                }
+                catchProgressNormalized -= currentPreset.catchDrainPerSecond * Time.deltaTime;
             }
 
             catchProgressNormalized = Mathf.Clamp01(catchProgressNormalized);
@@ -158,6 +239,12 @@ namespace FishingGame
             if (catchProgressNormalized >= 1f)
             {
                 Win();
+                return;
+            }
+
+            if (catchProgressNormalized <= 0f)
+            {
+                Lose();
             }
         }
 
@@ -182,23 +269,100 @@ namespace FishingGame
             progressBarContainer.localScale = localScale;
         }
 
+        public void BeginFishEncounter()
+        {
+            if (encounterRoutine != null)
+                StopCoroutine(encounterRoutine);
+
+            encounterRoutine = StartCoroutine(BeginFishEncounterRoutine());
+        }
+
+        private IEnumerator BeginFishEncounterRoutine()
+        {
+            fishState = FishEncounterState.Entering;
+            gameplayEnabled = false;
+
+            float spawnSide = Random.value > 0.5f ? 1.15f : -0.15f;
+            fishPositionNormalized = spawnSide;
+            fishDestinationNormalized = Random.Range(0.2f, 0.8f);
+
+            UpdateFishTransform();
+            UpdateHookTransform();
+            UpdateProgressBar();
+
+            float duration = 0.6f;
+            float t = 0f;
+            float start = fishPositionNormalized;
+            float target = fishDestinationNormalized;
+
+            while (t < duration)
+            {
+                t += Time.deltaTime;
+                fishPositionNormalized = Mathf.Lerp(start, target, t / duration);
+                UpdateFishTransform();
+                yield return null;
+            }
+
+            fishPositionNormalized = target;
+            fishDestinationNormalized = Random.value;
+            fishTimer = 0f;
+
+            gameplayEnabled = true;
+            fishState = FishEncounterState.Active;
+            encounterRoutine = null;
+        }
+
+        public void ResolveFish(bool caught)
+        {
+            if (encounterRoutine != null)
+                StopCoroutine(encounterRoutine);
+
+            encounterRoutine = StartCoroutine(ResolveFishRoutine(caught));
+        }
+
+        private IEnumerator ResolveFishRoutine(bool caught)
+        {
+            gameplayEnabled = false;
+            fishState = caught ? FishEncounterState.Caught : FishEncounterState.Escaped;
+
+            float duration = 0.5f;
+            float t = 0f;
+            float start = fishPositionNormalized;
+            float target = caught ? 1.2f : -0.2f;
+
+            while (t < duration)
+            {
+                t += Time.deltaTime;
+                fishPositionNormalized = Mathf.Lerp(start, target, t / duration);
+                UpdateFishTransform();
+                yield return null;
+            }
+
+            fishState = FishEncounterState.Hidden;
+            encounterRoutine = null;
+        }
+
         private void Win()
         {
             gameplayEnabled = false;
+            ResolveFish(true);
+
             GameController controller = FindFirstObjectByType<GameController>();
             if (controller != null)
             {
-                controller.OnCatchSuccess();
+                controller.OnFishCaught();
             }
         }
 
         private void Lose()
         {
             gameplayEnabled = false;
+            ResolveFish(false);
+
             GameController controller = FindFirstObjectByType<GameController>();
             if (controller != null)
             {
-                controller.OnCatchFailed();
+                controller.OnFishEscaped();
             }
         }
     }

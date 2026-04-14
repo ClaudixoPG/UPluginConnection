@@ -814,6 +814,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minigames:
+  - sceneName: EndlessRunnerScene
+    controlName: control_1
+    minigameId: RunnerGame
+    instructionText: "Toca la pantalla para saltar.  Presiona en el momento justo
+      para evitar obst\xE1culos."
   - sceneName: FishingGameScene
     controlName: control_4
     minigameId: FishingGame
@@ -824,11 +829,6 @@ MonoBehaviour:
     minigameId: RhythmGame
     instructionText: "Toca la pantalla en la direcci\xF3n indicada.  Arriba, abajo,
       izquierda o derecha siguiendo el ritmo."
-  - sceneName: EndlessRunnerScene
-    controlName: control_1
-    minigameId: RunnerGame
-    instructionText: "Toca la pantalla para saltar.  Presiona en el momento justo
-      para evitar obst\xE1culos."
   - sceneName: SpaceShipScene
     controlName: control_3
     minigameId: SpaceShipGame
