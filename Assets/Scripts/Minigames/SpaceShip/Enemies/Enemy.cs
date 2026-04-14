@@ -1,57 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SpaceShip
 {
     public class Enemy : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
+        [Header("Movement")]
+        [SerializeField] private float speed = 10f;
 
-        }
+        [Header("Destroy FX")]
+        [SerializeField] private GameObject destructionPrefab;
 
-        // Update is called once per frame
-        void Update()
+        private bool isBeingDestroyed;
+
+        private void Update()
         {
             Movement();
         }
 
-        public float speed = 10f;
-        public int health = 1;
-        private GameObject explosionPrefab;
-
         public void Movement()
         {
-            //transform.Translate(Vector3.down * speed * Time.deltaTime);
-            //Use Sin and Cos to move the enemy down in a wave pattern
-            transform.Translate(new Vector3(Mathf.Sin(Time.time * 1.5f), -1, 0) * speed * Time.deltaTime);
+            transform.Translate(
+                new Vector3(Mathf.Sin(Time.time * 1.5f), -1f, 0f) * speed * Time.deltaTime
+            );
         }
 
-        /*
-            public void TakeDamage(int damage)
+        public void DestroyEnemy()
         {
-            health -= damage;
-            if (health <= 0)
-            {
-                Die();
-            }
-        }
+            if (isBeingDestroyed)
+                return;
 
-        protected void Die()
-        {
-            if (explosionPrefab != null)
+            isBeingDestroyed = true;
+
+            if (destructionPrefab != null)
             {
-                Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+                Instantiate(destructionPrefab, transform.position, Quaternion.identity);
             }
+
             Destroy(gameObject);
         }
-
-         */
-
-
-        //Test if player collides with enemy, implement on CollisionEnter2D
-
     }
 }

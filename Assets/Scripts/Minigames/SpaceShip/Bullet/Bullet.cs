@@ -1,51 +1,77 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SpaceShip
 {
     public class Bullet : MonoBehaviour
     {
-        public GameManager gameManager;
-        public float speed = 5f;
+        [SerializeField] protected float speed = 5f;
+        [SerializeField] private float lifeTime = 2.5f;
+        [SerializeField] private float outOfBoundsMargin = 1.5f;
 
-        private void Start()
+        protected GameManager gameManager;
+        private float lifeTimer;
+
+        protected virtual void Awake()
         {
-            gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            gameManager = FindFirstObjectByType<GameManager>();
         }
 
-        // Update is called once per frame
-        void Update()
+        protected virtual void Update()
         {
+            lifeTimer += Time.deltaTime;
+
+            if (lifeTimer >= lifeTime)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             Movement();
+            DestroyIfOutOfBounds();
         }
-
-        /*void Movement()
-        {
-            transform.Translate(Vector3.up * 5.0f * Time.deltaTime);
-        }*/
 
         public virtual void Movement()
         {
             transform.Translate(Vector3.up * speed * Time.deltaTime);
         }
 
-
-        void OnCollisionEnter2D(Collision2D collision)
+        private void DestroyIfOutOfBounds()
         {
-            if (collision != null)
-            {
-                Debug.Log("Collided with: " + collision.gameObject.name);
+            Camera cam = Camera.main;
+            if (cam == null) return;
 
-                if (collision.gameObject.CompareTag("Enemy"))
-                {
-                    //Destroy the enemy
-                    gameManager.AddScore(10);
-                    Destroy(collision.gameObject);
-                    Destroy(this.gameObject);
-                }
+            float xMax = cam.orthographicSize * cam.aspect + outOfBoundsMargin;
+            float yMax = cam.orthographicSize + outOfBoundsMargin;
+            Vector3 pos = transform.position;
+
+            if (pos.x > xMax || pos.x < -xMax || pos.y > yMax || pos.y < -yMax)
+            {
+                Destroy(gameObject);
             }
         }
 
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision == null) return;
+            if (!collision.gameObject.CompareTag("Enemy")) return;
+
+            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+
+            if (enemy != null)
+            {
+                enemy.DestroyEnemy();
+            }
+            else
+            {
+                Destroy(collision.gameObject);
+            }
+
+            if (gameManager != null)
+            {
+                gameManager.AddScore(10);
+            }
+
+            Destroy(gameObject);
+        }
     }
 }

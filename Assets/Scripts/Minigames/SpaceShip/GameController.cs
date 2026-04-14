@@ -1,115 +1,226 @@
+using System.Collections;
 using UnityEngine;
 
 namespace SpaceShip
 {
     public class GameController : MonoBehaviour, IGameController
     {
-        // --- Nuevo sistema de input ---
         private PlayerInputActions inputActions;
-        public PlayerController playerController;
+
+        [Header("References")]
+        [SerializeField] private PlayerController playerController;
+        [SerializeField] private GameManager gameManager;
+        [SerializeField] private UIManager uiManager;
+
+        [Header("Restart Flow")]
+        [SerializeField] private float loseScreenDuration = 2f;
+        [SerializeField] private int countdownStart = 3;
+        [SerializeField] private float countdownStepDuration = 1f;
+
+        public enum GameState
+        {
+            Waiting,
+            Playing,
+            Results
+        }
+
+        public GameState CurrentState { get; private set; } = GameState.Waiting;
+
+        public static GameController Instance { get; private set; }
+
+        private bool IsGameplayActive =>
+            CurrentState == GameState.Playing &&
+            MinigameContext.IsMeasurementActive;
 
         private void Awake()
         {
-            inputActions = new PlayerInputActions();
-            inputActions.SpaceShipMinigame.Enable();
-
-            // Movimiento
-            inputActions.SpaceShipMinigame.Move.performed += ctx => playerController.moveInput = ctx.ReadValue<Vector2>();
-            inputActions.SpaceShipMinigame.Move.canceled += ctx => playerController.moveInput = Vector2.zero;
-
-            // Disparo
-            inputActions.SpaceShipMinigame.Fire.performed += ctx => playerController.Fire();
-
-            // Escudo
-            inputActions.SpaceShipMinigame.Shield.performed += ctx => playerController.UseShields();
-
-            // Cambio de armas
-            inputActions.SpaceShipMinigame.ChangeWeapon1.performed += ctx => playerController.ChangeWeapon(0);
-            inputActions.SpaceShipMinigame.ChangeWeapon2.performed += ctx => playerController.ChangeWeapon(1);
-            inputActions.SpaceShipMinigame.ChangeWeapon3.performed += ctx => playerController.ChangeWeapon(2);
-        }
-
-        private void OnEnable() => inputActions.Enable();
-        private void OnDisable() => inputActions.Disable();
-
-        public void HandleMessage(string message)
-        {
-            if (string.IsNullOrEmpty(message))
-                return;
-
-
-            if (message.StartsWith("Tap"))
-            {   
-                playerController.Fire(); // Acción de disparo al recibir "Tap"
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
                 return;
             }
 
-            // --- Joystick:x,y ---
+            Instance = this;
+
+            inputActions = new PlayerInputActions();
+            inputActions.SpaceShipMinigame.Enable();
+
+            inputActions.SpaceShipMinigame.Move.performed += ctx =>
+            {
+                if (IsGameplayActive && playerController != null)
+                    playerController.SetMoveInput(ctx.ReadValue<Vector2>());
+            };
+
+            inputActions.SpaceShipMinigame.Move.canceled += ctx =>
+            {
+                if (playerController != null)
+                    playerController.SetMoveInput(Vector2.zero);
+            };
+        }
+
+        private void Start()
+        {
+            if (uiManager != null)
+            {
+                uiManager.HideLoseScreen();
+            }
+
+            if (playerController != null)
+            {
+                playerController.SetGameplayEnabled(false);
+            }
+
+            if (gameManager != null)
+            {
+                gameManager.SetGameplayEnabled(false);
+                gameManager.ResetRun();
+            }
+        }
+
+        private void OnEnable() => inputActions.Enable();
+
+        private void OnDisable()
+        {
+            inputActions.Disable();
+        }
+
+        private void Update()
+        {
+            if (CurrentState == GameState.Waiting && MinigameContext.IsMeasurementActive)
+            {
+                StartRun();
+            }
+
+            if (CurrentState == GameState.Playing && !MinigameContext.IsMeasurementActive)
+            {
+                StopRunSilently();
+            }
+        }
+
+        public void HandleMessage(string message)
+        {
+            if (!IsGameplayActive || playerController == null) return;
+            if (string.IsNullOrWhiteSpace(message)) return;
+
             if (message.StartsWith("Joystick:"))
             {
                 string[] parts = message.Substring("Joystick:".Length).Split(',');
+
                 if (parts.Length == 2 &&
                     float.TryParse(parts[0], out float x) &&
                     float.TryParse(parts[1], out float y))
                 {
-                    Debug.Log("movement value:" + x + ", " + y);
-                    playerController.moveInput = new Vector2(x, y);
+                    playerController.SetMoveInput(new Vector2(x, y));
                 }
+
                 return;
             }
-
-            // --- Dpad:UP / DOWN / LEFT / RIGHT ---
-            if (message.StartsWith("Dpad:"))
-            {
-                string dir = message.Substring("Dpad:".Length).ToUpper();
-                switch (dir)
-                {
-                    case "UP":
-                        playerController.moveInput = Vector2.up;
-                        break;
-                    case "DOWN":
-                        playerController.moveInput = Vector2.down;
-                        break;
-                    case "LEFT":
-                        playerController.moveInput = Vector2.left;
-                        break;
-                    case "RIGHT":
-                        playerController.moveInput = Vector2.right;
-                        break;
-                    default:
-                        Debug.LogWarning("Dirección Dpad desconocida: " + dir);
-                        break;
-                }
-                return;
-            }
-
-            // --- Button:A / B / X / Y ---
-            if (message.StartsWith("Button:"))
-            {
-                string button = message.Substring("Button:".Length).ToUpper();
-                switch (button)
-                {
-                    case "A":
-                        playerController.Fire();
-                        break;
-                    case "B":
-                        playerController.UseShields();
-                        break;
-                    case "X":
-                        playerController.ChangeWeapon(0);
-                        break;
-                    case "Y":
-                        playerController.ChangeWeapon(1);
-                        break;
-                    default:
-                        Debug.LogWarning("Botón desconocido: " + button);
-                        break;
-                }
-                return;
-            }
-
-            Debug.LogWarning("Formato de mensaje no reconocido: " + message);
         }
 
+        private void StartRun()
+        {
+            CurrentState = GameState.Playing;
+
+            if (uiManager != null)
+            {
+                uiManager.HideLoseScreen();
+            }
+
+            if (gameManager != null)
+            {
+                gameManager.ResetRun();
+                gameManager.SetGameplayEnabled(true);
+            }
+
+            if (playerController != null)
+            {
+                playerController.ResetShip();
+                playerController.SetGameplayEnabled(true);
+                playerController.SetMoveInput(Vector2.zero);
+            }
+        }
+
+        private void StopRunSilently()
+        {
+            CurrentState = GameState.Waiting;
+
+            if (gameManager != null)
+            {
+                gameManager.SetGameplayEnabled(false);
+            }
+
+            if (playerController != null)
+            {
+                playerController.SetGameplayEnabled(false);
+                playerController.SetMoveInput(Vector2.zero);
+            }
+        }
+
+        public void OnPlayerDied()
+        {
+            if (CurrentState != GameState.Playing)
+                return;
+
+            CurrentState = GameState.Results;
+
+            if (gameManager != null)
+            {
+                gameManager.SetGameplayEnabled(false);
+            }
+
+            if (playerController != null)
+            {
+                playerController.SetGameplayEnabled(false);
+                playerController.SetMoveInput(Vector2.zero);
+            }
+
+            if (uiManager != null && gameManager != null && playerController != null)
+            {
+                uiManager.ShowLoseScreen(
+                    gameManager.Score,
+                    gameManager.ElapsedTime,
+                    playerController.Lives,
+                    playerController.CurrentWeaponName
+                );
+            }
+
+            StartCoroutine(RestartFlow());
+        }
+
+        private IEnumerator RestartFlow()
+        {
+            yield return new WaitForSeconds(loseScreenDuration);
+
+            bool countdownDone = false;
+            TransitionOverlayUI.Instance.ShowCountdown(
+                countdownStart,
+                countdownStepDuration,
+                () => countdownDone = true
+            );
+
+            yield return new WaitUntil(() => countdownDone);
+
+            ClearRuntimeObjects();
+
+            CurrentState = GameState.Waiting;
+        }
+
+        private void ClearRuntimeObjects()
+        {
+            foreach (var enemy in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
+            {
+                Destroy(enemy.gameObject);
+            }
+
+            foreach (var bullet in FindObjectsByType<Bullet>(FindObjectsSortMode.None))
+            {
+                Destroy(bullet.gameObject);
+            }
+
+            foreach (var powerUp in FindObjectsByType<WeaponPowerUp>(FindObjectsSortMode.None))
+            {
+                Destroy(powerUp.gameObject);
+            }
+        }
     }
 }

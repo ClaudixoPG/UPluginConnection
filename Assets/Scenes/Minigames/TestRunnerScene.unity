@@ -814,6 +814,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minigames:
+  - sceneName: SpaceShipScene
+    controlName: control_3
+    minigameId: SpaceShipGame
+    instructionText: "Mueve tu dedo como joystick.  Controla la direcci\xF3n de la
+      nave en todas las direcciones."
   - sceneName: EndlessRunnerScene
     controlName: control_1
     minigameId: RunnerGame
@@ -829,11 +834,6 @@ MonoBehaviour:
     minigameId: RhythmGame
     instructionText: "Toca la pantalla en la direcci\xF3n indicada.  Arriba, abajo,
       izquierda o derecha siguiendo el ritmo."
-  - sceneName: SpaceShipScene
-    controlName: control_3
-    minigameId: SpaceShipGame
-    instructionText: "Mueve tu dedo como joystick.  Controla la direcci\xF3n de la
-      nave en todas las direcciones."
   - sceneName: GyroGameScene
     controlName: sensor_gyro
     minigameId: GyroGame
