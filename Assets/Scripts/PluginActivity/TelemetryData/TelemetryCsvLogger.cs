@@ -115,8 +115,18 @@ public class TelemetryCsvLogger : MonoBehaviour
 
     private string BuildRow(TelemetryPayload p)
     {
-        double phoneProcessingMs = NsToMs(p.forward_ts_phone_native_ns - p.receive_ts_phone_native_ns);
-        double phoneToUnityMs = NsToMs(p.receive_ts_unity_ns - p.forward_ts_phone_native_ns);
+        double? phoneProcessingMs = null;
+        double? phoneToUnityMs = null;
+
+        if (p.receive_ts_phone_native_ns > 0 && p.forward_ts_phone_native_ns > 0)
+        {
+            phoneProcessingMs = NsToMs(p.forward_ts_phone_native_ns - p.receive_ts_phone_native_ns);
+        }
+
+        if (p.forward_ts_phone_native_ns > 0 && p.receive_ts_unity_ns > 0)
+        {
+            phoneToUnityMs = NsToMs(p.receive_ts_unity_ns - p.forward_ts_phone_native_ns);
+        }
 
         return string.Join(",",
             Escape(p.event_id),
@@ -138,8 +148,8 @@ public class TelemetryCsvLogger : MonoBehaviour
             p.forward_ts_phone_native_ns.ToString(CultureInfo.InvariantCulture),
             p.receive_ts_unity_ns.ToString(CultureInfo.InvariantCulture),
 
-            phoneProcessingMs.ToString("F4", CultureInfo.InvariantCulture),
-            phoneToUnityMs.ToString("F4", CultureInfo.InvariantCulture),
+            Escape(phoneProcessingMs.HasValue ? phoneProcessingMs.Value.ToString("F4", CultureInfo.InvariantCulture) : ""),
+            Escape(phoneToUnityMs.HasValue ? phoneToUnityMs.Value.ToString("F4", CultureInfo.InvariantCulture) : ""),
 
             Escape(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)),
 
