@@ -823,18 +823,22 @@ MonoBehaviour:
   hookPullPower: 0.01
   hookGravityPower: 0.005
   progressBarContainer: {fileID: 1590422170}
-  catchProgressIncreasePerSecond: 0.45
-  catchProgressDecreasePerSecond: 0.35
-  roundFailDuration: 10
+  initialCatchProgress: 0.5
   normalPreset:
     moveIntervalMultiplier: 3
     smoothMotion: 1
+    catchFillPerSecond: 0.45
+    catchDrainPerSecond: 0.35
   rarePreset:
     moveIntervalMultiplier: 3
     smoothMotion: 1
+    catchFillPerSecond: 0.45
+    catchDrainPerSecond: 0.35
   legendaryPreset:
     moveIntervalMultiplier: 3
     smoothMotion: 1
+    catchFillPerSecond: 0.45
+    catchDrainPerSecond: 0.35
 --- !u!4 &606830139
 Transform:
   m_ObjectHideFlags: 0
@@ -2207,7 +2211,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 560335bd697849b4f81d7f88bde5e1da, type: 3}
-  m_Color: {r: 0.51023495, g: 0.70804083, b: 0.9245283, a: 0.28627452}
+  m_Color: {r: 0.51023495, g: 0.74509805, b: 0.77254903, a: 0.28627452}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

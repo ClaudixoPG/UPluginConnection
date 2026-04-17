@@ -815,33 +815,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minigames:
   - sceneName: EndlessRunnerScene
-    controlName: control_1
+    controlName: gameplay_control_1
     minigameId: RunnerGame
     instructionText: "Toca la pantalla para hacer saltar al personaje.\nDebes presionar
       en el momento preciso para esquivar los obst\xE1culos que aparecen en tu camino.\nSi
       te anticipas o te atrasas, chocar\xE1s. Mant\xE9n un ritmo constante y reacciona
       a tiempo."
   - sceneName: RhythmScene
-    controlName: control_2
+    controlName: gameplay_control_2
     minigameId: RhythmGame
     instructionText: "Presiona la direcci\xF3n indicada en pantalla (arriba, abajo,
       izquierda o derecha).\nSigue el ritmo de las se\xF1ales y responde lo m\xE1s
       r\xE1pido y preciso posible.\nCada direcci\xF3n correcta en el momento adecuado
       cuenta como acierto."
   - sceneName: FishingGameScene
-    controlName: control_4
+    controlName: gameplay_control_4
     minigameId: FishingGame
     instructionText: "Mant\xE9n presionada la pantalla para cargar la acci\xF3n.\nObserva
       el indicador y suelta en el momento adecuado para completar correctamente.\nSoltar
       demasiado pronto o demasiado tarde reducir\xE1 tu precisi\xF3n."
   - sceneName: SpaceShipScene
-    controlName: control_3
+    controlName: gameplay_control_3
     minigameId: SpaceShipGame
     instructionText: "Desliza tu dedo por la pantalla como si fuera un joystick.\nControla
       la nave en todas las direcciones para moverte y esquivar peligros.\nAjusta
       la direcci\xF3n de forma continua para mantener el control."
   - sceneName: GyroGameScene
-    controlName: sensor_gyro
+    controlName: gameplay_sensor_gyro
     minigameId: GyroGame
     instructionText: "Inclina tu mu\xF1eca para controlar la inclinaci\xF3n del tablero.\nUtiliza
       movimientos suaves para guiar la esfera hacia el objetivo.\nMant\xE9n la esfera
