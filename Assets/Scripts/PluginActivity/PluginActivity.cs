@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PluginActivity : MonoBehaviour
 {
@@ -24,63 +23,19 @@ public class PluginActivity : MonoBehaviour
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-        _pluginActivity = new AndroidJavaObject("com.randomadjective.uactivity.PluginActivity");
-#endif
-    }
-
-    public void ShowToast(string message)
-    {
-#if UNITY_ANDROID && !UNITY_EDITOR
-        if (_pluginActivity != null)
-        {
-            _pluginActivity.Call("ShowToast", message);
-        }
-#else
-        Debug.Log($"[PluginActivity] Toast: {message}");
+        using var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        _pluginActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
 #endif
     }
 
     public void OnMessageReceived(string message)
     {
-        string finalMessage = message;
-
-        if (TryParseTelemetry(message, out TelemetryPayload payload))
-        {
-            payload.receive_ts_unity_ns = GetUnityTimestampNs();
-            payload.scene_name = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-            payload.minigame_id = MinigameContext.CurrentMinigameId;
-            payload.measurement_active = MinigameContext.IsMeasurementActive;
-            payload.measurement_phase = MinigameContext.CurrentPhase;
-
-            finalMessage = payload.raw_message;
-
-            if (TelemetryCsvLogger.Instance != null)
-            {
-                TelemetryCsvLogger.Instance.Log(payload);
-            }
-
-            /*Debug.Log(
-                $"[Telemetry] event_id={payload.event_id} " +
-                $"record_type={payload.record_type} " +
-                $"type={payload.event_type} " +
-                $"family={payload.input_family} " +
-                $"sampled={payload.latency_sampled} " +
-                $"scene={payload.scene_name} " +
-                $"minigame={payload.minigame_id} " +
-                $"phase={payload.measurement_phase} " +
-                $"active={payload.measurement_active} " +
-                $"raw={payload.raw_message}"
-            );*/
-
-            if (!payload.measurement_active)
-            {
-                return;
-            }
-        }
+        if (string.IsNullOrWhiteSpace(message)) return;
+        if (!MinigameContext.IsMeasurementActive) return;
 
         GameObject controllerObject = GameObject.Find("GameController");
         var controller = controllerObject?.GetComponent<IGameController>();
-        controller?.HandleMessage(finalMessage);
+        controller?.HandleMessage(message);
     }
 
     public void UpdateControl(int controlIndex)
@@ -115,40 +70,36 @@ public class PluginActivity : MonoBehaviour
 #endif
     }
 
-    private bool TryParseTelemetry(string message, out TelemetryPayload payload)
-    {
-        payload = null;
-
-        if (string.IsNullOrWhiteSpace(message))
-            return false;
-
-        try
-        {
-            payload = JsonUtility.FromJson<TelemetryPayload>(message);
-
-            return payload != null
-                   && payload.schema_version > 0
-                   && !string.IsNullOrWhiteSpace(payload.raw_message);
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-    }
-
-    private long GetUnityTimestampNs()
+    public string GetPhoneSessionSnapshot()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
-        try
+        if (_pluginActivity != null)
         {
-            using var systemClock = new AndroidJavaClass("android.os.SystemClock");
-            return systemClock.CallStatic<long>("elapsedRealtimeNanos");
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning($"[PluginActivity] Failed to get elapsedRealtimeNanos: {e.Message}");
+            return _pluginActivity.Call<string>("getPhoneSessionSnapshot");
         }
 #endif
-        return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() * 1_000_000L;
+        return string.Empty;
     }
+
+    public void StartMinigameSession(string minigameId)
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+    if (_pluginActivity != null)
+    {
+        _pluginActivity.Call("startMinigameSession", minigameId);
+    }
+#endif
+    }
+
+    public void EndMinigameSession()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+    if (_pluginActivity != null)
+    {
+        _pluginActivity.Call("endMinigameSession");
+    }
+#endif
+    }
+
 }
+

@@ -119,7 +119,9 @@ public class TestSessionManager : MonoBehaviour
             if (PluginActivity.Instance != null)
             {
                 PluginActivity.Instance.UpdateControl(mg.controlName);
+                PluginActivity.Instance.StartMinigameSession(mg.minigameId);
                 Debug.Log($"[TestSessionManager] Control requested: {mg.controlName}");
+                Debug.Log($"[TestSessionManager] Minigame session started: {mg.minigameId}");
             }
             else
             {
@@ -147,6 +149,16 @@ public class TestSessionManager : MonoBehaviour
             yield return WaitForFadeOut(overlay);
             Debug.Log($"[TestSessionManager] Finished minigame: {mg.sceneName}");
 
+            if (PluginActivity.Instance != null)
+            {
+                PluginActivity.Instance.EndMinigameSession();
+                Debug.Log($"[TestSessionManager] Minigame session ended and saved: {mg.minigameId}");
+            }
+            else
+            {
+                Debug.LogWarning("[TestSessionManager] PluginActivity.Instance is null on EndMinigameSession.");
+            }
+
             yield return new WaitForSeconds(postMinigameDelay);
         }
 
@@ -154,12 +166,6 @@ public class TestSessionManager : MonoBehaviour
         MinigameContext.CurrentInstructionText = "";
         MinigameContext.IsMeasurementActive = false;
         MinigameContext.CurrentPhase = "idle";
-
-        if (TelemetryCsvLogger.Instance != null)
-        {
-            TelemetryCsvLogger.Instance.FlushToDisk();
-            Debug.Log($"[TestSessionManager] CSV saved at: {TelemetryCsvLogger.Instance.FilePath}");
-        }
 
         Debug.Log("[TestSessionManager] TEST FINISHED");
 

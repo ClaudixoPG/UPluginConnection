@@ -35,7 +35,9 @@ namespace EndlessRunner
 
         private bool IsGameplayActive =>
             !IsGameOver && MinigameContext.IsMeasurementActive;
+
         [SerializeField] private CameraShake cameraShake;
+
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -87,10 +89,9 @@ namespace EndlessRunner
             if (!IsGameplayActive) return;
             if (string.IsNullOrEmpty(message)) return;
 
-            if (message.StartsWith("Tap"))
+            if (message == "Tap")
             {
-                if (playerController != null)
-                    playerController.Jump();
+                playerController?.Jump();
             }
         }
 
@@ -149,6 +150,7 @@ namespace EndlessRunner
 
             StartCoroutine(RestartFlow());
         }
+
         private IEnumerator RestoreTime()
         {
             yield return new WaitForSecondsRealtime(0.3f);

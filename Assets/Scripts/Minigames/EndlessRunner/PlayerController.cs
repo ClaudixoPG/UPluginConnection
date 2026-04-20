@@ -4,18 +4,26 @@ namespace EndlessRunner
 {
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] private Rigidbody2D rb;
-        [SerializeField] private float jumpForce = 10f;
+        [Header("Jump")]
+        [SerializeField] private float jumpHeight = 2.2f;
+        [SerializeField] private float jumpDuration = 0.45f;
+
+        [Header("Ground Check")]
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private Transform feetPos;
         [SerializeField] private float groundDistance = 0.25f;
-        [SerializeField] private float jumpoTime = 0.3f;
+
+        [Header("Crouch")]
         [SerializeField] private float crouchHight = 0.5f;
 
-        private bool isGrounded;
-        private bool isJumping;
-        private float jumpTimer;
         private bool gameplayEnabled = true;
+        private bool isJumping = false;
+        private bool isGrounded = true;
+        private bool isCrouching = false;
+
+        private float jumpTimer = 0f;
+        private float groundY;
+        private float _crouchOffset = 0.5f;
 
         private Vector3 _originalScale;
         private Vector3 _originalPosition;
@@ -25,62 +33,105 @@ namespace EndlessRunner
             !GameController.IsGameOver &&
             MinigameContext.IsMeasurementActive;
 
-        private float _crouchOffset = 0.5f;
-        private bool isCrouching = false;
-
         private void Awake()
         {
             _originalScale = transform.localScale;
             _originalPosition = transform.position;
+            groundY = transform.position.y;
         }
 
         private void Update()
         {
             if (!IsGameplayActive) return;
 
+            UpdateGroundState();
+            UpdateJumpArc();
+        }
+
+        private void UpdateGroundState()
+        {
+            if (isJumping)
+            {
+                isGrounded = false;
+                return;
+            }
+
             isGrounded = Physics2D.OverlapCircle(feetPos.position, groundDistance, groundLayer);
 
-            if (isGrounded && !isJumping)
+            if (isGrounded)
             {
-                jumpTimer = 0f;
+                Vector3 pos = transform.position;
+                pos.y = groundY;
+                transform.position = pos;
+            }
+        }
+
+        private void UpdateJumpArc()
+        {
+            if (!isJumping) return;
+
+            jumpTimer += Time.deltaTime;
+            float t = jumpTimer / jumpDuration;
+
+            if (t >= 1f)
+            {
+                EndJump();
+                return;
             }
 
-            if (isJumping && jumpTimer > 0f)
-            {
-                rb.AddForce(new Vector2(0, jumpForce * Time.deltaTime), ForceMode2D.Impulse);
-                jumpTimer -= Time.deltaTime;
-            }
+            // Parábola simple: 4h * t * (1 - t)
+            float arc = 4f * jumpHeight * t * (1f - t);
+
+            Vector3 pos = transform.position;
+            pos.y = groundY + arc;
+            transform.position = pos;
         }
 
         public void Jump()
         {
             if (!IsGameplayActive) return;
+            if (isJumping) return;
 
-            if (isGrounded)
+            bool groundedNow = Physics2D.OverlapCircle(feetPos.position, groundDistance, groundLayer);
+            if (!groundedNow) return;
+
+            if (isCrouching)
             {
-                isJumping = true;
-                jumpTimer = jumpoTime;
-                rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+                StandUp();
             }
+
+            isJumping = true;
+            isGrounded = false;
+            jumpTimer = 0f;
+        }
+
+        private void EndJump()
+        {
+            isJumping = false;
+            isGrounded = true;
+            jumpTimer = 0f;
+
+            Vector3 pos = transform.position;
+            pos.y = groundY;
+            transform.position = pos;
         }
 
         public void CancelJump()
         {
             if (!IsGameplayActive) return;
-            isJumping = false;
+            // vacío intencionalmente para esta prueba
         }
 
         public void Crounch()
         {
-            if (!IsGameplayActive || isCrouching) return;
+            if (!IsGameplayActive || isCrouching || isJumping) return;
 
-            if (isGrounded)
-            {
-                isCrouching = true;
+            bool groundedNow = Physics2D.OverlapCircle(feetPos.position, groundDistance, groundLayer);
+            if (!groundedNow) return;
 
-                transform.localScale = new Vector3(_originalScale.x, crouchHight, _originalScale.z);
-                transform.position += Vector3.down * _crouchOffset;
-            }
+            isCrouching = true;
+            transform.localScale = new Vector3(_originalScale.x, crouchHight, _originalScale.z);
+            transform.position += Vector3.down * _crouchOffset;
         }
 
         public void StandUp()
@@ -88,7 +139,6 @@ namespace EndlessRunner
             if (!isCrouching) return;
 
             isCrouching = false;
-
             transform.localScale = _originalScale;
             transform.position += Vector3.up * _crouchOffset;
         }
@@ -101,17 +151,13 @@ namespace EndlessRunner
         public void ResetState()
         {
             isJumping = false;
+            isGrounded = true;
+            isCrouching = false;
             jumpTimer = 0f;
+
             transform.localScale = _originalScale;
             transform.position = _originalPosition;
-
-            if (rb != null)
-            {
-                rb.linearVelocity = Vector2.zero;
-                rb.angularVelocity = 0f;
-                rb.Sleep();
-                rb.WakeUp();
-            }
+            groundY = _originalPosition.y;
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -122,6 +168,14 @@ namespace EndlessRunner
             {
                 GameController.Instance.GameOver();
             }
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (feetPos == null) return;
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(feetPos.position, groundDistance);
         }
     }
 }

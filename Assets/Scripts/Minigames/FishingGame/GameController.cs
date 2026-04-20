@@ -139,6 +139,7 @@ namespace FishingGame
 
                 if (parts.Length >= 1 && float.TryParse(parts[0], out float holdValue))
                 {
+                   Debug.Log("Hold value from message: " + holdValue);
                     playerController.SetHoldInput(Mathf.Clamp01(holdValue));
                 }
 
