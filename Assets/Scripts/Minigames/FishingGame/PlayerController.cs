@@ -30,14 +30,11 @@ namespace FishingGame
         private float fishTimer;
         private float fishVelocity;
 
-        // Mapeo 1:1: el valor recibido se usa directamente como posición del hook.
         private float hookPositionNormalized;
         private float holdInputNormalized;
-
         private float catchProgressNormalized;
 
         private bool gameplayEnabled;
-        private bool hasReceivedRemoteInput;
         private FishBehaviourPreset currentPreset;
 
         private enum FishEncounterState
@@ -98,13 +95,14 @@ namespace FishingGame
 
         private void Update()
         {
-            if (!gameplayEnabled) return;
+            if (!gameplayEnabled)
+                return;
 
             UpdateFishVisualMotion();
 
-            if (!IsFishActive) return;
+            if (!IsFishActive)
+                return;
 
-            UpdateHook();
             UpdateProgress();
         }
 
@@ -115,8 +113,9 @@ namespace FishingGame
 
         public void SetHoldInput(float value)
         {
-            holdInputNormalized = Mathf.Clamp01(value);
-            hasReceivedRemoteInput = true;
+            holdInputNormalized = value;
+            hookPositionNormalized = holdInputNormalized * (1f - hookSizeNormalized);
+            UpdateHookTransform();
         }
 
         public void ConfigureFish(GameController.FishRarity rarity)
@@ -145,10 +144,8 @@ namespace FishingGame
             fishTimer = 0f;
             fishVelocity = 0f;
 
-            hookPositionNormalized = 0.5f;
             holdInputNormalized = 0f;
-            hasReceivedRemoteInput = false;
-
+            hookPositionNormalized = 0f;
             catchProgressNormalized = initialCatchProgress;
 
             fishState = FishEncounterState.Hidden;
@@ -180,19 +177,6 @@ namespace FishingGame
 
             fishPositionNormalized = Mathf.Clamp01(fishPositionNormalized);
             UpdateFishTransform();
-        }
-
-        private void UpdateHook()
-        {
-            if (!hasReceivedRemoteInput)
-            {
-                UpdateHookTransform();
-                return;
-            }
-
-            // Mapeo 1:1 directo
-            hookPositionNormalized = holdInputNormalized;
-            UpdateHookTransform();
         }
 
         private void UpdateProgress()

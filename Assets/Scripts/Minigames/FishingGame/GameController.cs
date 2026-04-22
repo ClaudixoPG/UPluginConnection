@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Globalization;
 
 namespace FishingGame
 {
@@ -114,7 +115,8 @@ namespace FishingGame
                 return;
 
             remainingTime -= Time.deltaTime;
-            remainingTime = Mathf.Max(0f, remainingTime);
+            if (remainingTime < 0f)
+                remainingTime = 0f;
 
             if (uiManager != null)
             {
@@ -129,21 +131,31 @@ namespace FishingGame
 
         public void HandleMessage(string message)
         {
-            if (string.IsNullOrEmpty(message)) return;
-            if (!IsGameplayActive || playerController == null) return;
-
-            if (message.StartsWith("Hold:") || message.StartsWith("Time:"))
-            {
-                string prefix = message.StartsWith("Hold:") ? "Hold:" : "Time:";
-                string[] parts = message.Substring(prefix.Length).Split(',');
-
-                if (parts.Length >= 1 && float.TryParse(parts[0], out float holdValue))
-                {
-                    Debug.Log("Hold value from message: " + holdValue);
-                    playerController.SetHoldInput(Mathf.Clamp01(holdValue));
-                }
-
+            if (!IsGameplayActive || playerController == null || string.IsNullOrEmpty(message))
                 return;
+
+            if (message.StartsWith("Hold:"))
+            {
+                ReadHoldValue(message, 5);
+                return;
+            }
+
+            /*if (message.StartsWith("Time:"))
+            {
+                ReadHoldValue(message, 5);
+            }*/
+        }
+
+        private void ReadHoldValue(string message, int prefixLength)
+        {
+            int commaIndex = message.IndexOf(',', prefixLength);
+            string valueText = commaIndex >= 0
+                ? message.Substring(prefixLength, commaIndex - prefixLength)
+                : message.Substring(prefixLength);
+
+            if (float.TryParse(valueText, NumberStyles.Float, CultureInfo.InvariantCulture, out float holdValue))
+            {
+                playerController.SetHoldInput(holdValue);
             }
         }
 
