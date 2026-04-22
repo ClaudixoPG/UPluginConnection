@@ -2,12 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum MinigameScreenOrientation
+{
+    Portrait,
+    LandscapeLeft
+}
+
 [System.Serializable]
 public class MinigameConfig
 {
     public string sceneName;
     public string controlName;
     public string minigameId;
+    public MinigameScreenOrientation screenOrientation = MinigameScreenOrientation.Portrait;
     [TextArea(2, 5)] public string instructionText;
 }
 
@@ -28,12 +35,22 @@ public class TestSessionManager : MonoBehaviour
     public int countdownStart = 3;
     public float countdownStepDuration = 1f;
 
+    [Header("Orientation")]
+    public float orientationSettleDelay = 0.5f;
+
     [Header("Finish")]
     public string returnSceneName = "TestRunnerScene";
     public bool returnToStartScene = true;
     public bool quitAppWhenFinished = false;
 
     private bool _running;
+
+    private ScreenOrientation _previousOrientation;
+    private bool _prevPortrait;
+    private bool _prevPortraitUpsideDown;
+    private bool _prevLandscapeLeft;
+    private bool _prevLandscapeRight;
+    private bool _screenStateCaptured;
 
     private void Awake()
     {
@@ -73,6 +90,8 @@ public class TestSessionManager : MonoBehaviour
             return;
         }
 
+        CaptureCurrentScreenState();
+
         _running = true;
         StartCoroutine(RunSession());
     }
@@ -92,10 +111,20 @@ public class TestSessionManager : MonoBehaviour
         overlay.HideAllImmediate();
         Debug.Log("[TestSessionManager] Overlay ready");
 
+        if (PluginActivity.Instance != null)
+        {
+            PluginActivity.Instance.StartTestSession();
+            Debug.Log("[TestSessionManager] TEST_SESSION_START sent");
+        }
+        else
+        {
+            Debug.LogWarning("[TestSessionManager] PluginActivity.Instance is null on StartTestSession.");
+        }
+
         for (int i = 0; i < minigames.Count; i++)
         {
             var mg = minigames[i];
-            Debug.Log($"[TestSessionManager] Starting minigame index={i}, scene={mg.sceneName}, control={mg.controlName}, id={mg.minigameId}");
+            Debug.Log($"[TestSessionManager] Starting minigame index={i}, scene={mg.sceneName}, control={mg.controlName}, id={mg.minigameId}, orientation={mg.screenOrientation}");
 
             MinigameContext.CurrentMinigameId = mg.minigameId;
             MinigameContext.CurrentInstructionText = mg.instructionText;
@@ -108,6 +137,9 @@ public class TestSessionManager : MonoBehaviour
             MinigameContext.CurrentPhase = "instructions";
             yield return WaitForInstructions(overlay, mg.instructionText);
             Debug.Log("[TestSessionManager] Instructions done");
+
+            ApplyOrientation(mg.screenOrientation);
+            yield return new WaitForSeconds(orientationSettleDelay);
 
             MinigameContext.CurrentPhase = "loading";
             Debug.Log($"[TestSessionManager] Loading scene: {mg.sceneName}");
@@ -162,6 +194,18 @@ public class TestSessionManager : MonoBehaviour
             yield return new WaitForSeconds(postMinigameDelay);
         }
 
+        if (PluginActivity.Instance != null)
+        {
+            PluginActivity.Instance.EndTestSession();
+            Debug.Log("[TestSessionManager] TEST_SESSION_END sent");
+        }
+        else
+        {
+            Debug.LogWarning("[TestSessionManager] PluginActivity.Instance is null on EndTestSession.");
+        }
+
+        RestorePreviousScreenState();
+
         MinigameContext.CurrentMinigameId = "";
         MinigameContext.CurrentInstructionText = "";
         MinigameContext.IsMeasurementActive = false;
@@ -179,6 +223,65 @@ public class TestSessionManager : MonoBehaviour
         else if (quitAppWhenFinished)
         {
             Application.Quit();
+        }
+    }
+
+    private void CaptureCurrentScreenState()
+    {
+        if (_screenStateCaptured) return;
+
+        _previousOrientation = Screen.orientation;
+        _prevPortrait = Screen.autorotateToPortrait;
+        _prevPortraitUpsideDown = Screen.autorotateToPortraitUpsideDown;
+        _prevLandscapeLeft = Screen.autorotateToLandscapeLeft;
+        _prevLandscapeRight = Screen.autorotateToLandscapeRight;
+        _screenStateCaptured = true;
+
+        Debug.Log("[TestSessionManager] Screen state captured");
+    }
+
+    private void ApplyOrientation(MinigameScreenOrientation orientation)
+    {
+        switch (orientation)
+        {
+            case MinigameScreenOrientation.Portrait:
+                Screen.orientation = ScreenOrientation.Portrait;
+                Screen.autorotateToPortrait = true;
+                Screen.autorotateToPortraitUpsideDown = false;
+                Screen.autorotateToLandscapeLeft = false;
+                Screen.autorotateToLandscapeRight = false;
+                Debug.Log("[TestSessionManager] Orientation applied: Portrait");
+                break;
+
+            case MinigameScreenOrientation.LandscapeLeft:
+                Screen.orientation = ScreenOrientation.LandscapeLeft;
+                Screen.autorotateToPortrait = false;
+                Screen.autorotateToPortraitUpsideDown = false;
+                Screen.autorotateToLandscapeLeft = true;
+                Screen.autorotateToLandscapeRight = false;
+                Debug.Log("[TestSessionManager] Orientation applied: LandscapeLeft");
+                break;
+        }
+    }
+
+    private void RestorePreviousScreenState()
+    {
+        if (!_screenStateCaptured) return;
+
+        Screen.orientation = _previousOrientation;
+        Screen.autorotateToPortrait = _prevPortrait;
+        Screen.autorotateToPortraitUpsideDown = _prevPortraitUpsideDown;
+        Screen.autorotateToLandscapeLeft = _prevLandscapeLeft;
+        Screen.autorotateToLandscapeRight = _prevLandscapeRight;
+
+        Debug.Log("[TestSessionManager] Screen state restored");
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            RestorePreviousScreenState();
         }
     }
 

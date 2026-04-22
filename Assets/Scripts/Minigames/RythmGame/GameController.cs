@@ -152,16 +152,16 @@ namespace RythmGame
                 string dir = message.Substring("Dpad:".Length).ToUpper();
                 switch (dir)
                 {
-                    case "LEFT":
+                    case "UP":
                         if (buttons.Count > 0) buttons[0].PressButton();
                         break;
-                    case "UP":
+                    case "DOWN":
                         if (buttons.Count > 1) buttons[1].PressButton();
                         break;
-                    case "RIGHT":
+                    case "LEFT":
                         if (buttons.Count > 2) buttons[2].PressButton();
                         break;
-                    case "DOWN":
+                    case "RIGHT":
                         if (buttons.Count > 3) buttons[3].PressButton();
                         break;
                 }
@@ -173,16 +173,16 @@ namespace RythmGame
                 string dir = message.Substring("DpadRelease:".Length).ToUpper();
                 switch (dir)
                 {
-                    case "LEFT":
+                    case "UP":
                         if (buttons.Count > 0) buttons[0].ReleaseButton();
                         break;
-                    case "UP":
+                    case "DOWN":
                         if (buttons.Count > 1) buttons[1].ReleaseButton();
                         break;
-                    case "RIGHT":
+                    case "LEFT":
                         if (buttons.Count > 2) buttons[2].ReleaseButton();
                         break;
-                    case "DOWN":
+                    case "RIGHT":
                         if (buttons.Count > 3) buttons[3].ReleaseButton();
                         break;
                 }

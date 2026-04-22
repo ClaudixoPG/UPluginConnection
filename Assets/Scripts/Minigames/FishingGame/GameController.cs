@@ -139,7 +139,7 @@ namespace FishingGame
 
                 if (parts.Length >= 1 && float.TryParse(parts[0], out float holdValue))
                 {
-                   Debug.Log("Hold value from message: " + holdValue);
+                    Debug.Log("Hold value from message: " + holdValue);
                     playerController.SetHoldInput(Mathf.Clamp01(holdValue));
                 }
 
@@ -237,10 +237,12 @@ namespace FishingGame
                 case FishRarity.Rare: rareEscaped++; break;
                 case FishRarity.Legendary: legendaryEscaped++; break;
             }
+
             if (uiManager != null)
             {
                 uiManager.ShowEscapeFeedback(CurrentFishRarity);
             }
+
             QueueNextFish();
         }
 
@@ -255,10 +257,12 @@ namespace FishingGame
         private IEnumerator NextFishRoutine()
         {
             yield return new WaitForSeconds(nextFishDelay);
+
             if (uiManager != null)
             {
                 uiManager.HideFeedback();
             }
+
             if (IsGameplayActive)
                 StartNextFish();
 

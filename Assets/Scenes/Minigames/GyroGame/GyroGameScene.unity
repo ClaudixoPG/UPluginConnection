@@ -1001,7 +1001,6 @@ GameObject:
   - component: {fileID: 995744135}
   - component: {fileID: 995744134}
   - component: {fileID: 995744136}
-  - component: {fileID: 995744137}
   - component: {fileID: 995744138}
   m_Layer: 0
   m_Name: GameController
@@ -1030,7 +1029,7 @@ MonoBehaviour:
   tiltBoard: {fileID: 1816273345}
   targetSpawnMargin: 0.6
   minTargetDistanceFromPrevious: 1.2
-  totalTime: 60
+  totalTime: 600
   comboWindowDuration: 5
   fallPenaltySeconds: 10
   fallYThreshold: -3
@@ -1085,18 +1084,6 @@ MonoBehaviour:
   enableAssist: 1
   insideLinearDamping: 0.88
   insideAngularDamping: 0.85
---- !u!114 &995744137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 995744133}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c3772202c0498b42bb9847d1d9c4866, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &995744138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1922,6 +1909,7 @@ MonoBehaviour:
   tiltSmoothSpeed: 8
   deadZoneX: 0.08
   deadZoneZ: 0.08
+  remoteInputTimeout: 0.12
   invertX: 1
   invertZ: 1
   autoReturnToCenter: 0

@@ -15,8 +15,6 @@ namespace FishingGame
         [Header("Hook")]
         [SerializeField] private Transform hook;
         [SerializeField] private float hookSizeNormalized = 0.2f;
-        [SerializeField] private float hookPullPower = 2.5f;
-        [SerializeField] private float hookGravityPower = 1.5f;
 
         [Header("Progress")]
         [SerializeField] private Transform progressBarContainer;
@@ -32,9 +30,10 @@ namespace FishingGame
         private float fishTimer;
         private float fishVelocity;
 
+        // Mapeo 1:1: el valor recibido se usa directamente como posición del hook.
         private float hookPositionNormalized;
-        private float hookPullVelocity;
         private float holdInputNormalized;
+
         private float catchProgressNormalized;
 
         private bool gameplayEnabled;
@@ -147,7 +146,6 @@ namespace FishingGame
             fishVelocity = 0f;
 
             hookPositionNormalized = 0.5f;
-            hookPullVelocity = 0f;
             holdInputNormalized = 0f;
             hasReceivedRemoteInput = false;
 
@@ -188,32 +186,12 @@ namespace FishingGame
         {
             if (!hasReceivedRemoteInput)
             {
-                hookPositionNormalized = 0.5f;
-                hookPullVelocity = 0f;
                 UpdateHookTransform();
                 return;
             }
 
-            hookPullVelocity += holdInputNormalized * hookPullPower * Time.deltaTime;
-            hookPullVelocity -= hookGravityPower * Time.deltaTime;
-
-            hookPositionNormalized += hookPullVelocity * Time.deltaTime;
-
-            float maxHookPos = 1f - hookSizeNormalized;
-
-            if (hookPositionNormalized <= 0f && hookPullVelocity < 0f)
-            {
-                hookPositionNormalized = 0f;
-                hookPullVelocity = 0f;
-            }
-
-            if (hookPositionNormalized >= maxHookPos && hookPullVelocity > 0f)
-            {
-                hookPositionNormalized = maxHookPos;
-                hookPullVelocity = 0f;
-            }
-
-            hookPositionNormalized = Mathf.Clamp(hookPositionNormalized, 0f, maxHookPos);
+            // Mapeo 1:1 directo
+            hookPositionNormalized = holdInputNormalized;
             UpdateHookTransform();
         }
 

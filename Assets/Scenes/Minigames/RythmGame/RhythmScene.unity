@@ -1942,7 +1942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 011d4176c381df44bbfa7ef641173e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beatTempo: 120
+  beatTempo: 60
 --- !u!1 &1160336783
 GameObject:
   m_ObjectHideFlags: 0
@@ -2624,19 +2624,21 @@ MonoBehaviour:
   noteContainer: {fileID: 971531655}
   notePrefab: {fileID: 8526077180305274556, guid: 3d3db67ccb84e68438c002b209daddfa, type: 3}
   lanes:
-  - laneName: Left Line
-    button: {fileID: 450328917}
-    zRotation: 180
   - laneName: Up Line
     button: {fileID: 42740291}
     zRotation: 90
   - laneName: Down Line
     button: {fileID: 335185282}
     zRotation: 270
+  - laneName: Left Line
+    button: {fileID: 450328917}
+    zRotation: 180
   - laneName: Right Line
     button: {fileID: 1954822628}
     zRotation: 360
   initialLeadInSeconds: 2
+  useBeatScrollerTiming: 1
+  beatsPerNote: 1
   noteIntervalSeconds: 0.75
   avoidSameLaneTwiceInARow: 1
 --- !u!4 &1636082003
@@ -3719,9 +3721,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttons:
-  - {fileID: 450328917}
   - {fileID: 42740291}
   - {fileID: 335185282}
+  - {fileID: 450328917}
   - {fileID: 1954822628}
   audioSource: {fileID: 606239660}
   beatScroller: {fileID: 971531656}
