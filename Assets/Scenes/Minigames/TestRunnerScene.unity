@@ -851,11 +851,11 @@ MonoBehaviour:
     instructionText: "Inclina tu mu\xF1eca para controlar la inclinaci\xF3n del tablero.\nUtiliza
       movimientos suaves para guiar la esfera hacia el objetivo.\nMant\xE9n la esfera
       dentro del objetivo durante unos segundos para sumar puntos."
-  durationPerMinigame: 10
+  durationPerMinigame: 180
   controlSettleDelay: 1.5
   postMinigameDelay: 0.5
   fadeOutDuration: 0.5
-  instructionDuration: 0
+  instructionDuration: 10
   fadeInDuration: 0.5
   countdownStart: 3
   countdownStepDuration: 1
